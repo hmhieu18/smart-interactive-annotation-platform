@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Divider from "@material-ui/core/Divider";
 import Avatar from "@material-ui/core/Avatar";
 import Link from "../../../../../components/Link";
 
@@ -10,12 +9,14 @@ import moment from "moment";
 const useStyles = makeStyles((theme) => ({
   projectContainer: {
     paddingBottom: 20,
+    paddingTop: 20,
+    background: "#ffffff",
+    borderRadius: 8,
+    marginBottom: 10,
     "&:hover": {
       background: "#eef2f7",
     },
-  },
-  divider: {
-    marginBottom: 20,
+    display: "flex",
   },
   avatar: {
     margin: "auto",
@@ -25,6 +26,12 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(5),
       height: theme.spacing(5),
     },
+  },
+  avatarContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 8,
   },
   projectName: {
     fontWeight: "bold",
@@ -36,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "left",
   },
   date: {
+    marginTop: 10,
     fontSize: 12,
     color: "#595959",
   },
@@ -54,21 +62,17 @@ const ProjectItem = (props) => {
       component={Link}
       to={`/projects/project=${id}`}
     >
-        <Grid item xs={12}>
-          <Divider className={classes.divider}/>
-        </Grid>
-        <Grid container item xs={2} md={1}>
-          <Avatar className={classes.avatar}>{name[0]}</Avatar>
-        </Grid>
-        <Grid container item xs={7} md={8} direction="column" justifyContent="center" alignItems="flex-start">
-          <div className={classes.projectName}>{name}</div>
-          <div className={classes.projectDescription}>{description}</div>
-        </Grid>
-        <Grid container item xs={3} alignItems="center">
-          <div className={classes.date}>
-            {moment(date_created).format('MMMM Do YYYY, h:mm')}
-          </div>
-        </Grid>
+      <div className={classes.avatarContainer}>
+        <Avatar className={classes.avatar}>{name[0]}</Avatar>
+      </div>
+      <div>
+        <div className={classes.projectName}>{name}</div>
+        <div className={classes.projectDescription}>{description}</div>
+        <div className={classes.date}>
+          <i class="bi bi-calendar"></i>{" "}
+          {moment(date_created).format("MMMM Do YYYY, h:mm")}
+        </div>
+      </div>
     </Grid>
   );
 };

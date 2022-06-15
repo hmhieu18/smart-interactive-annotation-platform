@@ -48,7 +48,7 @@ const ProjectList = (props) => {
           <div
             style={{
               display: "flex",
-              justifyContent: "flex-start",
+              justifyContent: "flex-end",
               marginTop: 15,
               marginBottom: 15,
             }}
