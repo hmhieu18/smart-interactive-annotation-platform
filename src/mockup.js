@@ -13,7 +13,7 @@ export const mockupProject = {
   name: "Project1",
   description: "This is the project",
 };
-export const projectList = [mockupProject, mockupProject];
+export const projectList = [mockupProject, mockupProject, mockupProject, mockupProject, mockupProject];
 
 export const demoAnnotateData = [
   { id: 1, label: "Cat", isHidden: true, color: "red" },

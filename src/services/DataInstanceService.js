@@ -1,57 +1,59 @@
-import RestConnector from '../connectors/RestConnector'
+import RestConnector from "../connectors/RestConnector";
 
-import ImageDataInstanceClass from '../classes/ImageDataInstanceClass'
-import VideoDataInstanceClass from '../classes/VideoDataInstanceClass'
-import {mockupDataInstance} from '../mockup'
+import ImageDataInstanceClass from "../classes/ImageDataInstanceClass";
+import VideoDataInstanceClass from "../classes/VideoDataInstanceClass";
+import { mockupDataInstance } from "../mockup";
 
 class DataInstanceService {
   async parseDataInstanceFromServer(instance) {
-    if (instance._cls.includes(ImageDataInstanceClass._cls))
-      return ImageDataInstanceClass.constructorFromServerData(instance)
+    if (instance._cls.includes(ImageDataInstanceClass._cls)) {
+      return ImageDataInstanceClass.constructorFromServerData(instance);
+    }
     if (instance._cls.includes(VideoDataInstanceClass._cls))
-      return VideoDataInstanceClass.constructorFromServerData(instance)
-    return {}
+      return VideoDataInstanceClass.constructorFromServerData(instance);
+    return {};
   }
 
-  getDataInstancesByDataset(datasetId, page = 1, per_page = 0) {
+  async getDataInstancesByDataset(datasetId, page = 1, per_page = 0) {
     // const dataInstancesResponse = await RestConnector.get(`/data?dataset_id=${datasetId}&page=${page}&per_page=${per_page}`)
 
     // const dataInstancesObj = await Promise.all(dataInstancesResponse.data.map(instance => this.parseDataInstanceFromServer(instance)))
 
     //mockup
-    const dataInstancesObj = [mockupDataInstance].map(instance => this.parseDataInstanceFromServer(instance))
-
-    return dataInstancesObj
+    // const dataInstancesResponse = await [mockupDataInstance, mockupDataInstance]
+    const dataInstancesObj = [mockupDataInstance, mockupDataInstance].map(
+      (instance) => this.parseDataInstanceFromServer(instance)
+    );
+    console.log(dataInstancesObj);
+    return dataInstancesObj;
   }
 
   async deleteDataById(id) {
-    return RestConnector.delete(`/data?id=${id}`)
-      .then((response) => {
-        return response.data
-      })
+    return RestConnector.delete(`/data?id=${id}`).then((response) => {
+      return response.data;
+    });
   }
 
-  async putDataInstance(dataInstance)
-  {
+  async putDataInstance(dataInstance) {
     const updateData = {
       id: dataInstance.id,
-      annotateStatus: dataInstance.annotateStatus
-    }
-    return await RestConnector.put(`/data`, updateData)
+      annotateStatus: dataInstance.annotateStatus,
+    };
+    return await RestConnector.put(`/data`, updateData);
   }
 
   upload(file, datasetId, onUploadProgress) {
     let formData = new FormData();
 
     formData.append("dataset_id", datasetId);
-    
-    let uploadURL = "/data/upload_image"
+
+    let uploadURL = "/data/upload_image";
     if (file.type.includes("image")) {
       formData.append("image", file);
-      uploadURL = "/data/upload_image"
+      uploadURL = "/data/upload_image";
     } else {
       formData.append("video", file);
-      uploadURL = "/data/upload_video"
+      uploadURL = "/data/upload_video";
     }
 
     return RestConnector.post(uploadURL, formData, {
@@ -59,11 +61,11 @@ class DataInstanceService {
         "Content-Type": "multipart/form-data",
       },
       onUploadProgress,
-    }).then(response => {
-      const data = response.data
-      return this.parseDataInstanceFromServer(data)
-    })
+    }).then((response) => {
+      const data = response.data;
+      return this.parseDataInstanceFromServer(data);
+    });
   }
 }
 
-export default new DataInstanceService()
+export default new DataInstanceService();

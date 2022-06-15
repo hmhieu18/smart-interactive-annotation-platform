@@ -2,7 +2,7 @@ import React from "react";
 
 import SideMenu from "./SideMenu/SideMenu";
 import { Container } from "@material-ui/core";
-
+import './SideMenu/index.css'
 import { useState } from "react";
 const DesktopLayout = (props) => {
   const { children } = props;
@@ -16,9 +16,9 @@ const DesktopLayout = (props) => {
           setInactive(inactive);
         }}
       />
-      <div className={`container ${inactive ? "inactive" : ""}`}>
-        {children}
-      </div>
+        <div className={`container_page ${inactive ? "inactive" : ""}`}>
+          {children}
+        </div>
     </div>
   );
 };

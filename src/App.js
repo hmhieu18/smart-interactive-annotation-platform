@@ -8,9 +8,6 @@ import ProjectListPage from "./pages/ProjectList/index";
 import ProjectDetailPage from "./pages/ProjectDetailPage/index";
 import DatasetDetailPage from "./pages/DatasetManagement/index";
 import "./App.css";
-import SideMenu, { menuItems } from "./components/Layout/SideMenu/SideMenu";
-
-import { useState } from "react";
 const appTheme = createTheme({
   palette: {
     primary: {

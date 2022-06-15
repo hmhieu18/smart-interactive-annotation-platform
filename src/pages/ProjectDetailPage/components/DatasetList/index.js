@@ -16,6 +16,7 @@ import moment from "moment";
 import EditIcon from "@material-ui/icons/Edit";
 import CreateIcon from "@material-ui/icons/AddCircle";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
+import "../../../../assets/scss/sb-admin-2.scss";
 
 import Link from "../../../../components/Link";
 import CreateDatasetDialog from "./components/CreateDatasetDialog";
@@ -91,8 +92,10 @@ const DatasetList = (props) => {
 
   const StyledTableRow = withStyles((theme) => ({
     root: {
+      borderRadius: 8,
       "&:nth-of-type(odd)": {
         backgroundColor: theme.palette.action.hover,
+        
       },
     },
   }))(TableRow);
@@ -107,15 +110,15 @@ const DatasetList = (props) => {
           marginBottom: 15,
         }}
       >
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          endIcon={<CreateIcon />}
-          onClick={handleTriggerCreateDataset}
+        <a
+          onClick={() => {setOpenDialog(true)}}
+          className="btn btn-primary btn-icon-split"
         >
-          New Dataset
-        </Button>
+          <span className="icon text-white-50">
+            <i class="bi bi-plus-square-fill"></i>
+          </span>
+          <span className="text">New Dataset</span>
+        </a>
       </div>
       <Table className={classes.table} stickyHeader aria-label="sticky table">
         <TableHead>

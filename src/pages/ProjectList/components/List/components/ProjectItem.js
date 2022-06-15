@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   projectContainer: {
     paddingBottom: 20,
     paddingTop: 20,
-    background: "#ffffff",
+    background: "#f8f9fc",
     borderRadius: 8,
     marginBottom: 10,
     "&:hover": {
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    margin: 8,
+    margin: 15,
   },
   projectName: {
     fontWeight: "bold",
@@ -63,13 +63,15 @@ const ProjectItem = (props) => {
       to={`/projects/project=${id}`}
     >
       <div className={classes.avatarContainer}>
-        <Avatar className={classes.avatar}>{name[0]}</Avatar>
+        {/* <Avatar className={classes.avatar}>{name[0]}</Avatar> */}
+        <i class="bi bi-lightbulb" style={{fontSize: "40px"}}></i>
+
       </div>
       <div>
         <div className={classes.projectName}>{name}</div>
         <div className={classes.projectDescription}>{description}</div>
         <div className={classes.date}>
-          <i class="bi bi-calendar"></i>{" "}
+          <i class="bi bi-calendar" style={{margin: "4px"}}></i>{"  Last Modified: "}
           {moment(date_created).format("MMMM Do YYYY, h:mm")}
         </div>
       </div>

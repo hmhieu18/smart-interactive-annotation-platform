@@ -22,7 +22,7 @@ const fields = [
     name: 'name',
     label: 'Dataset name',
     helperText: 'Must be unique in same project',
-    variant: 'standard',
+    variant: 'outlined',
     required: true,
     fullWidth: true,
     component: TextField
@@ -30,13 +30,14 @@ const fields = [
   {
     name: 'description',
     label: 'Description',
-    variant: 'standard',
+    variant: 'outlined',
     fullWidth: true,
     component: TextField
   },
   {
     name: 'datatype',
     label: 'Datatype',
+    variant: 'outlined',
     options:[
       { value: DATASET_DATATYPE.IMAGE, label: 'Image' },
       { value: DATASET_DATATYPE.VIDEO, label: 'Video' },

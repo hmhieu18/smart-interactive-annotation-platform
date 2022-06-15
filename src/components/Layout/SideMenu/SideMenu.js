@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import logo from "../../../assets/logo/webscript.png";
 
 import MenuItem from "./MenuItem";
-import './index.css';
 
 /**
  * @author
@@ -110,26 +109,6 @@ const SideMenu = (props) => {
             />
           ))}
 
-          {/* <li>
-            <a className="menu-item">
-              <div className="menu-icon">
-                <i class="bi bi-speedometer2"></i>
-              </div>
-              <span>Dashboard</span>
-            </a>
-          </li>
-          <MenuItem
-            name={"Content"}
-            subMenus={[{ name: "Courses" }, { name: "Videos" }]}
-          />
-          <li>
-            <a className="menu-item">
-              <div className="menu-icon">
-                <i class="bi bi-vector-pen"></i>
-              </div>
-              <span>Design</span>
-            </a>
-          </li> */}
         </ul>
       </div>
 

@@ -24,8 +24,8 @@ const List = (props) => {
       <Grid
         container
         direction="row"
-        justifyContent="center"
-        alignItems="center"
+        justifyContent="left"
+        alignItems="left"
         xs={12}
         md={12}
         spacing={1}

@@ -7,6 +7,7 @@ import List from "./components/List/index";
 import useProjectListStore from "./store";
 import CreateProjectDialog from "./components/CreateProjectDialog";
 import CreateIcon from "@material-ui/icons/AddCircle";
+import "../../assets/scss/sb-admin-2.scss";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,15 +54,15 @@ const ProjectList = (props) => {
               marginBottom: 15,
             }}
           >
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              endIcon={<CreateIcon />}
+            <a
               onClick={() => setOpenCreateDialog(true)}
+              className="btn btn-primary btn-icon-split"
             >
-              New project
-            </Button>
+              <span className="icon text-white-50">
+                <i class="bi bi-plus-square-fill"></i>{" "}
+              </span>
+              <span className="text">New Project</span>
+            </a>
           </div>
           <CreateProjectDialog
             open={openCreateDialog}
