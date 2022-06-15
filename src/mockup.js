@@ -8,17 +8,46 @@
 // import Image_8 from './static/images/mockup/Image_8.jpg'
 // import Image_9 from './static/images/mockup/Image_9.jpg'
 // import Image_10 from './static/images/mockup/Image_10.jpg'
-
-export const projectList = [
-    {id: 1, name: 'Project1', description: 'This is the project'},
-    {id: 2, name: 'Project2', description: 'This is the project'},
-]
+export const mockupProject = {
+  id: 1,
+  name: "Project1",
+  description: "This is the project",
+};
+export const projectList = [mockupProject, mockupProject];
 
 export const demoAnnotateData = [
-    { id: 1, label: 'Cat', isHidden: true, color: 'red' },
-    { id: 2, label: 'Dog', isHidden: false, color: 'green' }
-  ] 
-  
+  { id: 1, label: "Cat", isHidden: true, color: "red" },
+  { id: 2, label: "Dog", isHidden: false, color: "green" },
+];
+
+export const mockupDataset = {
+  id: 1222,
+  name: "SoccerNet",
+  project: 1,
+  datatype: "image",
+  instances: 1,
+  date_created: new Date(2012, 1, 1),
+};
+
+
+
+export const mockupThumbnail = {
+  filename: "Image132",
+  url: "https://www.britannica.com/story/why-do-some-people-call-football-soccer",
+};
+
+export const mockupImage = {
+  id: 132,
+  original: mockupThumbnail,
+  thumbnail: mockupThumbnail,
+};
+export const mockupDataInstance = {
+    id: 132,
+    name: "Image132",
+    image: mockupImage,
+    thumbnail: mockupThumbnail,
+    _cls: "ImageDataInstance"
+  };
 // export const dataList = [
 //     // {
 //     //     id: 0,

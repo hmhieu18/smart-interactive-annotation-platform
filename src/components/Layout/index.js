@@ -1,22 +1,10 @@
-import React from 'react';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import React from "react";
 
-import DesktopLayout from './DesktopLayout'
-import MobileLayout from './MobileLayout'
-
+import DesktopLayout from "./DesktopLayout";
 const Layout = (props) => {
-  const isMobileLayout = useMediaQuery('(max-width:800px)');
-  const { children } = props
+  const { children } = props;
 
-  if (isMobileLayout) {
-    return <MobileLayout>
-      {children}
-    </MobileLayout>
-  } else {
-    return <DesktopLayout>
-      {children}
-    </DesktopLayout>
-  }
-}
+  return <DesktopLayout>{children}</DesktopLayout>;
+};
 
-export default Layout
+export default Layout;

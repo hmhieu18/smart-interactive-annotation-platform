@@ -19,7 +19,7 @@ const List = (props) => {
   const projects = useStore(state => state.projects)
 
   return (
-    <Grid container spacing={1} className={classes.listContainer}>
+    <div className="row">
       <Loading isLoading={isLoading}/>
       {
         projects.map(project => (
@@ -29,7 +29,7 @@ const List = (props) => {
           />
         ))
       }
-    </Grid>
+    </div>
   )
 }
 

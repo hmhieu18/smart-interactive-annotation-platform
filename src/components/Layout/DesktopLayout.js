@@ -1,61 +1,26 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import React from "react";
 
-// import Logo from './Logo'
-import NavBarItems from './NavBarItems'
+import SideMenu from "./SideMenu/SideMenu";
+import { Container } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  leftSection: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  centerSection: {
-    flexGrow: 1,
-  },
-  rightSection: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  mainContainer: {
-    flex: 1,
-  }
-}));
-
+import { useState } from "react";
 const DesktopLayout = (props) => {
-  const classes = useStyles()
-  const { children } = props
+  const { children } = props;
+  const [inactive, setInactive] = useState(false);
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static" color="white" elevation={1}>
-        <Toolbar style={{ minHeight: 40 }}>
-          <div className={classes.leftSection}>
-            {/* <Logo href='/'/> */}
-            <NavBarItems />
-          </div>
-          <div className={classes.centerSection}>
-
-          </div>
-          <div className={classes.rightSection}>
-            {/* <NavBarItems/> */}
-          </div>
-        </Toolbar>
-      </AppBar>
-      <div className={classes.mainContainer}>
+    <div>
+      <SideMenu
+        onCollapse={(inactive) => {
+          console.log(inactive);
+          setInactive(inactive);
+        }}
+      />
+      <div className={`container ${inactive ? "inactive" : ""}`}>
         {children}
       </div>
     </div>
   );
-}
+};
 
-export default DesktopLayout
+export default DesktopLayout;
