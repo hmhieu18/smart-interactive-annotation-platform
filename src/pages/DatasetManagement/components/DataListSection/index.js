@@ -56,17 +56,13 @@ const DataListSection = (props) => {
   const pageEnd = page * DATA_PER_PAGE
 
 
-  // const dataList = useStore(state => state.dataList)
+  const dataList = useStore(state => state.dataList)
   const setSelectedData = useStore(state => state.setSelectedData)
   const selected = useStore(state => state.selected)
-  const dataList = [mockupDataInstance, mockupDataInstance].map(instance => ImageDataInstanceClass.constructorFromServerData(instance))
   return (
     <ImageList className={classes.dataList} cols={isMobileLayout ? 2 : 4}>
-      {
-      // console.log(dataList)
-      dataList.map((item) => {
-        // console.log("xxxx", item.constructor.name)
-        // if (!(pageStart <= ind && ind < pageEnd)) return;
+      {dataList.map((item, ind) => {
+        if (!(pageStart <= ind && ind < pageEnd)) return;
         const isSelected = selected[item.id]
         const AnnotateStatusIcon = mapStatusToIcon[item.annotateStatus]
         return (
@@ -74,7 +70,19 @@ const DataListSection = (props) => {
             className={classes.dataListItem}
           >
             <img src={item?.thumbnail?.URL} alt={item.name} onClick={() => setSelectedData(item.id, !selected[item.id])} />
-
+            <ImageListItemBar
+              className={clsx(isSelected && classes.selectedItemBar)}
+              title={item.name}
+              status={item.annotateStatus}
+              actionIcon={
+                <IconButton
+                  aria-label={`check ${item.name}`}
+                // className={clsx(classes.icon, isSelected && classes.selectedIcon)}
+                >
+                  <AnnotateStatusIcon className={classes.icon}/>
+                </IconButton>
+              }
+            />
           </ImageListItem>
         )
       })

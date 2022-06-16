@@ -5,7 +5,7 @@ import VideoDataInstanceClass from "../classes/VideoDataInstanceClass";
 import { mockupDataInstance } from "../mockup";
 
 class DataInstanceService {
-  async parseDataInstanceFromServer(instance) {
+  parseDataInstanceFromServer(instance) {
     if (instance._cls.includes(ImageDataInstanceClass._cls)) {
       return ImageDataInstanceClass.constructorFromServerData(instance);
     }
@@ -24,7 +24,6 @@ class DataInstanceService {
     const dataInstancesObj = [mockupDataInstance, mockupDataInstance].map(
       (instance) => this.parseDataInstanceFromServer(instance)
     );
-    console.log(dataInstancesObj);
     return dataInstancesObj;
   }
 

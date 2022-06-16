@@ -23,6 +23,7 @@ export const demoAnnotateData = [
 export const mockupDataset = {
   id: 1222,
   name: "SoccerNet",
+  description: "This is a soccer dataset",
   project: 1,
   datatype: "image",
   instances: 1,
@@ -33,7 +34,7 @@ export const mockupDataset = {
 
 export const mockupThumbnail = {
   filename: "Image132",
-  url: "https://www.britannica.com/story/why-do-some-people-call-football-soccer",
+  URL: "https://cdn.britannica.com/51/190751-050-147B93F7/soccer-ball-goal.jpg?q=60",
 };
 
 export const mockupImage = {
@@ -46,7 +47,8 @@ export const mockupDataInstance = {
     name: "Image132",
     image: mockupImage,
     thumbnail: mockupThumbnail,
-    _cls: "ImageDataInstance"
+    _cls: "ImageDataInstance",
+    annotateStatus: 1,
   };
 // export const dataList = [
 //     // {

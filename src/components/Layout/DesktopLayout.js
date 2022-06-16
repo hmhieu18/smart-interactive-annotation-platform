@@ -6,13 +6,12 @@ import './SideMenu/index.css'
 import { useState } from "react";
 const DesktopLayout = (props) => {
   const { children } = props;
-  const [inactive, setInactive] = useState(false);
+  const [inactive, setInactive] = useState(true);
 
   return (
     <div>
       <SideMenu
         onCollapse={(inactive) => {
-          console.log(inactive);
           setInactive(inactive);
         }}
       />

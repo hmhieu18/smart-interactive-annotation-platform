@@ -14,7 +14,8 @@ import { get } from "lodash";
 import moment from "moment";
 
 import EditIcon from "@material-ui/icons/Edit";
-import CreateIcon from "@material-ui/icons/AddCircle";
+import SplitButton from "../../../../components/SplitButton";
+
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import "../../../../assets/scss/sb-admin-2.scss";
 
@@ -95,7 +96,6 @@ const DatasetList = (props) => {
       borderRadius: 8,
       "&:nth-of-type(odd)": {
         backgroundColor: theme.palette.action.hover,
-        
       },
     },
   }))(TableRow);
@@ -110,15 +110,13 @@ const DatasetList = (props) => {
           marginBottom: 15,
         }}
       >
-        <a
-          onClick={() => {setOpenDialog(true)}}
-          className="btn btn-primary btn-icon-split"
-        >
-          <span className="icon text-white-50">
-            <i class="bi bi-plus-square-fill"></i>
-          </span>
-          <span className="text">New Dataset</span>
-        </a>
+        <SplitButton
+          onClick={() => {
+            setOpenDialog(true);
+          }}
+          text="New Dataset"
+          icon={<i class="bi bi-plus-square-fill"></i>}
+        />
       </div>
       <Table className={classes.table} stickyHeader aria-label="sticky table">
         <TableHead>

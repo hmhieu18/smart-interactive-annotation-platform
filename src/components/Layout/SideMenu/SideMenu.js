@@ -30,7 +30,7 @@ export const menuItems = [
   },];
 
 const SideMenu = (props) => {
-  const [inactive, setInactive] = useState(false);
+  const [inactive, setInactive] = useState(props);
 
   useEffect(() => {
     if (inactive) {

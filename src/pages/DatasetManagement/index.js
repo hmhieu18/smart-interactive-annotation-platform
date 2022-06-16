@@ -34,8 +34,9 @@ const DatasetDetailPage = (props) => {
       <Loading isLoading={isLoading}/>
       <DatasetInfo useStore={useDatasetManagementStore}/>
       <BulkSelection useStore={useDatasetManagementStore}/>
-      <DataPagination useStore={useDatasetManagementStore}/>
       <DataListSection useStore={useDatasetManagementStore}/>
+      <DataPagination useStore={useDatasetManagementStore}/>
+
     </div>
   )
 }

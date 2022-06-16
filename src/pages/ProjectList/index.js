@@ -1,12 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-
+import SplitButton from "../../components/SplitButton";
 import List from "./components/List/index";
 import useProjectListStore from "./store";
 import CreateProjectDialog from "./components/CreateProjectDialog";
-import CreateIcon from "@material-ui/icons/AddCircle";
 import "../../assets/scss/sb-admin-2.scss";
 
 const useStyles = makeStyles((theme) => ({
@@ -54,15 +51,7 @@ const ProjectList = (props) => {
               marginBottom: 15,
             }}
           >
-            <a
-              onClick={() => setOpenCreateDialog(true)}
-              className="btn btn-primary btn-icon-split"
-            >
-              <span className="icon text-white-50">
-                <i class="bi bi-plus-square-fill"></i>{" "}
-              </span>
-              <span className="text">New Project</span>
-            </a>
+            <SplitButton onClick={() => setOpenCreateDialog(true)} text="New Project" icon={<i class="bi bi-plus-square-fill"></i>}/>
           </div>
           <CreateProjectDialog
             open={openCreateDialog}
