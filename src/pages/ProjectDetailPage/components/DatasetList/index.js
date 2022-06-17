@@ -47,11 +47,11 @@ const tableColumns = [
     label: "Type",
   },
   {
-    key: "instances",
-    label: "Instances",
+    key: "description",
+    label: "Description",
   },
   {
-    key: "date_created",
+    key: "createdDate",
     label: "Created at",
     formatter: (value) => moment(value).format("MMMM Do YYYY, HH:mm"),
   },

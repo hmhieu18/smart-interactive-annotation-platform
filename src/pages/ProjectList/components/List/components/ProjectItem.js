@@ -53,8 +53,8 @@ const ProjectItem = (props) => {
   const classes = useStyles();
   const { useStore, project } = props;
 
-  const { id, name, description, date_created } = project;
-
+  const { id, name, description, modifiedDate } = project;
+  
   return (
     <Grid
       container
@@ -72,7 +72,7 @@ const ProjectItem = (props) => {
         <div className={classes.projectDescription}>{description}</div>
         <div className={classes.date}>
           <i class="bi bi-calendar" style={{margin: "4px"}}></i>{"  Last Modified: "}
-          {moment(date_created).format("MMMM Do YYYY, h:mm")}
+          {moment(modifiedDate).format("MMMM Do YYYY, hh:mm")}
         </div>
       </div>
     </Grid>
