@@ -26,14 +26,14 @@ const ProjectList = (props) => {
 
   const queryProjects = useProjectListStore((state) => state.queryProjects);
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
-  const { useStore } = props;
-  // const appendProject = useStore(state => state.appendProject)
+  // const { useStore } = props;
+  const appendProject = useProjectListStore(state => state.appendProject);
 
   React.useEffect(() => {
     queryProjects();
   });
   const handleCreateProject = (newProject) => {
-    // appendProject(newProject)
+    appendProject(newProject)
   };
   return (
     // <div className={classes.root}>

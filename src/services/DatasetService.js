@@ -6,10 +6,10 @@ class DatasetService {
   getDatasetById(id) {
     return RestConnector.get(`/datasets?id=${id}`)
       .then(response => {
-        if (!response.data[0]) {
+        if (!response.data) {
           throw new Error("Not found dataset")
         }
-        return DatasetClass.constructorFromServerData(response.data[0])
+        return DatasetClass.constructorFromServerData(response.data)
       })
     // return DatasetClass.constructorFromServerData(mockupDataset)
   }
