@@ -15,10 +15,11 @@ const useProjectInfoStore = create((set, get) => ({
     setIsLoadingField("project", true)
 
     const project = await ProjectService.getProjectById(projectId)
-
+    
     if (!project) {
       alert("Not found project!")
       window.history.back()
+      Location.reload()
     } else {
       set({ project })
     }

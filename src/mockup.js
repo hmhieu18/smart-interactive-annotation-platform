@@ -24,10 +24,10 @@ export const mockupDataset = {
   id: 1222,
   name: "SoccerNet",
   description: "This is a soccer dataset",
-  project: 1,
+  projectId: 1,
   datatype: "image",
   instances: 1,
-  date_created: new Date(2012, 1, 1),
+  createdDate: new Date(2012, 1, 1),
 };
 
 

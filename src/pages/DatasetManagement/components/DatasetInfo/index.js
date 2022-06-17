@@ -62,13 +62,13 @@ const DatasetInfo = (props) => {
   const deleteDataset = useStore((state) => state.deleteDataset);
   const updateDatasetInfo = useStore((state) => state.updateDatasetInfo);
 
-  const { id, projectId, datatype, instances } = dataset;
+  const { id, projectId, datatype, description } = dataset;
 
   React.useEffect(() => {
-    const { name, description, date_created } = dataset;
+    const { name, description, createdDate } = dataset;
     setFieldValue("name", name);
     setFieldValue("description", description);
-    setFieldValue("date_created", description);
+    setFieldValue("createdDate", createdDate);
   }, [dataset, setFieldValue]);
 
   const handleSubmit = async () => {
@@ -149,7 +149,7 @@ const DatasetInfo = (props) => {
         <div className={classes.date}>
           <i class="bi bi-calendar" style={{ margin: "4px" }}></i>
           {"  Last Modified: "}
-          {moment(dataset.date_created).format("MMMM Do YYYY, h:mm")}
+          {moment(dataset.modifiedDate).format("MMMM Do YYYY, h:mm")}
         </div>
 
         <Grid
