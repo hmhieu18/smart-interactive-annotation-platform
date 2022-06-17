@@ -69,14 +69,19 @@ const CreateDatasetDialog = (props) => {
       fullWidth
       maxWidth="sm"
     >
-      <DialogTitle id="form-dialog-title">
-        Create dataset
-        {generalError &&
-          <FormHelperText error>
-            {generalError}
-          </FormHelperText>
-        }
-      </DialogTitle>
+      <div className="modal-header">
+        <h5 className="modal-title" id="exampleModalLabel">
+          Create new dataset
+        </h5>
+        <button
+          className="close"
+          type="button"
+          onClick={handleClose}
+          aria-label="Close"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
       <DialogContent>
         {
           fields.map(field => {
@@ -91,12 +96,20 @@ const CreateDatasetDialog = (props) => {
         }
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary" disabled={isSubmitting}>
+      <a
+          className="btn btn-secondary"
+          onClick={handleClose}
+          disabled={isSubmitting}
+        >
           Cancel
-        </Button>
-        <Button onClick={handleSubmit} color="primary" disabled={isSubmitting}>
-          Save
-        </Button>
+        </a>
+        <a
+          className="btn btn-primary"
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+        >
+          Create
+        </a>
       </DialogActions>
     </Dialog>
   );

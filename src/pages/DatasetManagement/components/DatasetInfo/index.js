@@ -45,6 +45,11 @@ const useStyles = makeStyles((theme) => ({
   storageIcon: {
     margin: 10,
   },
+  date: {
+    marginTop: 10,
+    fontSize: 14,
+    color: "#595959",
+  },
 }));
 
 const DatasetInfo = (props) => {
@@ -151,7 +156,11 @@ const DatasetInfo = (props) => {
           {"  Last Modified: "}
           {moment(dataset.date_created).format("MMMM Do YYYY, h:mm")}
         </div>
-
+        <div className={classes.date}>
+          <i class={dataset.datatype=="video"?"bi bi-file-play-fill":"bi bi-file-image-fill"} style={{ margin: "4px" }}></i>
+          {`  Number of ${dataset.datatype}(s): `}
+          {dataset.instances}
+        </div>
         <Grid
           container
           item

@@ -7,6 +7,7 @@ import Layout from "./components/Layout/index";
 import ProjectListPage from "./pages/ProjectList/index";
 import ProjectDetailPage from "./pages/ProjectDetailPage/index";
 import DatasetDetailPage from "./pages/DatasetManagement/index";
+import UploadDatasetPage from "./pages/UploadDataset/index";
 import "./App.css";
 const appTheme = createTheme({
   palette: {
@@ -18,9 +19,9 @@ const appTheme = createTheme({
       contrastText: "#ffffff",
     },
     secondary: {
-      main: "#ffc074",
-      light: "#ffddb5",
-      lighter: "#ffefdb",
+      main: "#6c757d",
+      light: "#adb5bd",
+      lighter: "#e9ecef",
     },
     error: {
       main: "#E91D00",
@@ -42,6 +43,11 @@ const appRoutes = [
   {
     path: "/datasets/dataset=:datasetId",
     component: DatasetDetailPage,
+    withLayout: true,
+  },
+  {
+    path: "/datasets/upload/dataset=:datasetId",
+    component: UploadDatasetPage,
     withLayout: true,
   },
 ];

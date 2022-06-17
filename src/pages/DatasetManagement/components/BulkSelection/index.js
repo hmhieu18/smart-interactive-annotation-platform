@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router'
 import { makeStyles } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
+import BasicButton from '../../../../components/BasicButton'
 import Collapse from '@material-ui/core/Collapse'
 import { filter } from 'lodash'
 import { useConfirm } from 'material-ui-confirm'
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 20,
     margin: 'auto',
     width: 'calc(100% - 40px)',
-    background: theme.palette.secondary.light,
+    background: theme.palette.secondary.lighter,
     borderRadius: 10,
   },
   infoText: {
@@ -54,31 +54,28 @@ const BulkSelection = (props) => {
         </Grid>
         <Grid container item xs={4} justifyContent="flex-end" spacing={1}>
           <Grid item>
-            <Button
-              color="primary"
-              variant="outlined"
+            <BasicButton
+              variant="primary"
               href={`/annotations/dataset=${datasetId}?instance_id=${selectedIds[0]}`}
+              text="Annotate"
             >
-              Annotate
-            </Button>
+            </BasicButton>
           </Grid>
           <Grid item>
-            <Button
-              color="primary"
-              variant="outlined"
+            <BasicButton
+              variant="secondary"
               onClick={deselectAll}
+              text="Cancel"
             >
-              Cancel
-            </Button>
+            </BasicButton>
           </Grid>
           <Grid item>
-            <Button
-              color="primary"
-              variant="outlined"
+            <BasicButton
+              variant="danger"
               onClick={handleDeleteSelected}
+              text="Delete"
             >
-              Delete
-            </Button>
+            </BasicButton>
           </Grid>
         </Grid>
       </Grid>
