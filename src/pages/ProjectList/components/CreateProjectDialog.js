@@ -48,13 +48,11 @@ const CreateProjectDialog = (props) => {
       fullWidth
       maxWidth="sm"
     >
-      {/* <DialogTitle id="form-dialog-title">
-        Create project
-        {generalError && <FormHelperText error>{generalError}</FormHelperText>}
-      </DialogTitle> */}
       <div className="modal-header">
         <h5 className="modal-title" id="exampleModalLabel">
           Create new project
+        {generalError && <FormHelperText error>{generalError}</FormHelperText>}
+
         </h5>
         <button
           className="close"
@@ -109,7 +107,7 @@ const CreateProjectForm = withFormik({
       handleCreate(newProject);
       setOpen(false);
     } catch (error) {
-      const errMessage = get(error, "data.errors.json.project", "");
+      const errMessage = get(error, "data");
       setErrors({ error: errMessage });
     }
     setSubmitting(false);

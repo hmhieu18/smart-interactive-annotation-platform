@@ -1,9 +1,8 @@
 import React from "react";
-import SwipeableViews from "react-swipeable-views";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { useParams } from "react-router";
 import Loading from "../../components/Loading";
-
+import ProjectInfo from "./components/ProjectInfo/index";
 import DatasetList from "./components/DatasetList/index";
 
 import useProjectInfoStore from "./store";
@@ -32,6 +31,9 @@ const ProjectDetailPage = () => {
   return (
     <div className={classes.root}>
       <Loading isLoading={isLoading} />
+      <ProjectInfo
+        useStore={useProjectInfoStore}
+      />
       <DatasetList useStore={useProjectInfoStore} />
     </div>
   );

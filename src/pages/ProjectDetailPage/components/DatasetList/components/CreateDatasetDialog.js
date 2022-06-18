@@ -72,6 +72,7 @@ const CreateDatasetDialog = (props) => {
       <div className="modal-header">
         <h5 className="modal-title" id="exampleModalLabel">
           Create new dataset
+        {generalError && <FormHelperText error>{generalError}</FormHelperText>}
         </h5>
         <button
           className="close"
@@ -137,7 +138,7 @@ const CreateDatasetForm = withFormik({
       handleCreate(newDataset)
       setOpen(false)
     } catch (error) {
-      const errMessage = get(error, 'data.errors.json.dataset', '')
+      const errMessage = get(error, 'data', '')
       setErrors({ error: errMessage })
     }
     setSubmitting(false)
