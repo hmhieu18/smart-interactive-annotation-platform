@@ -15,15 +15,15 @@ class DataInstanceService {
   }
 
   async getDataInstancesByDataset(datasetId, page = 1, per_page = 0) {
-    // const dataInstancesResponse = await RestConnector.get(`/data?dataset_id=${datasetId}`)
+    const dataInstancesResponse = await RestConnector.get(`/data?dataset-id=${datasetId}`)
 
-    // const dataInstancesObj = await Promise.all(dataInstancesResponse.data.map(instance => this.parseDataInstanceFromServer(instance)))
+    const dataInstancesObj = await Promise.all(dataInstancesResponse.data.map(instance => this.parseDataInstanceFromServer(instance)))
 
     //mockup
     // const dataInstancesResponse = await [mockupDataInstance, mockupDataInstance]
-    const dataInstancesObj = await Promise.all([mockupDataInstance].map(
-      (instance) => this.parseDataInstanceFromServer(instance)
-    ));
+    // const dataInstancesObj = await Promise.all([mockupDataInstance].map(
+    //   (instance) => this.parseDataInstanceFromServer(instance)
+    // ));
     return dataInstancesObj;
   }
 

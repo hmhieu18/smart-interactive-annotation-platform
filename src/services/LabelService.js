@@ -3,16 +3,8 @@ import LabelClass from '../classes/LabelClass'
 import RestConnector from '../connectors/RestConnector'
 import {mockupLabelList} from '../mockup'
 class LabelService {
-  getLabelByProject(projectId) {
-    //mockup
-    return mockupLabelList.map(label => LabelClass.constructorFromServerData(label))
-  
-    // return RestConnector.get(`/annotation_labels?project_id=${projectId}`)
-    //   .then(response => response.data.map(label => LabelClass.constructorFromServerData(label)))
-  }
-
   getLabelByDataset(datasetId) {
-    // return RestConnector.get(`/annotation_labels?dataset_id=${datasetId}`)
+    // return RestConnector.get(`/labels?dataset-id=${datasetId}`)
     //   .then(response => response.data.map(label => LabelClass.constructorFromServerData(label)))
     //mockup
     return mockupLabelList.map(label => LabelClass.constructorFromServerData(label))
@@ -20,25 +12,23 @@ class LabelService {
     }
 
   createLabel(data) {
-    return RestConnector.post('/annotation_labels', {
+    return RestConnector.post('/labels', {
       label: data.label,
-      project_id: data.projectId,
-      properties: data.properties,
+      dataset_id: data.datasetId,
       annotation_properties: data.annotationProperties
     }).then(response => LabelClass.constructorFromServerData(response.data))
   }
 
   updateLabel(data) {
-    return RestConnector.put('/annotation_labels', {
+    return RestConnector.put('/labels', {
       id: data.id,
       label: data.label,
-      properties: data.properties,
       annotation_properties: data.annotationProperties
     }).then(response => LabelClass.constructorFromServerData(response.data))
   }
 
   deleteLabelById(id) {
-    return RestConnector.delete(`/annotation_labels?id=${id}`)
+    return RestConnector.delete(`/labels?id=${id}`)
   }
 }
 

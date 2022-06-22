@@ -86,12 +86,12 @@ const useDatasetManagementStore = create((set, get) => ({
 
     setIsLoadingField("deleting-dataset", false);
   },
-  getLabels: async (projectId) => {
+  getLabels: async (datasetID) => {
     const setIsLoadingField = get().setIsLoadingField;
 
     setIsLoadingField("labels", true);
     try {
-      const labels = await LabelService.getLabelByProject(projectId);
+      const labels = await LabelService.getLabelByDataset(datasetID);
       set({ labels: labels });
     } catch (error) {
       alert(get(error, "response.data.errors", "Error getting labels"));

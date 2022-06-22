@@ -42,7 +42,7 @@ export const mockupLabelList = [
     date_created: "2021-12-01T17:02:43.289000",
     id: "61a7aab3ba45c2d182c087b4",
     label: "Person",
-    project: "61a649b13c699d85a19735c3",
+    dataset: "61a649b13c699d85a19735c3",
   },
 ];
 
