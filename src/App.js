@@ -8,6 +8,8 @@ import ProjectListPage from "./pages/ProjectList/index";
 import ProjectDetailPage from "./pages/ProjectDetailPage/index";
 import DatasetDetailPage from "./pages/DatasetManagement/index";
 import UploadDatasetPage from "./pages/UploadDataset/index";
+import AnnotationPage from "./pages/AnnotationPage/index";
+
 import "./App.css";
 const appTheme = createTheme({
   palette: {
@@ -49,6 +51,11 @@ const appRoutes = [
     path: "/datasets/upload/dataset=:datasetId",
     component: UploadDatasetPage,
     withLayout: true,
+  },
+  {
+    path: "/annotations/dataset=:datasetId",
+    component: AnnotationPage,
+    withLayout: false,
   },
 ];
 

@@ -21,9 +21,9 @@ class DataInstanceService {
 
     //mockup
     // const dataInstancesResponse = await [mockupDataInstance, mockupDataInstance]
-    const dataInstancesObj = [mockupDataInstance, mockupDataInstance].map(
+    const dataInstancesObj = await Promise.all([mockupDataInstance].map(
       (instance) => this.parseDataInstanceFromServer(instance)
-    );
+    ));
     return dataInstancesObj;
   }
 

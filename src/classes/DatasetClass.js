@@ -11,7 +11,6 @@ export default class DatasetClass {
   }
 
   static constructorFromServerData(data) {
-    console.log("UP A ", data)
     const { id, projectId, name, datatype, ...others } = data
     return new DatasetClass(
       id,

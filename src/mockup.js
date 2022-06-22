@@ -13,7 +13,13 @@ export const mockupProject = {
   name: "Project1",
   description: "This is the project",
 };
-export const projectList = [mockupProject, mockupProject, mockupProject, mockupProject, mockupProject];
+export const projectList = [
+  mockupProject,
+  mockupProject,
+  mockupProject,
+  mockupProject,
+  mockupProject,
+];
 
 export const demoAnnotateData = [
   { id: 1, label: "Cat", isHidden: true, color: "red" },
@@ -30,7 +36,15 @@ export const mockupDataset = {
   createdDate: new Date(2012, 1, 1),
 };
 
-
+export const mockupLabelList = [
+  {
+    annotation_properties: { fill: "#9C27B0", stroke: "#000000" },
+    date_created: "2021-12-01T17:02:43.289000",
+    id: "61a7aab3ba45c2d182c087b4",
+    label: "Person",
+    project: "61a649b13c699d85a19735c3",
+  },
+];
 
 export const mockupThumbnail = {
   filename: "Image132",
@@ -43,13 +57,39 @@ export const mockupImage = {
   thumbnail: mockupThumbnail,
 };
 export const mockupDataInstance = {
-    id: 132,
-    name: "Image132",
-    image: mockupImage,
-    thumbnail: mockupThumbnail,
-    _cls: "ImageDataInstance",
-    annotateStatus: 1,
-  };
+  id: 132,
+  name: "Image132",
+  image: mockupImage,
+  thumbnail: mockupThumbnail,
+  _cls: "ImageDataInstance",
+  annotateStatus: 1,
+};
+
+export const mockupDataList = [
+  {
+    _cls: "DataInstance.ImageDataInstance",
+    annotateStatus: 2,
+    dataset: "625a83f303383f34b7603037",
+    date_created: "2022-06-18T09:04:17.832000",
+    height: 168,
+    id: "62ad9511841ee8b12dd48ba7",
+    image: {
+      _cls: "Image",
+      id: "62ad9511841ee8b12dd48ba6",
+      original: {
+        URL: "https://storage.googleapis.com/iaa-production/dataset/625a83f303383f34b7603037/images/original/download.jpeg",
+        filename: "download.jpeg",
+      },
+      thumbnail: {
+        URL: "https://storage.googleapis.com/iaa-production/dataset/625a83f303383f34b7603037/images/thumbnail/download.jpeg",
+        filename: "download.jpeg",
+      },
+    },
+    name: "download.jpeg",
+    width: 300,
+  },
+];
+
 // export const dataList = [
 //     // {
 //     //     id: 0,
