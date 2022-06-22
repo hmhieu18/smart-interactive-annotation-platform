@@ -16,7 +16,7 @@ export default class VideoDataInstanceClass extends DataInstanceClass {
   }
 
   static async constructorFromServerData(data) {
-    const { id, name, video, frames = [], thumbnail, ...others } = data
+    const { id, name, url, frames = [], thumbnail, ...others } = data
     let frames_obj = frames.map(frame => ImageClass.constructorFromServerData(frame))
     // await Promise.all(frames_obj.map(async (frame) => frame.getData()))
     if (frames_obj && frames_obj[0]) {
@@ -26,7 +26,7 @@ export default class VideoDataInstanceClass extends DataInstanceClass {
     return new VideoDataInstanceClass(
       id,
       name,
-      video,
+      url,
       thumbnail,
       frames_obj,
       others

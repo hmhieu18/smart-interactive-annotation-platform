@@ -44,15 +44,15 @@ class DataInstanceService {
   upload(file, datasetId, onUploadProgress) {
     let formData = new FormData();
 
-    formData.append("dataset_id", datasetId);
+    formData.append("datasetID", datasetId);
 
-    let uploadURL = "/data/upload_image";
+    let uploadURL = "/data/image";
     if (file.type.includes("image")) {
-      formData.append("image", file);
-      uploadURL = "/data/upload_image";
+      formData.append("data", file);
+      uploadURL = "/data/image";
     } else {
-      formData.append("video", file);
-      uploadURL = "/data/upload_video";
+      formData.append("data", file);
+      uploadURL = "/data/video";
     }
 
     return RestConnector.post(uploadURL, formData, {
@@ -61,9 +61,14 @@ class DataInstanceService {
       },
       onUploadProgress,
     }).then((response) => {
-      const data = response.data;
-      return this.parseDataInstanceFromServer(data);
-    });
+      if (response.data.success === "success"){
+        const data = response.data;
+        return this.parseDataInstanceFromServer(data);
+      }
+    }).catch((err) => {
+      alert(err.response.data); // alert
+      console.log(err.response.status); 
+  });
   }
 }
 

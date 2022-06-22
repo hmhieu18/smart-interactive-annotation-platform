@@ -19,12 +19,12 @@ export default class ImageDataInstanceClass extends DataInstanceClass {
   }
 
   static constructorFromServerData(data) {
-    const { id, name, image, thumbnail, ...others } = data 
+    const { id, name, url, thumbnail, ...others } = data 
     return new ImageDataInstanceClass(
       id,
       name,
       StorageFileClass.constructorFromServerData(thumbnail),
-      ImageClass.constructorFromServerData(image),
+      ImageClass.constructorFromServerData(url),
       others
     )
   }
