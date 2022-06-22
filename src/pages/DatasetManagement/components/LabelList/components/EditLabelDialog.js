@@ -51,7 +51,7 @@ const fields = [
 const EditLabelDialog = (props) => {
   const { 
     open, setOpen, handleSave, 
-    projectId, label,
+    datasetId, label,
     values, setFieldValue,
     errors, isSubmitting,
     setSubmitting, setErrors
@@ -78,7 +78,7 @@ const EditLabelDialog = (props) => {
     const newLabel = new LabelClass(
       label.id, 
       values["label"],
-      projectId,
+      datasetId,
       {},
       {
         fill: get(values, 'annotationProperties.fill', ''),

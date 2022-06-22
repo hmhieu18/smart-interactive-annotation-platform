@@ -70,7 +70,7 @@ const StyledTableRow = withStyles((theme) => ({
 
 const LabelList = (props) => {
   const classes = useStyles()
-  const { projectId } = useParams()
+  const { datasetId } = useParams()
   const { useStore } = props
 
 
@@ -84,7 +84,7 @@ const LabelList = (props) => {
   const [editingLabel, setEditingLabel] = React.useState({})
 
   React.useEffect(() => {
-    getLabels(projectId)
+    getLabels(datasetId)
   }, [])
 
   const handleTriggerEditLabel = (label) => () => {
@@ -93,7 +93,7 @@ const LabelList = (props) => {
   }
 
   const handleTriggerCreateLabel = () => {
-    const newLabel = new LabelClass('', '', projectId, {}, {
+    const newLabel = new LabelClass('', '', datasetId, {}, {
       fill: randomColor(),
       stroke: '#000000'
     })
@@ -195,7 +195,7 @@ const LabelList = (props) => {
         </TableBody>
       </Table>
       <EditLabelDialog
-        projectId={projectId}
+        datasetId={datasetId}
         open={openDialog}
         setOpen={setOpenDialog}
         handleSave={handleSaveEditDialog}
