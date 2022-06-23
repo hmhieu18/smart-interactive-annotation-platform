@@ -4,10 +4,10 @@ import RestConnector from '../connectors/RestConnector'
 import {mockupLabelList} from '../mockup'
 class LabelService {
   getLabelByDataset(datasetId) {
-    // return RestConnector.get(`/labels?dataset-id=${datasetId}`)
-    //   .then(response => response.data.map(label => LabelClass.constructorFromServerData(label)))
-    //mockup
-    return mockupLabelList.map(label => LabelClass.constructorFromServerData(label))
+    return RestConnector.get(`/labels?dataset-id=${datasetId}`)
+      .then(response => response.data.map(label => LabelClass.constructorFromServerData(label)))
+    // mockup
+    // return mockupLabelList.map(label => LabelClass.constructorFromServerData(label))
 
     }
 

@@ -79,7 +79,6 @@ const EditLabelDialog = (props) => {
       label.id, 
       values["label"],
       datasetId,
-      {},
       {
         fill: get(values, 'annotationProperties.fill', ''),
         stroke: get(values, 'annotationProperties.stroke', '')
