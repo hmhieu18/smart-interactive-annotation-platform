@@ -13,6 +13,17 @@ export const mockupProject = {
   name: "Project1",
   description: "This is the project",
 };
+
+export const mockupModel = {
+  id: 1,
+  name: "Model1",
+  description: "This is the project",
+};
+export const modelList = [
+  mockupModel,
+  mockupModel,
+  mockupModel,
+]
 export const projectList = [
   mockupProject,
   mockupProject,

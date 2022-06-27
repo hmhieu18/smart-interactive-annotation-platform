@@ -39,26 +39,26 @@ const toolBoxButtons = [
     mode: MODES.DRAW_BBOX.name,
     component: <RectangleIcon />,
   },
-  {
-    name: 'Polygon',
-    mode: MODES.DRAW_POLYGON.name,
-    component: <PolygonIcon />,
-  },
-  {
-    name: 'Mask brush',
-    mode: MODES.DRAW_MASK_BRUSH.name,
-    component: <PainBrushIcon />,
-  },
-  {
-    name: 'Scribble to Mask',
-    mode: MODES.DRAW_MASK.name,
-    component: <ScribblesIcon />,
-  },
-  {
-    name: 'Referring expression',
-    mode: MODES.REFERRING_EXPRESSION.name,
-    component: <RefExIcon />,
-  },
+  // {
+  //   name: 'Polygon',
+  //   mode: MODES.DRAW_POLYGON.name,
+  //   component: <PolygonIcon />,
+  // },
+  // {
+  //   name: 'Mask brush',
+  //   mode: MODES.DRAW_MASK_BRUSH.name,
+  //   component: <PainBrushIcon />,
+  // },
+  // {
+  //   name: 'Scribble to Mask',
+  //   mode: MODES.DRAW_MASK.name,
+  //   component: <ScribblesIcon />,
+  // },
+  // {
+  //   name: 'Referring expression',
+  //   mode: MODES.REFERRING_EXPRESSION.name,
+  //   component: <RefExIcon />,
+  // },
 ]
 
 const Toolbox = () => {

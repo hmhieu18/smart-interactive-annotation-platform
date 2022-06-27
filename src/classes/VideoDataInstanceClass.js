@@ -1,34 +1,39 @@
 import DataInstanceClass from './DataInstanceClass'
 import ImageClass from './ImageClass'
+import StorageFileClass from "./StorageFileClass";
 
 export default class VideoDataInstanceClass extends DataInstanceClass {
   static _cls = "VideoDataInstance"
 
-  constructor(id, name = '', video, thumbnail, frames, otherData) {
-    const { fps, num_frames, width, height, ...others } = otherData
+  constructor(id, name = '', video, thumbnail, otherData) {
+    const { fps, width, height, ...others } = otherData
 
     super(id, name, thumbnail, width, height, others)
 
     this.video = video
-    this.frames = frames
+    // this.frames = frames
     this.fps = fps
-    this.numFrames = num_frames
+    // this.numFrames = num_frames
   }
 
   static async constructorFromServerData(data) {
-    const { id, name, url, frames = [], thumbnail, ...others } = data
-    let frames_obj = frames.map(frame => ImageClass.constructorFromServerData(frame))
+    const { id, name, url, thumbnail, ...others } = data
+    // let frames_obj = frames.map(frame => ImageClass.constructorFromServerData(frame))
     // await Promise.all(frames_obj.map(async (frame) => frame.getData()))
-    if (frames_obj && frames_obj[0]) {
-      await frames_obj[0].getData()
-    }
+    // if (frames_obj && frames_obj[0]) {
+    //   await frames_obj[0].getData()
+    // }
 
     return new VideoDataInstanceClass(
       id,
       name,
       url,
-      thumbnail,
-      frames_obj,
+      StorageFileClass.constructorFromServerData({
+        URL: thumbnail,
+        filename: name,
+      }),
+      // thumbnail,
+      // frames_obj,
       others
     )
   }

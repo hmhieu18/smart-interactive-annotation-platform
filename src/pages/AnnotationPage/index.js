@@ -9,6 +9,8 @@ import useQuery from "../../utils/useQuery";
 import annotationEventCenter from "./EventCenter";
 import "../../assets/scss/sb-admin-2.scss";
 import RenderComponent from './components/Stage/index'
+import PlayControl from './components/PlayControl/index'
+import PropagationControl from './components/PropagationControl/index'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,7 +57,7 @@ const AnnotationPage = (props) => {
   const getDataInstances = useDatasetStore((state) => state.getDataInstances);
   const setInstanceId = useDatasetStore((state) => state.setInstanceId);
   const loadAnnotationLabels = useAnnotationStore(state => state.loadAnnotationLabels)
-  const loadAnnotationObjects = useAnnotationStore(state => state.loadAnnotationObjects)
+  // const loadAnnotationObjects = useAnnotationStore(state => state.loadAnnotationObjects)
   const loadAnnotations = useAnnotationStore(state => state.loadAnnotations)
 
   useEffect(() => {
@@ -76,8 +78,8 @@ const AnnotationPage = (props) => {
 
   useEffect(() => {
     if (instanceId) {
-      loadAnnotationObjects(instanceId);
-      loadAnnotations(instanceId);
+      // loadAnnotationObjects(instanceId);
+      // loadAnnotations(instanceId);
     }
   }, [instanceId]);
 
@@ -91,9 +93,9 @@ const AnnotationPage = (props) => {
 
         <div className={classes.annotatorContainer}>
            <RenderComponent/>
-          {/*<PropagationControl/>
+          {/* <PropagationControl/> */}
           <PlayControl/>
-          <ModeController/>
+          {/*<ModeController/>
           <KeyboardHandler /> 
           <Prediction /> */}
         </div>

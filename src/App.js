@@ -5,7 +5,9 @@ import { ConfirmProvider } from "material-ui-confirm";
 import Layout from "./components/Layout/index";
 
 import ProjectListPage from "./pages/ProjectList/index";
+import ModelListPage from "./pages/ModelList/index";
 import ProjectDetailPage from "./pages/ProjectDetailPage/index";
+import ModelDetailPage from "./pages/ModelDetailPage/index";
 import DatasetDetailPage from "./pages/DatasetManagement/index";
 import UploadDatasetPage from "./pages/UploadDataset/index";
 import AnnotationPage from "./pages/AnnotationPage/index";
@@ -38,6 +40,11 @@ const appRoutes = [
     withLayout: true,
   },
   {
+    path: ["/models"],
+    component: ModelListPage,
+    withLayout: true,
+  },
+  {
     path: "/projects/project=:projectId",
     component: ProjectDetailPage,
     withLayout: true,
@@ -45,6 +52,11 @@ const appRoutes = [
   {
     path: "/datasets/dataset=:datasetId",
     component: DatasetDetailPage,
+    withLayout: true,
+  },
+  {
+    path: "/models/model=:modelId",
+    component: ModelDetailPage,
     withLayout: true,
   },
   {
@@ -65,40 +77,38 @@ function App() {
       <ConfirmProvider>
         <div className="App">
           <Router>
-              <Switch>
-                {appRoutes.map((route) => {
-                  const {
-                    withLayout,
-                    exact = true,
-                    path,
-                    component: Component,
-                    ...others
-                  } = route;
-                  return (
-                    <Route
-                      key={path}
-                      path={path}
-                      exact={exact}
-                      render={() =>
-                        withLayout ? (
-                          <Layout>
-                            <Component />
-                          </Layout>
-                        ) : (
+            <Switch>
+              {appRoutes.map((route) => {
+                const {
+                  withLayout,
+                  exact = true,
+                  path,
+                  component: Component,
+                  ...others
+                } = route;
+                return (
+                  <Route
+                    key={path}
+                    path={path}
+                    exact={exact}
+                    render={() =>
+                      withLayout ? (
+                        <Layout>
                           <Component />
-                        )
-                      }
-                      {...others}
-                    />
-                  );
-                })}
-              </Switch>
+                        </Layout>
+                      ) : (
+                        <Component />
+                      )
+                    }
+                    {...others}
+                  />
+                );
+              })}
+            </Switch>
           </Router>
-          
         </div>
       </ConfirmProvider>
     </ThemeProvider>
-
   );
 }
 

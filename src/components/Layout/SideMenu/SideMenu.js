@@ -17,9 +17,9 @@ export const menuItems = [
     iconClassName: "bi bi-kanban",
   },
   {
-    name: "Dataset List",
+    name: "Model List",
     exact: true,
-    to: `/datasets`,
+    to: `/models`,
     iconClassName: "bi bi-file-earmark-zip",
   },
   {
