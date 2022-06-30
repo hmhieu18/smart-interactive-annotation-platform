@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Link from "../../../../../components/Link";
-
+import {Robot} from "../../../../../components/icons/RobotIcon";
 import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
@@ -52,8 +52,8 @@ const ModelItem = (props) => {
   const classes = useStyles();
   const { useStore, model } = props;
 
-  const { id, name, description, modifiedDate } = model;
-  
+  const { id, name, description, modifiedDate, input } = model;
+
   return (
     <Grid
       container
@@ -63,15 +63,19 @@ const ModelItem = (props) => {
     >
       <div className={classes.avatarContainer}>
         {/* <Avatar className={classes.avatar}>{name[0]}</Avatar> */}
-        <i class="bi bi-lightbulb" style={{fontSize: "40px"}}></i>
-
+        <Robot style={{ height:40, width:40 }}></Robot>
       </div>
       <div>
         <div className={classes.modelName}>{name}</div>
         <div className={classes.modelDescription}>{description}</div>
         <div className={classes.date}>
-          <i class="bi bi-calendar" style={{margin: "4px"}}></i>{"  Last Modified: "}
+          <i class="bi bi-calendar" style={{ margin: "4px" }}></i>
+          {"  Last Modified: "}
           {moment(modifiedDate).format("MMMM Do YYYY, hh:mm")}
+        </div>
+
+        <div className={classes.date}>
+          {"Datatype: "} {input}
         </div>
       </div>
     </Grid>

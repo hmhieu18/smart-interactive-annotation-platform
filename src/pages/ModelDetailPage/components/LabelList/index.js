@@ -16,9 +16,9 @@ import DeleteIcon from '@material-ui/icons/HighlightOff';
 import CreateIcon from '@material-ui/icons/AddCircle';
 
 import EditLabelDialog from './components/EditLabelDialog';
-import { ColorCell } from './components/ColorCell'
+// import { ColorCell } from './components/ColorCell'
 
-import LabelClass from '../../../../classes/LabelClass'
+import ModelLabelClass from '../../../../classes/ModelLabelClass'
 import randomColor from '../../../../utils/randomColor'
 import SplitButton from '../../../../components/SplitButton'
 const useStyles = makeStyles(() => ({
@@ -35,14 +35,6 @@ const useStyles = makeStyles(() => ({
 
 const tableColumns = [
   { field: 'label', headerName: 'Label', },
-  {
-    field: 'annotationProperties.fill', headerName: 'Fill color',
-    component: ColorCell
-  },
-  {
-    field: 'annotationProperties.stroke', headerName: 'Stroke color',
-    component: ColorCell
-  },
   { field: '', headerName: 'Edit', align: 'center' },
   { field: '', headerName: 'Delete', align: 'center' },
 ];
@@ -93,10 +85,7 @@ const LabelList = (props) => {
   }
 
   const handleTriggerCreateLabel = () => {
-    const newLabel = new LabelClass('', '', modelId, {}, {
-      fill: randomColor(),
-      stroke: '#000000'
-    })
+    const newLabel = new ModelLabelClass('', '', modelId)
     setEditingLabel(newLabel)
     setOpenDialog(true)
   }

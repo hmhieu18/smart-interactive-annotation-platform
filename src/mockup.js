@@ -19,11 +19,7 @@ export const mockupModel = {
   name: "Model1",
   description: "This is the project",
 };
-export const modelList = [
-  mockupModel,
-  mockupModel,
-  mockupModel,
-]
+export const modelList = [mockupModel, mockupModel, mockupModel];
 export const projectList = [
   mockupProject,
   mockupProject,
@@ -55,6 +51,25 @@ export const mockupLabelList = [
     label: "Person",
     dataset: "61a649b13c699d85a19735c3",
   },
+];
+
+export const mockupLabelMaps = [
+  [
+    {
+      id: "0549867f-39c9-4f2e-b5e0-9b36fd8451f2",
+      datasetId: "e6645871-4519-4b95-b2b6-0019dbf25d29",
+      label: "Goal",
+      annotation_properties: { fill: "#1A237E", stroke: "#B71C1C" },
+      date_created: 1656153980052,
+    },
+    {
+      id: "0eabe8ee-220c-46b8-bfe5-c98bc2e40e69",
+      datasetId: "e6645871-4519-4b95-b2b6-0019dbf25d29",
+      label: "Kick off",
+      annotation_properties: { fill: "#4A148C", stroke: "#1A237E" },
+      date_created: 1656253054043,
+    },
+  ],
 ];
 
 export const mockupThumbnail = {

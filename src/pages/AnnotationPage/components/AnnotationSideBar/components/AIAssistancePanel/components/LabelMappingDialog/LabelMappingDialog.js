@@ -28,18 +28,14 @@ const labelMapItem = {
   component: DoubleSelectField,
 };
 
-const fields = []
-const yourOptions = []
 const LabelMappingDialog = (props) => {
-  // const [fields, setFields] = React.useState([]);
-  // const [yourOptions, setYourOptions] = React.useState([]);
-  const [modelOptions, setModelOptions] = React.useState([]);
+  const [fields, setFields] = React.useState([]);
   const {
     open,
     setOpen,
     handleSave,
     datasetId,
-    label,
+    labelPairList,
     values,
     setFieldValue,
     errors,
@@ -51,29 +47,31 @@ const LabelMappingDialog = (props) => {
   } = props;
 
   React.useEffect(() => {
-    yourOptions.splice()
-    fields.splice()
-    // console.log("yourLabels", yourLabels);
-    yourLabels.forEach((label) => {
-      // console.log("yourOptions", [
-      //     ...yourOptions,
-      //     { value: label.id, label: label.label },
-      //   ])
-      // setYourOptions((yourOptions) => [
-      //   ...yourOptions,
-      //   { value: label.id, label: label.label },
-      // ]);
-      yourOptions.push({ value: label.id, label: label.label })
+    setFields([]);
+    const yourOptions = [];
+    yourLabels.forEach((mlabel) => {
+      yourOptions.push({ value: mlabel.id, label: mlabel.label });
     });
-    // console.log("yourOptions", yourOptions);
+    const modelOptions = [];
+    modelLabels.forEach((mlabel) => {
+      modelOptions.push({ value: mlabel.id, label: mlabel.label });
+    });
     yourOptions.forEach((option, index) => {
-      // setFields((fields) => [
-      //   ...fields,
-      //   { id: index, name: index, options1: [option], ...labelMapItem },
-      // ]);
-      fields.push({ id: index, name: index,value: option.label, options1: [], ...labelMapItem })
+      console.log("xxxx labelPairList", labelPairList)
+      console.log("option.label", get(values, option.label))
+      setFields((fields) => [
+        ...fields,
+        {
+          name: option.label,
+          valueYourOption: option.label,
+          valueModelOption: labelPairList?labelPairList[0][index].id:null,
+          options2: modelOptions,
+          ...labelMapItem,
+        },
+      ]);
     });
-    // console.log(fields);
+    console.log("values", values);
+
   }, [yourLabels]);
 
   const handleClose = () => {
@@ -82,6 +80,7 @@ const LabelMappingDialog = (props) => {
 
   const handleSubmit = async () => {
     let data = cloneDeep(values);
+    console.log("values", values);
     Object.keys(data).forEach((key) => {
       if (errors[key]) {
         return;
@@ -90,16 +89,19 @@ const LabelMappingDialog = (props) => {
 
     const newListOfLabelPairs = [];
     yourLabels.forEach((label, index) => {
-      newListOfLabelPairs.push({classID: modelLabel[index].id, lableID: label.id})
-    }) 
+      newListOfLabelPairs.push({
+        classID: get(values, label.label, ""),
+        lableID: label.id,
+      });
+    });
     try {
-      await handleSave(newListOfLabelPairs)
+      await handleSave(newListOfLabelPairs);
     } catch (error) {
-      const errMessage = get(error, 'data.errors.json.label', '')
-      setErrors({ error: errMessage })
+      const errMessage = get(error, "data.errors.json.label", "");
+      setErrors({ error: errMessage });
     }
-    setSubmitting(false)
-    };
+    setSubmitting(false);
+  };
 
   const generalError = get(errors, "error", "");
 
@@ -116,8 +118,7 @@ const LabelMappingDialog = (props) => {
       </DialogTitle>
       <DialogContent>
         {fields.map((field) => {
-          console.log(field.id);
-          return <Field key={field.id} {...field} />;
+          return <Field key={field.name} name={field.name} {...field} />;
         })}
       </DialogContent>
       <DialogActions>
@@ -133,19 +134,18 @@ const LabelMappingDialog = (props) => {
 };
 
 const LabelForm = withFormik({
-  // mapPropsToValues: ({ labelPairsList }) => (
-  //   fields.forEach((field, index)=>{
-  //     const list = []
-  //     list.push({ id: index, name: index, options1: [option], options2: [labelPairsList[index]], ...labelMapItem })
-  //   })
-  // ),
-  validationSchema: Yup.object().shape({
-    label: Yup.string().required(),
-    annotationProperties: Yup.object().shape({
-      fill: Yup.string().required(),
-      stroke: Yup.string().required(),
-    }),
-  }),
+  enableReinitialize: true,
+  // mapPropsToValues: ({ labelPairList }) =>
+  //   labelPairList.map((labelPair) => {
+  //     return { [labelPair[0].label]: labelPair[1].id };
+  //   }),
+  // validationSchema: Yup.object().shape({
+  //   label: Yup.string().required(),
+  //   annotationProperties: Yup.object().shape({
+  //     fill: Yup.string().required(),
+  //     stroke: Yup.string().required(),
+  //   }),
+  // }),
 })(LabelMappingDialog);
 
 export default LabelForm;

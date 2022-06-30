@@ -65,26 +65,27 @@ const Input = (props) => {
     helperText,
     fullWidth,
     style = {},
-    value,
+    valueYourOption,
+    valueModelOption,
     ...others
   } = props;
   const inputLabel = React.useRef(null);
 
   const [labelWidth, setLabelWidth] = React.useState(0);
-  // React.useEffect(() => {
-  //   setLabelWidth(inputLabel.current.offsetWidth + (!fullWidth ? 200 : 0));
-  // }, [fullWidth]);
+  React.useEffect(() => {
+    console.log("valueYourOption, valueModelOption", valueYourOption, valueModelOption)
+  }, [valueYourOption, valueModelOption]);
   return (
     <Grid container spacing={3} >
       <Grid item xs>
         {/* <Paper className={classes.paper}></Paper> */}
-        <TextField label={label1} {...props} disabled={true} value={value}/>
+        <TextField label={label1} {...props} disabled={true} value={valueYourOption}/>
       </Grid>
       <Grid item xs={1} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
         <i class="bi bi-arrow-right"></i>
       </Grid>
       <Grid item xs>
-        <SelectField label={label2} options={options2} {...props} />
+        <SelectField label={label2} options={options2} {...props} defaultValue={valueModelOption}/>
         {/* <Paper className={classes.paper}>xs</Paper> */}
       </Grid>
     </Grid>

@@ -11,7 +11,7 @@ import "../../../../assets/scss/sb-admin-2.scss";
 import CloseIcon from "@material-ui/icons/Close";
 import SettingsIcon from "@material-ui/icons/Settings";
 import StorageIcon from "@material-ui/icons/Storage";
-
+import { Robot } from "../../../../components/icons/RobotIcon";
 import moment from "moment";
 import NakedField from "../../../../components/NakedField";
 import SettingsMenu from "./components/SettingsMenu";
@@ -47,43 +47,39 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ModelInfo = (props) => {
-  const classes = useStyles()
-  const { 
-    useStore, 
-    values, setFieldValue,
-    errors,
-    setSubmitting, setErrors
-  } = props
+  const classes = useStyles();
+  const { useStore, values, setFieldValue, errors, setSubmitting, setErrors } =
+    props;
 
-  const model = useStore(state => state.model)
-  const updateModelInfo = useStore(state => state.updateModelInfo)
-  const deleteModel = useStore(state => state.deleteModel)
-  const confirm = useConfirm()
-  const history = useHistory()
+  const model = useStore((state) => state.model);
+  const updateModelInfo = useStore((state) => state.updateModelInfo);
+  const deleteModel = useStore((state) => state.deleteModel);
+  const confirm = useConfirm();
+  const history = useHistory();
   React.useEffect(() => {
-    const { name, description } = model
-    setFieldValue("name", name)
-    setFieldValue("description", description)
-  }, [model, setFieldValue])
+    const { name, description } = model;
+    setFieldValue("name", name);
+    setFieldValue("description", description);
+  }, [model, setFieldValue]);
 
   const handleSubmit = async () => {
-    let data = cloneDeep(values)
-    Object.keys(data).forEach(key => {
+    let data = cloneDeep(values);
+    Object.keys(data).forEach((key) => {
       if (errors[key]) {
-        data[key] = model[key]
+        data[key] = model[key];
       }
-    })
+    });
 
-    const newDataset = new ModelClass(model.id, data.name, data.description)
+    const newDataset = new ModelClass(model.id, data.name, data.description);
 
     try {
-      await updateModelInfo(newDataset)
+      await updateModelInfo(newDataset);
     } catch (error) {
-      const errMessage = get(error, 'data.errors.json.model', '')
-      setErrors({ error: errMessage })
+      const errMessage = get(error, "data.errors.json.model", "");
+      setErrors({ error: errMessage });
     }
-    setSubmitting(false)
-  }
+    setSubmitting(false);
+  };
 
   const [settingAnchorEl, setSettingAnchorEl] = React.useState(null);
 
@@ -96,24 +92,24 @@ const ModelInfo = (props) => {
   };
 
   const handleDeleteModel = () => {
-    confirm({ 
+    confirm({
       title: `Delete model "${model.name}"`,
-      description: `This action is permanent! You'll lost all dataset and annotations in this model.`
-    })
-    .then(async () => { 
-      await deleteModel()
-      history.replace(`/models`)
-    })
-  }
-
-
+      description: `This action is permanent! You'll lost all dataset and annotations in this model.`,
+    }).then(async () => {
+      await deleteModel();
+      history.replace(`/models`);
+    });
+  };
 
   return (
     <div className="card shadow mb-4">
       <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
         <h6 className="m-0 font-weight-bold text-primary">
           {/* <StorageIcon className={classes.storageIcon}></StorageIcon> */}
-          <i class="bi bi-lightbulb" className={classes.storageIcon} style={{fontSize: "25px", margin: 10}}></i>
+          <Robot
+            className={classes.storageIcon}
+            style={{ fontSize: "25px", margin: 10, width: 20, height: 20 }}
+          ></Robot>
           {model.name}
         </h6>
         <div className="dropdown no-arrow">
@@ -139,7 +135,7 @@ const ModelInfo = (props) => {
           onBlur={handleSubmit}
           placeholder={model.description || "Add model description"}
           onKeyPress={(e) => {
-            if (e.key === 'Enter') {
+            if (e.key === "Enter") {
               handleSubmit();
             }
           }}

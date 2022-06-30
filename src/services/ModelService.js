@@ -6,18 +6,18 @@ import {modelList, mockupModel} from '../mockup'
 
 class ModelService {
   async getModels() {
-    return modelList.map(data => ModelClass.constructorFromServerData(data))
-    // return RestConnector.get(`/models`)
-    //   .then(response => response.data.map(data => ModelClass.constructorFromServerData(data)))
+    // return modelList.map(data => ModelClass.constructorFromServerData(data))
+    return RestConnector.get(`/models`)
+      .then(response => response.data.map(data => ModelClass.constructorFromServerData(data)))
   }
 
   async getModelById(modelId) {
-    // const modelResponse = await RestConnector.get(`/models?id=${modelId}`)
-    // const modelData = modelResponse.data
+    const modelResponse = await RestConnector.get(`/models?id=${modelId}`)
+    const modelData = modelResponse.data
 
     // Mockup
-    const modelResponse = modelList
-    const modelData = mockupModel
+    // const modelResponse = modelList
+    // const modelData = mockupModel
 
     if (modelData) {
       return ModelClass.constructorFromServerData(modelData)
@@ -30,6 +30,10 @@ class ModelService {
     return RestConnector.post(`/models`, {
       name: data.name,
       description: data.description,
+      input: data.input,
+      output: data.output,
+      feature: data.feature,
+      URL: data.URL,
     })
       .then(response => {
         return ModelClass.constructorFromServerData(response.data)

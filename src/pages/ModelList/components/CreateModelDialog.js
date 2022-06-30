@@ -10,13 +10,15 @@ import * as Yup from "yup";
 import { get } from "lodash";
 
 import TextField from "../../../components/TextField";
+import SelectField from "../../../components/SelectField";
+import { DATASET_DATATYPE, FEATURE_TYPE } from '../../../constants/constants'
 
-import ProjectService from "../../../services/ProjectService";
+import ModelService from "../../../services/ModelService";
 import "../../../assets/scss/sb-admin-2.scss";
 const fields = [
   {
     name: "name",
-    label: "Project name",
+    label: "Model name",
     helperText: "Must be unique",
     variant: "outlined",
     required: true,
@@ -29,6 +31,44 @@ const fields = [
     variant: "outlined",
     fullWidth: true,
     component: TextField,
+  },
+  {
+    name: "URL",
+    label: "URL",
+    variant: "outlined",
+    fullWidth: false,
+    component: TextField,
+  },
+  {
+    name: 'input',
+    label: 'Input Datatype',
+    variant: 'outlined',
+    options:[
+      { value: DATASET_DATATYPE.IMAGE, label: 'Image' },
+      { value: DATASET_DATATYPE.VIDEO, label: 'Video' },
+    ],
+    required: false,
+    fullWidth: true,
+    component: SelectField,
+  },
+  {
+    name: "output",
+    label: "Output",
+    variant: "outlined",
+    fullWidth: false,
+    component: TextField,
+  },  
+  {
+    name: 'feature',
+    label: 'Model\'s Feature',
+    variant: 'outlined',
+    options:[
+      { value: FEATURE_TYPE.EVENT, label: 'Event Annotation' },
+      { value: FEATURE_TYPE.BBOX, label: 'Bounding-box Annotation' },
+    ],
+    required: true,
+    fullWidth: true,
+    component: SelectField,
   },
 ];
 
@@ -50,7 +90,7 @@ const CreateProjectDialog = (props) => {
     >
       <div className="modal-header">
         <h5 className="modal-title" id="exampleModalLabel">
-          Create new project
+          Create new model
         {generalError && <FormHelperText error>{generalError}</FormHelperText>}
 
         </h5>
@@ -103,7 +143,8 @@ const CreateProjectForm = withFormik({
     setSubmitting(true);
 
     try {
-      const newProject = await ProjectService.createProject(values);
+      console.log("values", values)
+      const newProject = await ModelService.createModel(values);
       handleCreate(newProject);
       setOpen(false);
     } catch (error) {

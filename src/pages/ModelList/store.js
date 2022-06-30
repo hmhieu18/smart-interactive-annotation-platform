@@ -8,6 +8,7 @@ const useModelListStore = create((set, get) => ({
   setIsLoading: (name, value) => set(state => ({ isLoading: { ...state.isLoading, [name]: value }})),
   queryModels: async () => {
     const models = await ModelService.getModels()
+    console.log("models", models)
     set({ models })
   },
   appendModel: (newModel) => {

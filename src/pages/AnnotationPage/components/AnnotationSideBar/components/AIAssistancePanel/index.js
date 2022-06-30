@@ -3,14 +3,17 @@ import { makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Collapse from "@material-ui/core/Collapse";
 import List from "@material-ui/core/List";
+import { useParams } from "react-router";
 
 import { useAnnotationStore } from "../../../../stores/index";
+import { useLabelStore } from "../../../../stores/index";
 
 import ArrowRightIcon from "@material-ui/icons/ChevronRightRounded";
 import ArrowDownIcon from "@material-ui/icons/ExpandMoreRounded";
 
 import SplitButton from "../../../../../../components/SplitButton";
 import LabelMappingDialog from "./components/LabelMappingDialog/LabelMappingDialog";
+import {MODEL_ID} from "../../../../../../constants/constants"
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 20,
@@ -46,24 +49,41 @@ const useStyles = makeStyles((theme) => ({
 const AIAssistancePanel = (props) => {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(true);
+  const [modelId, setModelId] = useState("");
+  const labelMaps = useLabelStore((state) => state.labelMaps);
+  const modelLabels = useLabelStore((state) => state.modelLabels);
+  const loadDatasetLabel = useLabelStore((state) => state.loadDatasetLabel);
+  const loadModelLabels = useLabelStore((state) => state.loadModelLabel);
+  const loadLabelMaps = useLabelStore((state) => state.loadLabelMaps);
+  const createLabelMaps = useLabelStore((state) => state.createLabelMappings);
+  const updateLabelMaps = useLabelStore((state) => state.updateLabelMaps);
+  const { datasetId } = useParams();
 
   const [openDialog, setOpenDialog] = React.useState(false);
-  const labels = useAnnotationStore(state => state.labels)
+  const labels = useAnnotationStore((state) => state.labels);
 
-  const handleTriggerLabelMapping =  () => {
-    console.log("OPENING DIALOG")
+  React.useEffect(() => {
+    loadModelLabels(modelId);
+    // loadModelLabels(datasetId);
+    loadLabelMaps(datasetId);
+    console.log("labelMaps", labelMaps)
+  }, [datasetId, modelId]);
+
+  const handleTriggerLabelMapping = () => {
+    console.log("OPENING DIALOG");
+    setModelId(MODEL_ID.NON_AUDIO_SOCCERNET_MODEL)
     setOpenDialog(true);
   };
 
   const handleSaveEditDialog = (finishedLabel) => {
-    if (finishedLabel.id) {
-      updateLabel(finishedLabel)
-    } else {
-      createLabel(finishedLabel)
-    }
-    setOpenDialog(false)
-  }
-
+    // if (finishedLabel.id) {
+    //   updateLabel(finishedLabel)
+    // } else {
+    console.log(finishedLabel, datasetId);
+    createLabelMaps(finishedLabel, datasetId);
+    // }
+    setOpenDialog(false);
+  };
 
   return (
     <div>
@@ -95,8 +115,9 @@ const AIAssistancePanel = (props) => {
         open={openDialog}
         setOpen={setOpenDialog}
         yourLabels={labels}
-        modelLabels={[]}
+        modelLabels={modelLabels}
         handleSave={handleSaveEditDialog}
+        labelPairListjson={labelMaps}
       />
     </div>
   );

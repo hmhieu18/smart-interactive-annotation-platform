@@ -1,7 +1,8 @@
 import create from 'zustand'
+import { filter } from 'lodash'
 
 import ModelService from '../../services/ModelService'
-import LabelService from '../../services/LabelService'
+import ModelLabelService from '../../services/ModelLabelService'
 
 const useModelInfoStore = create((set, get) => ({
   isLoading: {},
@@ -43,24 +44,56 @@ const useModelInfoStore = create((set, get) => ({
 
     setIsLoadingField("deleting-model", false)
   },
-
   getLabels: async (modelId) => {
-    const setIsLoadingField = get().setIsLoadingField
+    const setIsLoadingField = get().setIsLoadingField;
 
-    setIsLoadingField("labels", true)
+    setIsLoadingField("labels", true);
+    try {
+      const labels = await ModelLabelService.getLabelByModel(modelId);
+      set({ labels: labels });
+    } catch (error) {
+      alert(get(error, "response.data.errors", "Error getting labels"));
+    }
 
-    const labels = await LabelService.getLabelByModel(modelId)
-
-    set({ labels })
-
-    setIsLoadingField("labels", false)
+    setIsLoadingField("labels", false);
   },
 
-  appendNewLabel: (newLabel) => {
-    const currentLabels = get().labels
+  createLabel: async (newLabel) => {
+    const createdLabel = await ModelLabelService.createLabel(newLabel);
+
+    const currentLabels = get().labels;
     set({
-      labels: [...currentLabels, newLabel]
-    })
+      labels: [...currentLabels, createdLabel],
+    });
+  },
+
+  updateLabel: async (newLabel) => {
+    const updatedLabel = await ModelLabelService.updateLabel(newLabel);
+
+    const newLabels = [...get().labels].map((label) => {
+      if (label.id !== newLabel.id) {
+        return label;
+      } else {
+        return updatedLabel;
+      }
+    });
+
+    set({ labels: newLabels });
+  },
+
+  deleteLabel: async (deleteLabel) => {
+    try {
+      await ModelLabelService.deleteLabelById(deleteLabel.id);
+      const currentLabels = [...get().labels];
+      const newLabels = filter(
+        currentLabels,
+        (label) => label.id !== deleteLabel.id
+      );
+
+      set({ labels: newLabels });
+    } catch (error) {
+      alert(get(error, "data.errors.json.label", ""));
+    }
   },
 }))
 
