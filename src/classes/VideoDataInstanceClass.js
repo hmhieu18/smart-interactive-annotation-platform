@@ -1,29 +1,23 @@
-import DataInstanceClass from './DataInstanceClass'
-import ImageClass from './ImageClass'
+import DataInstanceClass from "./DataInstanceClass";
+import ImageClass from "./ImageClass";
 import StorageFileClass from "./StorageFileClass";
 
 export default class VideoDataInstanceClass extends DataInstanceClass {
-  static _cls = "VideoDataInstance"
+  static _cls = "VideoDataInstance";
 
-  constructor(id, name = '', video, thumbnail, otherData) {
-    const { fps, width, height, ...others } = otherData
+  constructor(id, name = "", video, thumbnail, otherData) {
+    const { fps, width, height, ...others } = otherData;
 
-    super(id, name, thumbnail, width, height, others)
+    super(id, name, thumbnail, width, height, others);
 
-    this.video = video
-    // this.frames = frames
-    this.fps = fps
-    // this.numFrames = num_frames
+    this.video = video;
+    this.frames = null;
+    this.fps = null;
+    this.numFrames = null;
   }
 
   static async constructorFromServerData(data) {
-    const { id, name, url, thumbnail, ...others } = data
-    // let frames_obj = frames.map(frame => ImageClass.constructorFromServerData(frame))
-    // await Promise.all(frames_obj.map(async (frame) => frame.getData()))
-    // if (frames_obj && frames_obj[0]) {
-    //   await frames_obj[0].getData()
-    // }
-
+    const { id, name, url, thumbnail, ...others } = data;
     return new VideoDataInstanceClass(
       id,
       name,
@@ -32,14 +26,52 @@ export default class VideoDataInstanceClass extends DataInstanceClass {
         URL: thumbnail,
         filename: name,
       }),
-      // thumbnail,
-      // frames_obj,
       others
-    )
+    );
+  }
+  async loadFrames(data) {
+    console.log("Loading Frame", data);
+    const { fps, URL, ...others } = data;
+    const frames = [];
+    const numFrames = 10;
+    for (let i = 1; i <= numFrames; i++) {
+      const name = `${i}.jpeg`;
+      const url = `files/${URL.split("files/")[1]}/${name}`;
+      const id = `${i}`;
+      frames.push({
+        id: id,
+        name: name,
+        url: url,
+      });
+    }
+    let frames_obj = frames.map((frame) =>
+      ImageClass.constructorFrameFromServerData(frame)
+    );
+    // await Promise.all(frames_obj.map(async (frame) => frame.getData()));
+    let height = 50;
+    let width = 50;
+
+    if (frames_obj && frames_obj[0]) {
+      await frames_obj[0].getData();
+      let img = new Image();
+      img.src = frames[0].url;
+      img.onload = () => {
+        this.width = img.width;
+        this.height = img.height;
+        // console.log(height, width);
+      };
+    }
+    this.frames = frames_obj;
+    this.numFrames = numFrames;
+    this.fps = fps;
+    this.width = width;
+    this.height = height;
+    // console.log(this.height, this.width);
+
   }
 
   getCurrentImage(playingState) {
-    const { playingFrame = 0 } = playingState
-    return this.frames[playingFrame]
+    const { playingFrame = 0 } = playingState;
+    return this.frames[playingFrame];
   }
 }

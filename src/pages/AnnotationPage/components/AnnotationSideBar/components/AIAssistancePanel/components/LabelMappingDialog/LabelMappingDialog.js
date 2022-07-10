@@ -50,11 +50,11 @@ const LabelMappingDialog = (props) => {
     setFields([]);
     const yourOptions = [];
     yourLabels.forEach((mlabel) => {
-      yourOptions.push({ value: mlabel.id, label: mlabel.label });
+      yourOptions.push({ value: mlabel.label, label: mlabel.label });
     });
     const modelOptions = [];
     modelLabels.forEach((mlabel) => {
-      modelOptions.push({ value: mlabel.id, label: mlabel.label });
+      modelOptions.push({ value: mlabel.label, label: mlabel.label });
     });
     yourOptions.forEach((option, index) => {
       console.log("xxxx labelPairList", labelPairList)
@@ -64,7 +64,7 @@ const LabelMappingDialog = (props) => {
         {
           name: option.label,
           valueYourOption: option.label,
-          valueModelOption: labelPairList?labelPairList[0][index].id:null,
+          // valueModelOption: labelPairList?labelPairList[0][index].id:null,
           options2: modelOptions,
           ...labelMapItem,
         },
@@ -90,8 +90,8 @@ const LabelMappingDialog = (props) => {
     const newListOfLabelPairs = [];
     yourLabels.forEach((label, index) => {
       newListOfLabelPairs.push({
-        classID: get(values, label.label, ""),
-        lableID: label.id,
+        className: get(values, label.label, ""),
+        lableName: label.label,
       });
     });
     try {
@@ -134,7 +134,7 @@ const LabelMappingDialog = (props) => {
 };
 
 const LabelForm = withFormik({
-  enableReinitialize: true,
+  // enableReinitialize: true,
   // mapPropsToValues: ({ labelPairList }) =>
   //   labelPairList.map((labelPair) => {
   //     return { [labelPair[0].label]: labelPair[1].id };

@@ -46,6 +46,15 @@ const useDatasetStore = create((set, get) => ({
 
     const dataInstancesObj =
       await DataInstanceService.getDataInstancesByDataset(datasetId, page);
+    // dataInstancesObj.map((dataInstance)=>{
+    //   return
+    // })
+    for (let i = 0; i < dataInstancesObj.length; i++) {
+      dataInstancesObj[i] =
+        await DataInstanceService.getFramesOfVideoDataInstance(
+          dataInstancesObj[i]
+        );
+    }
     set({ dataInstances: dataInstancesObj });
     console.log("dataInstancesObj", dataInstancesObj);
 

@@ -93,7 +93,7 @@ const AnnotationPage = (props) => {
 
         <div className={classes.annotatorContainer}>
            <RenderComponent/>
-          {/* <PropagationControl/> */}
+          <PropagationControl/>
           <PlayControl/>
           {/*<ModeController/>
           <KeyboardHandler /> 

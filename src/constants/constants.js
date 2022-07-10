@@ -11,14 +11,12 @@ const ResponseCode = {
 
 const ANNOTATION_TYPE = {
   BBOX: 'BBOX',
-  POLYGON: 'POLYGON',
-  MASK: 'MASK',
+  EVENT: 'EVENT',
 }
 
 const ENUM_ANNOTATION_TYPE = {
   BBOX: 1,
-  POLYGON: 2,
-  MASK: 3,
+  EVENT: 2,
 }
 
 const ENUM_ANNOTATE_STATUS = {

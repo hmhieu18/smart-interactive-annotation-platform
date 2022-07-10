@@ -57,8 +57,9 @@ const VideoPlayControl = (props) => {
 
   useEffect(() => {
     if (video && playingState) {
-      // const currentFrame = video.getCurrentImage(playingState)
-      // setCurrentAnnotationImageId(currentFrame?.id)
+      // console.log("PLAYING VIDEO", video);
+      const currentFrame = video.getCurrentImage(playingState)
+      setCurrentAnnotationImageId(currentFrame?.id)
     }
   }, [videoId, playingState])
 

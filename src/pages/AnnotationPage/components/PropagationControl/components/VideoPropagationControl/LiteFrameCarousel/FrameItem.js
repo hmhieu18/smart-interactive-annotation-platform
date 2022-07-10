@@ -1,46 +1,48 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import clsx from "clsx";
-import Avatar from "@material-ui/core/Avatar";
+import React from 'react'
+import { makeStyles } from '@material-ui/core'
+import Grid from '@material-ui/core/Grid'
+import clsx from 'clsx'
 
-import "./index.css";
+import './index.css'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   frameItem: {
     height: 60,
     width: 50,
     paddingLeft: 5,
     paddingRight: 5,
+    textAlign: "center",
   },
-  activeFrameItem: {},
+  activeFrameItem: {
+
+  },
   frameIndex: {
     fontSize: 12,
     marginBottom: 5,
-    cursor: "pointer",
-    "-webkit-user-select": "none" /* Chrome all / Safari all */,
-    "-moz-user-select": "none" /* Firefox all */,
-    "-ms-user-select": "none" /* IE 10+ */,
-    "user-select": "none" /* Likely future */,
+    cursor: 'pointer',
+    '-webkit-user-select': 'none',  /* Chrome all / Safari all */
+    '-moz-user-select': 'none',     /* Firefox all */
+    '-ms-user-select': 'none',      /* IE 10+ */
+    'user-select': 'none'          /* Likely future */
   },
   activeFrameIndex: {
     fontSize: 15,
-    fontWeight: "bold",
-    color: theme.palette.primary.main,
+    fontWeight: 'bold',
+    color: theme.palette.primary.main
   },
   annotationIndicator: {
-    cursor: "pointer",
-    boxSizing: "border-box",
+    cursor: 'pointer',
+    boxSizing: 'border-box',
     borderRadius: 5,
-    width: "100%",
+    width: '100%',
     height: 25,
     background: theme.palette.secondary.lighter,
-    "&:hover": {
+    '&:hover': {
       background: theme.palette.primary.main,
-    },
+    }
   },
   activeAnnotationIndicator: {
-    border: "3px solid",
+    border: '3px solid',
     borderColor: theme.palette.primary.main,
   },
   existAnnotationIndicator: {
@@ -51,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
         ${theme.palette.primary.dark} 5px,
         ${theme.palette.primary.dark} 10px
       )`,
-    "&:hover": {
+    '&:hover': {
       background: `repeating-linear-gradient(
         45deg,
         ${theme.palette.primary.light},
@@ -59,13 +61,13 @@ const useStyles = makeStyles((theme) => ({
         ${theme.palette.primary.darker} 5px,
         ${theme.palette.primary.darker} 10px
       )`,
-    },
+    }
   },
   keyFrameAnnotationIndicator: {
     background: theme.palette.primary.dark,
-    "&:hover": {
+    '&:hover': {
       background: theme.palette.primary.main,
-    },
+    }
   },
   propagatingFrameIndicator: {
     background: `repeating-linear-gradient(
@@ -75,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
         ${theme.palette.secondary.dark} 5px,
         ${theme.palette.secondary.dark} 10px
       )`,
-    "&:hover": {
+    '&:hover': {
       background: `repeating-linear-gradient(
         45deg,
         ${theme.palette.secondary.light},
@@ -84,53 +86,29 @@ const useStyles = makeStyles((theme) => ({
         ${theme.palette.secondary.darker} 10px
       )`,
     },
-    "animation-name": "FadeIn",
-    "animation-duration": "2s",
-    "animation-fill-mode": "forwards",
-    "animation-iteration-count": "infinite",
+    'animation-name': 'FadeIn',
+    'animation-duration': '2s',
+    'animation-fill-mode': 'forwards',
+    'animation-iteration-count': 'infinite'
   },
-  avatar: {
-    margin: "auto",
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-    [theme.breakpoints.down("md")]: {
-      width: theme.spacing(5),
-      height: theme.spacing(5),
-    },
-  },
-}));
+}))
+
 
 const FrameItem = (props) => {
-  const classes = useStyles();
-  const { index, isActive, annotation, className, ...others } = props;
+  const classes = useStyles()
+  const { index, isActive, annotation, className, ...others } = props
 
-  const isKeyFrame = !!annotation?.keyFrame;
-  const hasAnnotation = !!annotation;
+  const isKeyFrame = !!annotation?.keyFrame
+  const hasAnnotation = !!annotation
 
   return (
-    <Grid
-      container
-      direction="column"
-      alignItems="center"
-      justifyContent="space-evenly"
-      className={clsx(
-        classes.frameItem,
-        isActive && classes.activeFrameItem,
-        className
-      )}
+    <Grid container direction="column" alignItems="center" justifyContent="space-evenly"
+      className={clsx(classes.frameItem, isActive && classes.activeFrameItem, className)}
       {...others}
     >
-      {/* <Grid
-        item
-        className={clsx(
-          classes.frameIndex,
-          isActive && classes.activeFrameIndex
-        )}
-      >
-        {index + 1}
+      {/* <Grid item className={clsx(classes.frameIndex, isActive && classes.activeFrameIndex)}>
       </Grid> */}
-      <Grid
-        item
+      <Grid item
         className={clsx(
           classes.annotationIndicator,
           isActive && classes.activeAnnotationIndicator,
@@ -139,12 +117,11 @@ const FrameItem = (props) => {
           isKeyFrame && classes.keyFrameAnnotationIndicator,
         )}
       >
-        {/* <Avatar variant="square" className={classes.avatar}> */}
-          {index + 1}
-        {/* </Avatar> */}
+                {index + 1}
+
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default FrameItem;
+export default FrameItem

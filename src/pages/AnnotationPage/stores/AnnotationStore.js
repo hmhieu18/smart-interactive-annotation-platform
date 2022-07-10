@@ -168,26 +168,9 @@ const useAnnotationStore = create((set, get) => ({
 
     set({ annotations })
   },
-  cleanUpPropagatingAnnotations: () => {
-    let annotations = cloneDeep(get().annotations)
-
-    Object.keys(annotations).forEach(annotationImageId => {
-      let newAnnotations = []
-      annotations[annotationImageId].forEach((ann) => {
-        if (!ann.isTemporary) {
-          ann.isPropagating = false
-          newAnnotations.push(ann)
-        }
-      })
-      annotations[annotationImageId] = newAnnotations
-    })
-    set({ annotations })
-  },
 
 
-  drawingAnnotation: null,
-  getDrawingAnnotation: () => get().drawingAnnotation,
-  setDrawingAnnotation: (newDrawingAnnotation) => set({ drawingAnnotation: newDrawingAnnotation }),
+
   appendAnnotation: async (newAnnotation, options = {} ) => {
     const { commitAnnotation = true, awaitUpdate = true } = options
     try {
@@ -226,38 +209,6 @@ const useAnnotationStore = create((set, get) => ({
     set({ annotations })
   },
 
-
-  /**
-   * 
-   * @param {*} newAnnotationsDict 
-   * @param {*} options 
-   * @returns {*} reaching keyFrame index or not propagating
-   */
-  updatePropagatedAnnotations: async (newAnnotations, options = {}) => {
-    const { commitAnnotation = true } = options
-    let annotations = cloneDeep(get().annotations)
-
-    let breakFrameIndex = undefined
-    newAnnotations.every((newAnnotation, index) => {
-      const pos = findIndex(annotations[newAnnotation.annotationImageId], { id: newAnnotation.id })
-      const oldAnnotation = annotations[newAnnotation.annotationImageId][pos]
-      if (oldAnnotation.keyFrame || !oldAnnotation.isPropagating) {
-        breakFrameIndex = index;
-        return false;
-      }
-
-      annotations[newAnnotation.annotationImageId][pos] = newAnnotation
-      return true;
-    })
-
-
-    if (commitAnnotation) {
-      await Promise.all(newAnnotations.slice(0, breakFrameIndex).map(ann => ann.applyUpdate()))
-    }
-
-    set({ annotations })
-    return breakFrameIndex;
-  },
 }))
 
 export default useAnnotationStore

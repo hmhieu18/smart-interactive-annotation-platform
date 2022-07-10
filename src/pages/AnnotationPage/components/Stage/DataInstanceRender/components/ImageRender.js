@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import KonvaImage from '../../../../../../components/KonvaImage'
+import KonvaImage from '../../../../../../classes/KonvaImage'
 
 const ImageRender = (props) => {
   const { instanceId, image: image_data, renderingSize } = props

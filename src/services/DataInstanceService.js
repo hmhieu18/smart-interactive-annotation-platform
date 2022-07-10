@@ -15,9 +15,15 @@ class DataInstanceService {
   }
 
   async getDataInstancesByDataset(datasetId, page = 1, per_page = 0) {
-    const dataInstancesResponse = await RestConnector.get(`/data?dataset-id=${datasetId}`)
+    const dataInstancesResponse = await RestConnector.get(
+      `/data?dataset-id=${datasetId}`
+    );
 
-    const dataInstancesObj = await Promise.all(dataInstancesResponse.data.map(instance => this.parseDataInstanceFromServer(instance)))
+    const dataInstancesObj = await Promise.all(
+      dataInstancesResponse.data.map((instance) =>
+        this.parseDataInstanceFromServer(instance)
+      )
+    );
 
     //mockup
     // const dataInstancesResponse = await [mockupDataInstance, mockupDataInstance]
@@ -25,6 +31,21 @@ class DataInstanceService {
     //   (instance) => this.parseDataInstanceFromServer(instance)
     // ));
     return dataInstancesObj;
+  }
+
+  async getFramesOfVideoDataInstance(videoDataInstance) {
+    const dataResponse = await RestConnector.get(
+      `/video?data-id=${videoDataInstance.id}`
+    );
+    await videoDataInstance.loadFrames(dataResponse.data)
+    console.log('getFramesOfVideoDataInstance', dataResponse, videoDataInstance)
+
+    return videoDataInstance;
+    // const dataInstancesObj = await Promise.all(
+    //   dataInstancesResponse.data.map((instance) =>
+    //   videoDataInstance.loadFrames(instance)
+    //   )
+    // );
   }
 
   async deleteDataById(id) {
@@ -60,15 +81,17 @@ class DataInstanceService {
         "Content-Type": "multipart/form-data",
       },
       onUploadProgress,
-    }).then((response) => {
-      if (response.data.success === "success"){
-        const data = response.data;
-        return this.parseDataInstanceFromServer(data);
-      }
-    }).catch((err) => {
-      alert(err.response.data); // alert
-      console.log(err.response.status); 
-  });
+    })
+      .then((response) => {
+        if (response.data.success === "success") {
+          const data = response.data;
+          return this.parseDataInstanceFromServer(data);
+        }
+      })
+      .catch((err) => {
+        alert(err.response.data); // alert
+        console.log(err.response.status);
+      });
   }
 }
 

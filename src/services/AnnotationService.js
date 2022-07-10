@@ -1,9 +1,6 @@
 import RestConnector from '../connectors/RestConnector'
 
 import EventAnnotationClass from '../classes/EventAnnotationClass'
-// import PolygonAnnotationClass from '../classes/PolygonAnnotationClass'
-// import MaskAnnotationClass from '../classes/MaskAnnotationClass'
-
 
 class AnnotationService {
   async parseAnnotationObj(ann) {

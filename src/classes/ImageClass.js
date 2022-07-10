@@ -1,21 +1,21 @@
-import StorageFileClass from './StorageFileClass'
+import StorageFileClass from "./StorageFileClass";
 
 export default class ImageClass {
   /**
-   * 
-   * @param {String} id 
-   * @param {StorageFile} original 
-   * @param {StorageFile} thumbnail 
+   *
+   * @param {String} id
+   * @param {StorageFile} original
+   * @param {StorageFile} thumbnail
    */
   constructor(id, original, thumbnail) {
-    this.id = id
-    this.original = original
-    this.thumbnail = thumbnail
+    this.id = id;
+    this.original = original;
+    this.thumbnail = thumbnail;
   }
-  
+
   async getData() {
-    await this.original.getBitmap()
-    await this.thumbnail.getBitmap()
+    await this.original.getBitmap();
+    await this.thumbnail.getBitmap();
   }
 
   static constructorFromServerData(data) {
@@ -23,6 +23,19 @@ export default class ImageClass {
       data.id,
       StorageFileClass.constructorFromServerData(data.original),
       StorageFileClass.constructorFromServerData(data.thumbnail)
-    )
+    );
+  }
+  static constructorFrameFromServerData(data) {
+    return new ImageClass(
+      data.id,
+      StorageFileClass.constructorFromServerData({
+        URL: data.url,
+        filename: data.name,
+      }),
+      StorageFileClass.constructorFromServerData({
+        URL: data.url,
+        filename: data.name,
+      })
+    );
   }
 }

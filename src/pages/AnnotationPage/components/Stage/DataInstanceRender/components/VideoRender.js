@@ -3,7 +3,7 @@ import { get } from 'lodash'
 
 import { useDatasetStore } from '../../../../stores/index'
 
-import KonvaImage from '../../../../../../components/KonvaImage'
+import KonvaImage from '../../../../../../classes/KonvaImage'
 
 const Video = (props) => {
   const { instanceId, video, renderingSize } = props

@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core'
 import '../../../../assets/scss/sb-admin-2.scss'
 import DataInstanceListPanel from './components/DataInstanceListPanel/index'
 import LabelInfoPanel from './components/LabelInfoPanel/index'
+import ObjectInfoPanel from './components/ObjectInfoPanel/index'
 import UpdateStatusButtonPanel from './components/UpdateStatusButtonPanel/index'
 import AIAssistancePanel from './components/AIAssistancePanel/index'
 
@@ -24,6 +25,7 @@ const AnnotationSideBar = (props) => {
         <AIAssistancePanel/>
         <DataInstanceListPanel/>
         <LabelInfoPanel/>
+        <ObjectInfoPanel/>
         <UpdateStatusButtonPanel/>
       </div>
     )

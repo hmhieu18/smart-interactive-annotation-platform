@@ -63,15 +63,19 @@ const AIAssistancePanel = (props) => {
   const labels = useAnnotationStore((state) => state.labels);
 
   React.useEffect(() => {
+    setModelId(MODEL_ID.NON_AUDIO_SOCCERNET_MODEL)
     loadModelLabels(modelId);
     // loadModelLabels(datasetId);
     loadLabelMaps(datasetId);
     console.log("labelMaps", labelMaps)
-  }, [datasetId, modelId]);
+  }, [datasetId]);
 
   const handleTriggerLabelMapping = () => {
     console.log("OPENING DIALOG");
+    console.log("MODEL_ID.NON_AUDIO_SOCCERNET_MODEL",MODEL_ID.NON_AUDIO_SOCCERNET_MODEL)
     setModelId(MODEL_ID.NON_AUDIO_SOCCERNET_MODEL)
+    loadModelLabels(modelId);
+    console.log("modelid", modelId)
     setOpenDialog(true);
   };
 
@@ -117,7 +121,7 @@ const AIAssistancePanel = (props) => {
         yourLabels={labels}
         modelLabels={modelLabels}
         handleSave={handleSaveEditDialog}
-        labelPairListjson={labelMaps}
+        labelPairList={labelMaps}
       />
     </div>
   );

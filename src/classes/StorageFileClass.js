@@ -15,6 +15,7 @@ export default class StorageFileClass {
         this.blob = null
       }
     }
+    // console.log("this.blob", this.blob)
     return this.blob
   }
 
