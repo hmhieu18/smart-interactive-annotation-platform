@@ -1,30 +1,29 @@
-import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core'
-import Grid from '@material-ui/core/Grid'
-import Collapse from '@material-ui/core/Collapse'
-import List from '@material-ui/core/List'
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Collapse from "@material-ui/core/Collapse";
+import List from "@material-ui/core/List";
 
-import { useAnnotationStore } from '../../../../stores/index'
+import { useAnnotationStore } from "../../../../stores/index";
 
-import ArrowRightIcon from '@material-ui/icons/ChevronRightRounded'
-import ArrowDownIcon from '@material-ui/icons/ExpandMoreRounded';
+import ArrowRightIcon from "@material-ui/icons/ChevronRightRounded";
+import ArrowDownIcon from "@material-ui/icons/ExpandMoreRounded";
 
-import LabelInfo from './LabelInfo'
-
-
+import LabelInfo from "./LabelInfo";
+import EventAnnotationClass from "../../../../../../classes/EventAnnotationClass";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 20,
   },
   header: {
-    cursor: 'pointer',
+    cursor: "pointer",
     background: theme.palette.primary.dark,
     padding: 10,
     borderRadius: 5,
   },
   title: {
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
+    fontWeight: "bold",
+    textTransform: "uppercase",
     fontSize: 12,
     color: theme.palette.primary.contrastText,
   },
@@ -38,50 +37,77 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.contrastText,
   },
   listContainer: {
-    width: '100%',
+    width: "100%",
     background: theme.palette.primary.light,
-  }
-}))
+  },
+}));
 
 const LabelInfoPanel = (props) => {
-  const classes = useStyles()
-  const [isOpen, setIsOpen] = useState(true)
+  const classes = useStyles();
+  const [isOpen, setIsOpen] = useState(true);
 
-  const labels = useAnnotationStore(state => state.labels)
+  const labels = useAnnotationStore((state) => state.labels);
+  const appendAnnotation = useAnnotationStore(
+    (state) => state.appendAnnotation
+  );
+
+  const handleAddEventAnnotation = (frameID, labelID) => {
+    const newEvent= EventAnnotationClass.constructorFromServerData({
+      id: null,
+      frameID,
+      labelID,
+    })
+    console.log("newEvent", newEvent)
+    appendAnnotation(
+      newEvent
+    );
+  };
 
   return (
     <Grid container className={classes.root}>
-      <Grid container item xs={12} direction="row" alignItems="center" className={classes.header}
-        onClick={() => setIsOpen(isOpen => !isOpen)}
+      <Grid
+        container
+        item
+        xs={12}
+        direction="row"
+        alignItems="center"
+        className={classes.header}
+        onClick={() => setIsOpen((isOpen) => !isOpen)}
       >
         <Grid container item direction="row" alignItems="center" xs={2}>
-          {isOpen ?
+          {isOpen ? (
             <ArrowDownIcon color="secondary" />
-            : <ArrowRightIcon color="secondary" />
-          }
+          ) : (
+            <ArrowRightIcon color="secondary" />
+          )}
         </Grid>
         <Grid container item xs={8} direction="row" alignItems="center">
-          <Grid item className={classes.title}>Labels</Grid>
-          <Grid item className={classes.titleCount}>{labels.length}</Grid>
+          <Grid item className={classes.title}>
+            Labels
+          </Grid>
+          <Grid item className={classes.titleCount}>
+            {labels.length}
+          </Grid>
         </Grid>
-        <Grid item xs={2}>
-
-        </Grid>
+        <Grid item xs={2}></Grid>
       </Grid>
       <Grid container item xs={12}>
         <Collapse in={isOpen} className={classes.listContainer}>
           <List className={classes.listContainer}>
-            {labels.map(obj => {
+            {labels.map((obj) => {
               return (
-                <LabelInfo key={obj.id} labelObject={obj} />
-              )
-            })
-            }
+                <LabelInfo
+                  key={obj.id}
+                  labelObject={obj}
+                  handleAddEventAnnotation={handleAddEventAnnotation}
+                />
+              );
+            })}
           </List>
         </Collapse>
       </Grid>
     </Grid>
-  )
-}
+  );
+};
 
-export default LabelInfoPanel
+export default LabelInfoPanel;

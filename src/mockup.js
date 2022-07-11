@@ -8,6 +8,27 @@
 // import Image_8 from './static/images/mockup/Image_8.jpg'
 // import Image_9 from './static/images/mockup/Image_9.jpg'
 // import Image_10 from './static/images/mockup/Image_10.jpg'
+export const mockupAnnotation = {
+  frameID: 2,
+  labelID: "0549867f-39c9-4f2e-b5e0-9b36fd8451f2",
+};
+
+export const mockupAnnotationList = [
+  {
+    _cls: "Annotation.Event",
+    id: 10,
+    frameID: 2,
+    labelID: "0549867f-39c9-4f2e-b5e0-9b36fd8451f2",
+    annotationType: "EVENT",
+  },
+  {
+    _cls: "Annotation.Event",
+    id: 11,
+    frameID: 2,
+    labelID: "0549867f-39c9-4f2e-b5e0-9b36fd8451f2",
+    annotationType: "EVENT",
+  },
+];
 export const mockupProject = {
   id: 1,
   name: "Project1",

@@ -1,39 +1,44 @@
-import RestConnector from '../connectors/RestConnector'
+import RestConnector from "../connectors/RestConnector";
 
-import EventAnnotationClass from '../classes/EventAnnotationClass'
+import EventAnnotationClass from "../classes/EventAnnotationClass";
+import {mockupAnnotationList} from "../mockup"
 
 class AnnotationService {
   async parseAnnotationObj(ann) {
     switch (ann._cls) {
       case "Annotation.Event":
-        return await EventAnnotationClass.constructorFromServerData(ann)
+        return await EventAnnotationClass.constructorFromServerData(ann);
       default:
-        return {}
+        return {};
     }
   }
 
   async getAnnotationsByDataInstance(dataInstanceId) {
-    const annotationResponse = await RestConnector.get(`/annotations?data_instance_id=${dataInstanceId}`)
+    // const annotationResponse = await RestConnector.get(
+    //   `/annotations?data-id=${dataInstanceId}`
+    // );
 
-    const annotationsObj = await Promise.all(annotationResponse.data.map(async ann => await this.parseAnnotationObj(ann)))
+    // const annotationsObj = await Promise.all(
+    //   annotationResponse.data.map(
+    //     async (ann) => await this.parseAnnotationObj(ann, labelList)
+    //   )
+    // );
+    // MOCKUP
+    const annotationsObj = await Promise.all(mockupAnnotationList.map(
+          async (ann) => await this.parseAnnotationObj(ann)
+        ));
 
-    return annotationsObj
+    return annotationsObj;
   }
 
-  async getAnnotationByAnnotationObject(annotationObjectId) {
-    const annotationResponse = await RestConnector.get(`/annotations?annotation_object_id=${annotationObjectId}`)
-
-    const annotationsObj = await Promise.all(annotationResponse.data.map(async ann => await this.parseAnnotationObj(ann)))
-
-    return annotationsObj
-  }
-
-  async deleteAnnotationById(id) {
-    return RestConnector.delete(`/annotations?id=${id}`)
-      .then((response) => {
-        return response.data
-      })
+  async setAnnotationsByDataInstance(dataID, listAnnotation) {
+    return RestConnector.post(`/annotations`, {
+      dataID: dataID,
+      annotationList: JSON.stringify(listAnnotation),
+    }).then((response) => {
+      return response.data;
+    });
   }
 }
 
-export default new AnnotationService()
+export default new AnnotationService();

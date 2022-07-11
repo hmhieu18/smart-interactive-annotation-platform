@@ -32,8 +32,9 @@ export default class VideoDataInstanceClass extends DataInstanceClass {
   async loadFrames(data) {
     console.log("Loading Frame", data);
     const { fps, URL, ...others } = data;
-    const frames = [];
     const numFrames = 10;
+    const frames = [];
+    // const  = 10;
     for (let i = 1; i <= numFrames; i++) {
       const name = `${i}.jpeg`;
       const url = `files/${URL.split("files/")[1]}/${name}`;
@@ -67,7 +68,6 @@ export default class VideoDataInstanceClass extends DataInstanceClass {
     this.width = width;
     this.height = height;
     // console.log(this.height, this.width);
-
   }
 
   getCurrentImage(playingState) {

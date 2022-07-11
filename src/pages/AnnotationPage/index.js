@@ -64,7 +64,6 @@ const AnnotationPage = (props) => {
     if (datasetId) {
       getDatasetInfo(datasetId);
       loadAnnotationLabels(datasetId)
-
     }
   }, [datasetId]);
 
@@ -79,7 +78,7 @@ const AnnotationPage = (props) => {
   useEffect(() => {
     if (instanceId) {
       // loadAnnotationObjects(instanceId);
-      // loadAnnotations(instanceId);
+      loadAnnotations(instanceId);
     }
   }, [instanceId]);
 

@@ -7,7 +7,6 @@ import EventCenter from '../../EventCenter'
 import { useGeneralStore, useDatasetStore } from '../../stores/index'
 
 import DataInstanceRender from './DataInstanceRender/index'
-// import AnnotationRenderLayers from './AnnotationRenderLayers/index'
 import ToolRender from './ToolRender/index'
 
 import { EVENT_TYPES, MODES, STAGE_PADDING } from '../../constants'
@@ -155,7 +154,6 @@ const RenderComponent = (props) => {
         <Layer listening={false}>
           <DataInstanceRender/>
         </Layer>
-        {/* <AnnotationRenderLayers/> */}
         <Layer listening={false}>
           <ToolRender/>
         </Layer>
