@@ -42,21 +42,22 @@ class LabelService {
   }
 
   getLabelMappingByDataset(datasetID) {
-    // return RestConnector.get(`/classes/map?dataset-id=${datasetID}`).then(
-    //   (response) =>
-    //     response.data.map((modelLabel, yourLabel) => [
-    //       LabelClass.constructorFromServerData(modelLabel),
-    //       LabelClass.constructorFromServerData(yourLabel),
-    //     ])
-    // );
+    return RestConnector.get(`/mapping?dataset-id=${datasetID}`).then(
+      (response) => {
+        console.log("getLabelMappingByDataset", response.data.mapping);
+        return JSON.parse(response.data.mapping);
+      }
+    );
 
     // Mockup
-    const labelmaps = mockupLabelMaps.map(([modelLabel, yourLabel]) => [
-      LabelClass.constructorFromServerData(modelLabel),
-      LabelClass.constructorFromServerData(yourLabel),
-    ]);
-    console.log("getLabelMappingByDataset", labelmaps);
-    return labelmaps;
+    // const labelmaps = mockupLabelMaps.map(([modelLabel, yourLabel]) => {
+    //   return {
+    //     classId: modelLabel.id,
+    //     labelId: yourLabel.id,
+    //   };
+    // });
+    // console.log("getLabelMappingByDataset", labelmaps);
+    // return labelmaps;
   }
 
   setLabelMapping(labelMapping, datasetId) {
@@ -69,16 +70,16 @@ class LabelService {
   }
 
   editLabelMapping(labelPairs) {
-    return RestConnector.put("/classes/map", labelPairs).then((response) => {
+    return RestConnector.put("/mapping", labelPairs).then((response) => {
       return response.data;
     });
   }
 
-  deleteLabelMapping(modelLabel, yourLabel) {
-    return RestConnector.delete(
-      `/classes/map?class-id=${modelLabel.id}&label-id=${yourLabel.id}`
-    );
-  }
+  // deleteLabelMapping(modelLabel, yourLabel) {
+  //   return RestConnector.delete(
+  //     `/classes/map?class-id=${modelLabel.id}&label-id=${yourLabel.id}`
+  //   );
+  // }
 }
 
 export default new LabelService();

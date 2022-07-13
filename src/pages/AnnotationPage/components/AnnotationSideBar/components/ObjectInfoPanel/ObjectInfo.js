@@ -129,15 +129,15 @@ const ObjectInfo = (props) => {
           ) : (
             <ArrowRightIcon color="primary" fontSize="small" />
           )}
-          <SvgIcon
-            className={classes.annotationTypeIcon}
-          >
-            <AnnotationTypeIcon             
-            style={{ color: fillColor }}
-
-            />
+          <SvgIcon className={classes.annotationTypeIcon}>
+            <AnnotationTypeIcon style={{ color: fillColor }} />
           </SvgIcon>
         </ListItemIcon>
+        <ListItemText
+          disableTypography
+          primary={<div className={classes.objectId}>Frame: {frameID}</div>}
+          className={classes.objectId}
+        />
         <ListItemText
           disableTypography
           primary={<div className={classes.objectId}>ID: {id}</div>}
@@ -148,11 +148,7 @@ const ObjectInfo = (props) => {
           primary={<div className={classes.objectId}>Label: {label.label}</div>}
           className={classes.objectId}
         /> */}
-        <ListItemText
-          disableTypography
-          primary={<div className={classes.objectId}>Frame: {frameID}</div>}
-          className={classes.objectId}
-        />
+
         <ListItemSecondaryAction>
           <IconButton size="small" onClick={handleDeleteAnnotationObject}>
             <DeleteIcon fontSize="small" />

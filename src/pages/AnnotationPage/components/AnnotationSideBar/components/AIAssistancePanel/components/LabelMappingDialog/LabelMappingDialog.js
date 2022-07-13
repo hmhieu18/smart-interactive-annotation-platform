@@ -50,29 +50,27 @@ const LabelMappingDialog = (props) => {
     setFields([]);
     const yourOptions = [];
     yourLabels.forEach((mlabel) => {
-      yourOptions.push({ value: mlabel.label, label: mlabel.label });
+      yourOptions.push({ value: mlabel.id, label: mlabel.label });
     });
     const modelOptions = [];
     modelLabels.forEach((mlabel) => {
-      modelOptions.push({ value: mlabel.label, label: mlabel.label });
+      modelOptions.push({ value: mlabel.id, label: mlabel.label });
     });
     yourOptions.forEach((option, index) => {
-      console.log("xxxx labelPairList", labelPairList)
-      console.log("option.label", get(values, option.label))
+      // console.log("xxxx labelPairList", labelPairList[index].classId)
+      // console.log("option.label", get(values, option.label))
       setFields((fields) => [
         ...fields,
         {
           name: option.label,
           valueYourOption: option.label,
-          // valueModelOption: labelPairList?labelPairList[0][index].id:null,
+          valueModelOption: labelPairList?labelPairList[index]?.classId:null,
           options2: modelOptions,
           ...labelMapItem,
         },
       ]);
     });
-    console.log("values", values);
-
-  }, [yourLabels]);
+  }, [yourLabels, modelLabels]);
 
   const handleClose = () => {
     setOpen(false);
@@ -90,8 +88,8 @@ const LabelMappingDialog = (props) => {
     const newListOfLabelPairs = [];
     yourLabels.forEach((label, index) => {
       newListOfLabelPairs.push({
-        className: get(values, label.label, ""),
-        lableName: label.label,
+        classId: get(values, label.label, ""),
+        lableId: label.id,
       });
     });
     try {

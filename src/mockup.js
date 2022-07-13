@@ -8,6 +8,30 @@
 // import Image_8 from './static/images/mockup/Image_8.jpg'
 // import Image_9 from './static/images/mockup/Image_9.jpg'
 // import Image_10 from './static/images/mockup/Image_10.jpg'
+export const predictionResultMockup = {
+  UrlLocal: "WandaVision.mp4",
+  predictions: [
+    {
+      gameTime: "1 - 0:0",
+      label: "Goal",
+      position: 0,
+      confidence: 0.4477207064628601,
+    },
+    {
+      gameTime: "1 - 0:0",
+      label: "Kick off",
+      position: 500,
+      confidence: 0.34665852785110474,
+    },
+    {
+      gameTime: "1 - 0:15",
+      label: "Kick off",
+      position: 15000,
+      confidence: 0.37085026502609253,
+    },
+  ],
+};
+
 export const mockupAnnotation = {
   frameID: 2,
   labelID: "0549867f-39c9-4f2e-b5e0-9b36fd8451f2",

@@ -18,6 +18,9 @@ const useAnnotationStore = create((set, get) => ({
 
     setIsLoading("loading_dataset_labels", false);
   },
+  getLabelByName: (name) => {
+    return find(get().labels, { label: name });
+  },
 
   selectedAnnotationId: null,
   setSelectedAnnotationId: (newAnnotationId) => set({ selectedAnnotationId: newAnnotationId }),

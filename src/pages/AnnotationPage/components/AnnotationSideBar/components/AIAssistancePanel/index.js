@@ -1,19 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Collapse from "@material-ui/core/Collapse";
 import List from "@material-ui/core/List";
 import { useParams } from "react-router";
+import { backendURL } from "../../../../../../constants/constants";
+import { find } from "lodash";
 
-import { useAnnotationStore } from "../../../../stores/index";
-import { useLabelStore } from "../../../../stores/index";
+import {
+  useAnnotationStore,
+  useLabelStore,
+  useDatasetStore,
+} from "../../../../stores/index";
+import EventAnnotationClass from "../../../../../../classes/EventAnnotationClass";
 
+import LoadingDialog from "./components/LoadingDialog/LoadingDialog";
 import ArrowRightIcon from "@material-ui/icons/ChevronRightRounded";
 import ArrowDownIcon from "@material-ui/icons/ExpandMoreRounded";
 
 import SplitButton from "../../../../../../components/SplitButton";
 import LabelMappingDialog from "./components/LabelMappingDialog/LabelMappingDialog";
-import {MODEL_ID} from "../../../../../../constants/constants"
+import { MODEL_ID } from "../../../../../../constants/constants";
+import { predictionResultMockup } from "../../../../../../mockup";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 20,
@@ -48,47 +56,128 @@ const useStyles = makeStyles((theme) => ({
 
 const AIAssistancePanel = (props) => {
   const classes = useStyles();
+  const instanceId = useDatasetStore((state) => state.instanceId);
   const [isOpen, setIsOpen] = useState(true);
   const [modelId, setModelId] = useState("");
+  const datasetLabels = useLabelStore((state) => state.labels);
   const labelMaps = useLabelStore((state) => state.labelMaps);
   const modelLabels = useLabelStore((state) => state.modelLabels);
   const loadDatasetLabel = useLabelStore((state) => state.loadDatasetLabel);
   const loadModelLabels = useLabelStore((state) => state.loadModelLabel);
   const loadLabelMaps = useLabelStore((state) => state.loadLabelMaps);
+  const getDatasetLabelIDMappedModelLabelName = useLabelStore(
+    (state) => state.getDatasetLabelIDMappedModelLabelName
+  );
   const createLabelMaps = useLabelStore((state) => state.createLabelMappings);
   const updateLabelMaps = useLabelStore((state) => state.updateLabelMaps);
   const { datasetId } = useParams();
 
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [openLoadingDialog, setOpenLoadingDialog] = React.useState(false);
   const labels = useAnnotationStore((state) => state.labels);
+  const [progress, setProgress] = useState(0);
+  const [progressDes, setProgressDes] = useState("");
+  const [sse, setSse] = useState(null);
+  const [result, setResult] = useState(null);
+  const [isHandled, setIsHandled] = useState(false);
+  const video = useDatasetStore(
+    useCallback(
+      (state) => find(state.dataInstances, { id: instanceId }),
+      [instanceId]
+    )
+  );
 
-  React.useEffect(() => {
-    setModelId(MODEL_ID.NON_AUDIO_SOCCERNET_MODEL)
-    loadModelLabels(modelId);
-    // loadModelLabels(datasetId);
-    loadLabelMaps(datasetId);
-    console.log("labelMaps", labelMaps)
-  }, [datasetId]);
+  React.useEffect(async () => {
+    setModelId(MODEL_ID.NON_AUDIO_SOCCERNET_MODEL);
+    await loadModelLabels(modelId);
+    await loadLabelMaps(datasetId);
+    console.log("labelMaps", labelMaps);
+  }, [datasetId, modelId]);
 
-  const handleTriggerLabelMapping = () => {
+  const handleTriggerLabelMapping = async () => {
     console.log("OPENING DIALOG");
-    console.log("MODEL_ID.NON_AUDIO_SOCCERNET_MODEL",MODEL_ID.NON_AUDIO_SOCCERNET_MODEL)
-    setModelId(MODEL_ID.NON_AUDIO_SOCCERNET_MODEL)
-    loadModelLabels(modelId);
-    console.log("modelid", modelId)
+    console.log(
+      "MODEL_ID.NON_AUDIO_SOCCERNET_MODEL",
+      MODEL_ID.NON_AUDIO_SOCCERNET_MODEL
+    );
+    await loadModelLabels(modelId);
+    console.log("handleTriggerLabelMapping.modelLabels", modelLabels);
+    await loadLabelMaps(datasetId);
+    console.log("handleTriggerLabelMapping.labelMaps", labelMaps);
+
+    setModelId(MODEL_ID.NON_AUDIO_SOCCERNET_MODEL);
     setOpenDialog(true);
   };
 
-  const handleSaveEditDialog = (finishedLabel) => {
+  const handleSaveEditDialog = async (finishedLabel) => {
     // if (finishedLabel.id) {
     //   updateLabel(finishedLabel)
     // } else {
     console.log(finishedLabel, datasetId);
-    createLabelMaps(finishedLabel, datasetId);
+    await createLabelMaps(finishedLabel, datasetId);
     // }
+    
     setOpenDialog(false);
+    setOpenLoadingDialog(true);
+    setSse(sendRequest());
   };
 
+  const appendAnnotation = useAnnotationStore(
+    (state) => state.appendAnnotation
+  );
+
+  const handleAddEventAnnotation = (frameID, labelID) => {
+    const newEvent = EventAnnotationClass.constructorFromServerData({
+      id: null,
+      frameID,
+      labelID,
+    });
+    console.log("newEvent", newEvent);
+    appendAnnotation(newEvent);
+  };
+
+  const handlePredictionResult = (result) => {
+    setIsHandled(true);
+    const { fps, numFrames } = video;
+    for (const prediction of result.predictions) {
+      const frameID = Math.floor((prediction.position / 1000) * fps);
+      const modelLabel = find(modelLabels, { label: prediction.label });
+      console.log("modelLabel", modelLabel);
+      console.log("labelMaps", labelMaps);
+      for (const labelMap of labelMaps) {
+        if (labelMap.classId === modelLabel?.id) {
+          const datasetLabelId = labelMap.labelId;
+          console.log("datasetLabelId", datasetLabelId);
+          if(datasetLabelId)
+            handleAddEventAnnotation(frameID, datasetLabelId);
+        }
+      }
+    }
+    setIsHandled(false);
+  };
+
+  const sendRequest = () => {
+    const sse = new EventSource(
+      `${backendURL}/predict?model-url=soccernet-9b7f7694-64d8-4cb3-bf37-080dce41ebb4.loca.lt&data-id=${instanceId}`
+    );
+    function getRealtimeData(obj) {
+      setProgress(obj.progress);
+      setProgressDes(obj.stage);
+      if (obj.progress >= 100) {
+        setResult(predictionResultMockup);
+        console.log("RESULT", result);
+        sse.close();
+        if (!isHandled) {
+          handlePredictionResult(predictionResultMockup);
+        }
+      }
+    }
+    sse.onmessage = (e) => getRealtimeData(JSON.parse(e.data));
+    sse.onerror = () => {
+      sse.close();
+    };
+    return sse;
+  };
   return (
     <div>
       <div className="card shadow mb-4">
@@ -108,7 +197,7 @@ const AIAssistancePanel = (props) => {
             <SplitButton
               text="Predict Soccer Events"
               icon={"ss"}
-              onClick={handleTriggerLabelMapping}
+              onClick={instanceId ? handleTriggerLabelMapping : null}
             />
             <div className="my-2"></div>
             <SplitButton text="Predict Faces" icon={"ss"} />
@@ -122,6 +211,15 @@ const AIAssistancePanel = (props) => {
         modelLabels={modelLabels}
         handleSave={handleSaveEditDialog}
         labelPairList={labelMaps}
+      />
+      <LoadingDialog
+        open={openLoadingDialog}
+        setOpen={setOpenLoadingDialog}
+        progress={progress}
+        description={progressDes}
+        handleOnCancel={() => {
+          sse.close();
+        }}
       />
     </div>
   );

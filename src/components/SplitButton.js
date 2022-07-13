@@ -16,6 +16,7 @@ const SplitButton = (props) => {
       onClick={onClick}
       className={`btn btn-${variant} btn-icon-split`}
       href={href}
+      others
     >
       <span className={`icon text-white-50`}>
         {icon}
