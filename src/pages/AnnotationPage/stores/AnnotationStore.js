@@ -23,17 +23,22 @@ const useAnnotationStore = create((set, get) => ({
   },
 
   selectedAnnotationId: null,
-  setSelectedAnnotationId: (newAnnotationId) => set({ selectedAnnotationId: newAnnotationId }),
+  setSelectedAnnotationId: (newAnnotationId) =>
+    set({ selectedAnnotationId: newAnnotationId }),
   getSelectedAnnotationId: () => get().selectedAnnotationId,
 
   annotations: [],
   loadAnnotations: async (dataID) => {
+    set({
+      annotations: [],
+      saveStatus: true,
+    });
     const setIsLoading = get().setIsLoading;
     setIsLoading("loading_annotations", true);
     let annotationsList = await AnnotationService.getAnnotationsByDataInstance(
       dataID
     );
-    console.log("annotationsListstore", annotationsList)
+    console.log("annotationsListstore", annotationsList);
     let annotations = [];
     annotationsList.forEach((ann) => {
       annotations.push(ann);
@@ -43,14 +48,29 @@ const useAnnotationStore = create((set, get) => ({
     });
     setIsLoading("loading_annotations", false);
   },
+
   appendAnnotation: (newAnnotation) => {
-    set(state => ({ annotations: [...state.annotations, newAnnotation] }))
+    set((state) => ({ annotations: [...state.annotations, newAnnotation],
+    saveStatus: false }));
   },
+
   deleteAnnotation: (deleteAnnotationId) => {
-    set(state => ({
-      annotations: filter(state.annotations, ann => ann.id !== deleteAnnotationId)
-    }))
+    set((state) => ({
+      saveStatus: false,
+      annotations: filter(
+        state.annotations,
+        (ann) => ann.id !== deleteAnnotationId
+      ),
+    }));
   },
+  updateAnnotations: (id, annotationsList) => {
+    AnnotationService.setAnnotationsByDataInstance(id, annotationsList)
+    set({ saveStatus: true });
+  },
+
+  saveStatus: true,
+  setSaveStatus: (saveStatus) => set({ saveStatus }),
+  getSaveStatus: () => get().saveStatus,
 }));
 
 export default useAnnotationStore;

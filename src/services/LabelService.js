@@ -44,7 +44,6 @@ class LabelService {
   getLabelMappingByDataset(datasetID) {
     return RestConnector.get(`/mapping?dataset-id=${datasetID}`).then(
       (response) => {
-        console.log("getLabelMappingByDataset", response.data.mapping);
         return JSON.parse(response.data.mapping);
       }
     );

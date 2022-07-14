@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useCallback }  from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { get } from 'lodash'
+import { find } from 'lodash'
 
 import { useDatasetStore } from '../../../../stores/index'
 // import {mockupDataInstance} from '../../../../../../mockup'
@@ -22,11 +23,14 @@ const useStyles = makeStyles(theme => ({
 const DataInfo = (props) => {
   const classes = useStyles()
 
-  const getDataInstance = useDatasetStore(state => state.getDataInstance)
-  const dataInstance = getDataInstance()
+  const instanceId = useDatasetStore(state => state.instanceId)
+  const dataInstance = useDatasetStore(useCallback(state => find(state.dataInstances, { id: instanceId }), [instanceId]))
 
-  const dataInstanceName = get(dataInstance, 'name', '')
+  const dataInstanceName = get(dataInstance, 'name', '');
 
+  React.useEffect(() => {
+    console.log("dataInstance", dataInstance);
+  }, [dataInstance])
   return (
     <div className={classes.root}>
       <div className={classes.name}>

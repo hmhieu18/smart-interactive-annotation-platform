@@ -1,7 +1,7 @@
 import { Grid, makeStyles, styled } from "@material-ui/core";
 import React from "react";
 
-import { useDatasetStore } from "../../../../stores/index";
+import { useDatasetStore, useAnnotationStore } from "../../../../stores/index";
 import { ENUM_ANNOTATE_STATUS } from "../../../../../../constants/constants";
 
 import SplitButton from "../../../../../../components/SplitButton";
@@ -20,6 +20,10 @@ const UpdateStatusButtonPanel = () => {
   const updateAnnotateStatusDataInstance = useDatasetStore(
     (state) => state.updateAnnotateStatusDataInstance
   );
+  const annotationsList = useAnnotationStore((state) => state.annotations);
+  const updateAnnotations = useAnnotationStore(
+    (state) => state.updateAnnotations
+  );
   const classes = useStyles();
   return (
     <div className={classes.container}>
@@ -36,12 +40,13 @@ const UpdateStatusButtonPanel = () => {
           <Grid item>
             <SplitButton
               variant="primary"
-              onClick={() =>
+              onClick={() => {
                 updateAnnotateStatusDataInstance(
                   instanceId,
                   ENUM_ANNOTATE_STATUS.FINSIHED
-                )
-              }
+                );
+                updateAnnotations(instanceId, annotationsList);
+              }}
               text="Mark as finished"
               icon={<DoneIcon />}
             />
@@ -49,12 +54,13 @@ const UpdateStatusButtonPanel = () => {
           <Grid item>
             <SplitButton
               variant="info"
-              onClick={() =>
+              onClick={() => {
                 updateAnnotateStatusDataInstance(
                   instanceId,
                   ENUM_ANNOTATE_STATUS.UNFINISHED
-                )
-              }
+                );
+                updateAnnotations(instanceId, annotationsList);
+              }}
               text="Mark as Unfinished"
               icon={<UnfinishedIcon />}
             />
@@ -62,12 +68,13 @@ const UpdateStatusButtonPanel = () => {
           <Grid item>
             <SplitButton
               variant="warning"
-              onClick={() =>
+              onClick={() => {
                 updateAnnotateStatusDataInstance(
                   instanceId,
                   ENUM_ANNOTATE_STATUS.UNCERTAIN
-                )
-              }
+                );
+                updateAnnotations(instanceId, annotationsList);
+              }}
               text="Mark as uncertain"
               icon={<HelpIcon />}
             />{" "}

@@ -73,22 +73,52 @@ const Input = (props) => {
 
   const [labelWidth, setLabelWidth] = React.useState(0);
   React.useEffect(() => {
-    console.log("valueYourOption, valueModelOption", valueYourOption, valueModelOption)
+    console.log(
+      "valueYourOption, valueModelOption",
+      valueYourOption,
+      valueModelOption
+    );
   }, [valueYourOption, valueModelOption]);
   return (
-    <Grid container spacing={3} >
-      <Grid item xs>
-        {/* <Paper className={classes.paper}></Paper> */}
-        <TextField label={label1} {...props} disabled={true} value={valueYourOption}/>
+    <StyledFormControl
+      required={required}
+      variant={variant}
+      error={Boolean(error && touched)}
+    >
+      <Grid container spacing={3}>
+        <Grid item xs>
+          <TextField
+            label={label1}
+            {...props}
+            disabled={true}
+            value={valueYourOption}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={1}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <i class="bi bi-arrow-right"></i>
+        </Grid>
+        <Grid item xs>
+          <SelectField
+            label={label2}
+            options={options2}
+            {...props}
+            defaultValue={valueModelOption}
+          />
+        </Grid>
       </Grid>
-      <Grid item xs={1} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-        <i class="bi bi-arrow-right"></i>
-      </Grid>
-      <Grid item xs>
-        <SelectField label={label2} options={options2} {...props} defaultValue={valueModelOption}/>
-        {/* <Paper className={classes.paper}>xs</Paper> */}
-      </Grid>
-    </Grid>
+      <FormHelperText error>
+        <ErrorMessage name={field.name} />
+      </FormHelperText>
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+    </StyledFormControl>
   );
 };
 

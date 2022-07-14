@@ -6,6 +6,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { useParams } from 'react-router'
 
 import DataInfo from './components/DataInfo/index'
+import SaveStatus from './components/SaveStatus/index'
 import useQuery from '../../../../utils/useQuery'
 
 const useStyles = makeStyles(theme => ({
@@ -52,6 +53,7 @@ const TopNav = (props) => {
     <div className={classes.topNavWrapper}>
       <div className={classes.leftSection}>
         <DataInfo />
+        <SaveStatus/>
       </div>
       <div className={classes.rightSection}>
         <IconButton

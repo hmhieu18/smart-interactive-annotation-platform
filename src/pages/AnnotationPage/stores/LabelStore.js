@@ -21,9 +21,7 @@ const useLabelStore = create((set, get) => ({
     const labelMaps = get().labelMaps;
     for (const labelMap of labelMaps) {
       if (labelMap.classId === modelLabel?.id) {
-        console.log("labelMap", labelMap);
         const datasetLabelId = labelMap ? labelMap.labelId : null;
-        console.log("datasetLabelId", datasetLabelId);
         return datasetLabelId;
       }
     }
@@ -52,7 +50,6 @@ const useLabelStore = create((set, get) => ({
     setIsLoading("loadLabelMaps", true);
 
     const labelMaps = await LabelService.getLabelMappingByDataset(datasetId);
-    console.log("LabelService.getLabelMappingByDataset", labelMaps);
     set({ labelMaps: labelMaps });
 
     setIsLoading("loadLabelMaps", false);
@@ -64,7 +61,7 @@ const useLabelStore = create((set, get) => ({
     );
 
     set({
-      labelMaps: createdLabelMaps.mapping,
+      labelMaps: newLabelMappings,
     });
   },
 
@@ -74,7 +71,7 @@ const useLabelStore = create((set, get) => ({
     );
 
     set({
-      labelMaps: createdLabelMaps.mapping,
+      labelMaps:newLabelMappings,
     });
   },
 }));

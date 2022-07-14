@@ -64,7 +64,6 @@ const LabelInfo = (props) => {
               size="small"
               onClick={() => {
                 handleAddEventAnnotation(frameId, labelId);
-                console.log("labelId", labelId);
               }}
             >
               <PlusIcon fontSize="small" />

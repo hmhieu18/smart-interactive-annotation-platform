@@ -48,6 +48,7 @@ const LabelMappingDialog = (props) => {
 
   React.useEffect(() => {
     setFields([]);
+    console.log("labelPairList", labelPairList);
     const yourOptions = [];
     yourLabels.forEach((mlabel) => {
       yourOptions.push({ value: mlabel.id, label: mlabel.label });
@@ -57,8 +58,6 @@ const LabelMappingDialog = (props) => {
       modelOptions.push({ value: mlabel.id, label: mlabel.label });
     });
     yourOptions.forEach((option, index) => {
-      // console.log("xxxx labelPairList", labelPairList[index].classId)
-      // console.log("option.label", get(values, option.label))
       setFields((fields) => [
         ...fields,
         {
@@ -70,7 +69,7 @@ const LabelMappingDialog = (props) => {
         },
       ]);
     });
-  }, [yourLabels, modelLabels]);
+  }, [yourLabels, modelLabels, labelPairList]);
 
   const handleClose = () => {
     setOpen(false);
@@ -89,7 +88,7 @@ const LabelMappingDialog = (props) => {
     yourLabels.forEach((label, index) => {
       newListOfLabelPairs.push({
         classId: get(values, label.label, ""),
-        lableId: label.id,
+        labelId: label.id,
       });
     });
     try {
@@ -132,18 +131,6 @@ const LabelMappingDialog = (props) => {
 };
 
 const LabelForm = withFormik({
-  // enableReinitialize: true,
-  // mapPropsToValues: ({ labelPairList }) =>
-  //   labelPairList.map((labelPair) => {
-  //     return { [labelPair[0].label]: labelPair[1].id };
-  //   }),
-  // validationSchema: Yup.object().shape({
-  //   label: Yup.string().required(),
-  //   annotationProperties: Yup.object().shape({
-  //     fill: Yup.string().required(),
-  //     stroke: Yup.string().required(),
-  //   }),
-  // }),
 })(LabelMappingDialog);
 
 export default LabelForm;

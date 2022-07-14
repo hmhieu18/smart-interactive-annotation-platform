@@ -65,7 +65,7 @@ const ObjectInfoPanel = (props) => {
   const setAnnotationLabel = useAnnotationStore(
     (state) => state.setAnnotationLabel
   );
-
+  
   React.useEffect(() => {
     // console.log("annotationsList", annotationsList);
   }, [annotationsList]);

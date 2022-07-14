@@ -19,13 +19,13 @@ export const predictionResultMockup = {
     },
     {
       gameTime: "1 - 0:0",
-      label: "Kick off",
+      label: "Goal",
       position: 500,
       confidence: 0.34665852785110474,
     },
     {
       gameTime: "1 - 0:15",
-      label: "Kick off",
+      label: "Shot off target",
       position: 15000,
       confidence: 0.37085026502609253,
     },

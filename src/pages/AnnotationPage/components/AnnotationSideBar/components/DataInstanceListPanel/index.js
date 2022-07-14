@@ -9,7 +9,7 @@ import { find } from 'lodash'
 import { useParams, useHistory } from 'react-router'
 import { get } from 'lodash'
 
-import { useDatasetStore } from '../../../../stores/index'
+import { useDatasetStore, useAnnotationStore } from '../../../../stores/index'
 import useQuery from '../../../../../../utils/useQuery'
 
 import { IMAGES_PER_PAGE } from '../../../../constants'
@@ -61,11 +61,26 @@ const ObjectInfoPanel = (props) => {
   let history = useHistory()
   const page = JSON.parse(query.get("page") || 1)
 
+  const annotationsList = useAnnotationStore((state) => state.annotations);
+  const updateAnnotations = useAnnotationStore(
+    (state) => state.updateAnnotations
+  );
+
   const dataset = useDatasetStore(state => state.dataset)
   const dataInstances = useDatasetStore(state => state.dataInstances)
   const instanceId = useDatasetStore(state => state.instanceId)
   const setInstanceId = useDatasetStore(state => state.setInstanceId)
-
+  const saveStatus = useAnnotationStore(state => state.saveStatus)
+  
+  const handleChangeInstanceId = (id) => {
+    if(!saveStatus){
+      console.log("handleChangeInstanceId not save");
+      if (window.confirm("Save before leaving?")) {
+        updateAnnotations(instanceId, annotationsList)
+      }
+    }
+    setInstanceId(id)
+  }
   useEffect(() => {
     if (dataInstances) {
       if (instanceId) {
@@ -128,7 +143,7 @@ const ObjectInfoPanel = (props) => {
                     key={instance.id}
                     dataInstance={instance}
                     isSelected={instance.id === instanceId}
-                    setSelectedInstanceId={setInstanceId}
+                    setSelectedInstanceId={handleChangeInstanceId}
                   />
                 )
               })

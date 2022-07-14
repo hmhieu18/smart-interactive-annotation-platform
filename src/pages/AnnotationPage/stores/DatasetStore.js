@@ -4,6 +4,7 @@ import { cloneDeep } from "lodash";
 
 import DatasetService from "../../../services/DatasetService";
 import DataInstanceService from "../../../services/DataInstanceService";
+import AnnotationService from "../../../services/AnnotationService";
 
 import { IMAGES_PER_PAGE } from "../constants";
 
@@ -22,8 +23,9 @@ const useDatasetStore = create((set, get) => ({
   setInstanceId: (id) => set({ instanceId: id }),
   getInstanceId: () => get().instanceId,
   getDataInstance: () => {
-    console.log("getDataInstance", get().dataInstances);
-    find(get().dataInstances, { id: get().instanceId });
+    const data = find(get().dataInstances, { id: get().instanceId });
+    console.log("getDataInstance", data);
+    return data;
   },
   getCurrentAnnotationImageId: () => get().currentAnnotationImageId,
   setCurrentAnnotationImageId: (id) => set({ currentAnnotationImageId: id }),

@@ -91,35 +91,24 @@ const AIAssistancePanel = (props) => {
     setModelId(MODEL_ID.NON_AUDIO_SOCCERNET_MODEL);
     await loadModelLabels(modelId);
     await loadLabelMaps(datasetId);
-    console.log("labelMaps", labelMaps);
   }, [datasetId, modelId]);
 
   const handleTriggerLabelMapping = async () => {
-    console.log("OPENING DIALOG");
-    console.log(
-      "MODEL_ID.NON_AUDIO_SOCCERNET_MODEL",
-      MODEL_ID.NON_AUDIO_SOCCERNET_MODEL
-    );
+
     await loadModelLabels(modelId);
-    console.log("handleTriggerLabelMapping.modelLabels", modelLabels);
     await loadLabelMaps(datasetId);
-    console.log("handleTriggerLabelMapping.labelMaps", labelMaps);
 
     setModelId(MODEL_ID.NON_AUDIO_SOCCERNET_MODEL);
     setOpenDialog(true);
   };
 
   const handleSaveEditDialog = async (finishedLabel) => {
-    // if (finishedLabel.id) {
-    //   updateLabel(finishedLabel)
-    // } else {
-    console.log(finishedLabel, datasetId);
     await createLabelMaps(finishedLabel, datasetId);
-    // }
     
     setOpenDialog(false);
-    setOpenLoadingDialog(true);
-    setSse(sendRequest());
+    // setOpenLoadingDialog(true);
+    handlePredictionResult(predictionResultMockup);
+    // setSse(sendRequest());
   };
 
   const appendAnnotation = useAnnotationStore(
@@ -132,23 +121,20 @@ const AIAssistancePanel = (props) => {
       frameID,
       labelID,
     });
-    console.log("newEvent", newEvent);
+    console.log("handleAddEventAnnotation", newEvent);
     appendAnnotation(newEvent);
   };
 
   const handlePredictionResult = (result) => {
     setIsHandled(true);
     const { fps, numFrames } = video;
+    console.log("handlePredictionResult", modelLabels, labelMaps);
     for (const prediction of result.predictions) {
       const frameID = Math.floor((prediction.position / 1000) * fps);
       const modelLabel = find(modelLabels, { label: prediction.label });
-      for (const labelMap of labelMaps) {
-        if (labelMap.classId === modelLabel?.id) {
-          const datasetLabelId = labelMap.labelId;
-          console.log("datasetLabelId", datasetLabelId);
-          if(datasetLabelId)
-            handleAddEventAnnotation(frameID, datasetLabelId);
-        }
+      const datasetLabelId = find(labelMaps, {classId: modelLabel.id}).labelId;
+      if(datasetLabelId) {
+        handleAddEventAnnotation(frameID, datasetLabelId);
       }
     }
     setIsHandled(false);
