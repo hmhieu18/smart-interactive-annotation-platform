@@ -142,8 +142,6 @@ const AIAssistancePanel = (props) => {
     for (const prediction of result.predictions) {
       const frameID = Math.floor((prediction.position / 1000) * fps);
       const modelLabel = find(modelLabels, { label: prediction.label });
-      console.log("modelLabel", modelLabel);
-      console.log("labelMaps", labelMaps);
       for (const labelMap of labelMaps) {
         if (labelMap.classId === modelLabel?.id) {
           const datasetLabelId = labelMap.labelId;
