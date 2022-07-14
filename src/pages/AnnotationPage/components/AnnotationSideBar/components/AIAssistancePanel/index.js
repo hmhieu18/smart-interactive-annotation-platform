@@ -106,9 +106,9 @@ const AIAssistancePanel = (props) => {
     await createLabelMaps(finishedLabel, datasetId);
     
     setOpenDialog(false);
-    // setOpenLoadingDialog(true);
+    setOpenLoadingDialog(true);
     handlePredictionResult(predictionResultMockup);
-    // setSse(sendRequest());
+    setSse(sendRequest());
   };
 
   const appendAnnotation = useAnnotationStore(
