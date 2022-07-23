@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from "@material-ui/core/IconButton";
 import { useParams, useHistory } from "react-router";
 import { useConfirm } from "material-ui-confirm";
@@ -9,12 +10,10 @@ import * as Yup from "yup";
 import { get, cloneDeep } from "lodash";
 import "../../../../assets/scss/sb-admin-2.scss";
 import CloseIcon from "@material-ui/icons/Close";
-import SettingsIcon from "@material-ui/icons/Settings";
 import StorageIcon from "@material-ui/icons/Storage";
 
 import moment from "moment";
 import NakedField from "../../../../components/NakedField";
-import SettingsMenu from "./components/SettingsMenu";
 
 import DatasetClass from "../../../../classes/DatasetClass";
 import useQuery from "../../../../utils/useQuery";
@@ -102,20 +101,10 @@ const DatasetInfo = (props) => {
     setSubmitting(false);
   };
 
-  const [settingAnchorEl, setSettingAnchorEl] = React.useState(null);
-
-  const handleClickSettingMenu = (event) => {
-    setSettingAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseSettingMenu = () => {
-    setSettingAnchorEl(null);
-  };
-
   const handleClickDeleteDataset = async () => {
     confirm({
-      title: "Delete dataset",
-      description: `This action can't be undone and will delete all images and annotations belong to this dataset`,
+      title: `Delete dataset ${dataset.name}?`,
+      description: `The dataset ${dataset.name} and all related data will be deleted.`,
     }).then(async () => {
       await deleteDataset(datasetId);
       history.replace(`/projects/project=${projectId}`);
@@ -130,14 +119,6 @@ const DatasetInfo = (props) => {
           {dataset.name}
         </h6>
         <div className="dropdown no-arrow">
-          <IconButton onClick={handleClickSettingMenu}>
-            <SettingsIcon />
-          </IconButton>
-          <SettingsMenu
-            anchorEl={settingAnchorEl}
-            handleClickDelete={handleClickDeleteDataset}
-            handleClose={handleCloseSettingMenu}
-          />
           <IconButton href={`/projects/project=${projectId}`}>
             <CloseIcon />
           </IconButton>
@@ -191,6 +172,23 @@ const DatasetInfo = (props) => {
               href={`/annotations/dataset=${datasetId}?page=${1}`}
               text="Annotate"
               icon={<i class="bi bi-pencil-fill"></i>}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          item
+          xs={12}
+          spacing={1}
+          alignItems="center"
+          justifyContent="flex-end"
+        >
+          <Grid item>
+            <SplitButton
+              variant="danger"
+              onClick={handleClickDeleteDataset}
+              text="Delete dataset"
+              icon={<DeleteIcon/>}
             />
           </Grid>
         </Grid>

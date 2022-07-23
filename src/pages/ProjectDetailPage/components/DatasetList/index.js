@@ -124,7 +124,6 @@ const DatasetList = (props) => {
             {tableColumns.map((col) => (
               <StyledTableCell key={col.key}>{col.label}</StyledTableCell>
             ))}
-            <StyledTableCell align="center">Edit</StyledTableCell>
             <StyledTableCell align="center">Annotate</StyledTableCell>
           </StyledTableRow>
         </TableHead>
@@ -141,15 +140,7 @@ const DatasetList = (props) => {
                   </StyledTableCell>
                 );
               })}
-              <StyledTableCell align="center">
-                <IconButton
-                  color="primary"
-                  component="a"
-                  href={`/datasets/dataset=${dataset.id}`}
-                >
-                  <EditIcon />
-                </IconButton>
-              </StyledTableCell>
+              
               <StyledTableCell align="center">
                 <IconButton
                   color="secondary"

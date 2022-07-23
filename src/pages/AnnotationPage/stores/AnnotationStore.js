@@ -54,8 +54,7 @@ const useAnnotationStore = create((set, get) => ({
     // sort annotations by frameid
     annotations.sort((a, b) => a.frameID - b.frameID);
     console.log("sorted annotations", annotations);
-    set((state) => ({ annotations,
-    saveStatus: false }));
+    set((state) => ({ annotations, saveStatus: false }));
   },
 
   deleteAnnotation: (deleteAnnotationId) => {
@@ -68,8 +67,20 @@ const useAnnotationStore = create((set, get) => ({
     }));
   },
   updateAnnotations: (id, annotationsList) => {
-    AnnotationService.setAnnotationsByDataInstance(id, annotationsList)
+    AnnotationService.setAnnotationsByDataInstance(id, annotationsList);
     set({ saveStatus: true });
+  },
+  setAnnotationLabel: (id, newLabelId) => {
+    const annotations = get().annotations.map((object) => {
+      if (object.id !== id) {
+        return object;
+      } else {
+        let newAnnotationObject = cloneDeep(object);
+        newAnnotationObject.labelId = newLabelId;
+        return newAnnotationObject;
+      }
+    });
+    set({ annotations, saveStatus: false });
   },
 
   saveStatus: true,

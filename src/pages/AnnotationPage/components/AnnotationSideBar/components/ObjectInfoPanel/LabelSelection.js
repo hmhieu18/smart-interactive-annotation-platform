@@ -62,7 +62,7 @@ const LabelSelection = (props) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Choose a label"
+          label="Pick a label"
           variant="outlined"
           size="small"
           inputProps={{
