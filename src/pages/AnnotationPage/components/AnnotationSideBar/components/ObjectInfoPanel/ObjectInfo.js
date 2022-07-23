@@ -135,7 +135,7 @@ const ObjectInfo = (props) => {
         </ListItemIcon>
         <ListItemText
           disableTypography
-          primary={<div className={classes.objectId}>Frame: {frameID}</div>}
+          primary={<div className={classes.objectId}>Frame: {frameID} | {label.label}</div>}
           className={classes.objectId}
         />
         <ListItemText

@@ -5,7 +5,7 @@ import '../../../../assets/scss/sb-admin-2.scss'
 import DataInstanceListPanel from './components/DataInstanceListPanel/index'
 import LabelInfoPanel from './components/LabelInfoPanel/index'
 import ObjectInfoPanel from './components/ObjectInfoPanel/index'
-import UpdateStatusButtonPanel from './components/UpdateStatusButtonPanel/index'
+import StatusButtonsList from './components/StatusButtonsList/index'
 import AIAssistancePanel from './components/AIAssistancePanel/index'
 
 const useStyles = makeStyles(theme => ({
@@ -26,7 +26,6 @@ const AnnotationSideBar = (props) => {
         <DataInstanceListPanel/>
         <LabelInfoPanel/>
         <ObjectInfoPanel/>
-        <UpdateStatusButtonPanel/>
       </div>
     )
 };

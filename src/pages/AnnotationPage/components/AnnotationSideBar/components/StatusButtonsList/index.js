@@ -4,7 +4,7 @@ import React from "react";
 import { useDatasetStore, useAnnotationStore } from "../../../../stores/index";
 import { ENUM_ANNOTATE_STATUS } from "../../../../../../constants/constants";
 
-import SplitButton from "../../../../../../components/SplitButton";
+import IconButton from "../../../../../../components/IconButton";
 
 import DoneIcon from "@material-ui/icons/Done";
 import HelpIcon from "@material-ui/icons/HelpOutline";
@@ -12,10 +12,11 @@ import UnfinishedIcon from "@material-ui/icons/NotInterested";
 const useStyles = makeStyles((theme) => ({
   container: {
     margin: "15",
+    padding: "10",
   },
 }));
 
-const UpdateStatusButtonPanel = () => {
+const StatusButtonsList = () => {
   const instanceId = useDatasetStore((state) => state.instanceId);
   const updateAnnotateStatusDataInstance = useDatasetStore(
     (state) => state.updateAnnotateStatusDataInstance
@@ -38,7 +39,7 @@ const UpdateStatusButtonPanel = () => {
           justifyContent="flex-end"
         >
           <Grid item>
-            <SplitButton
+            <IconButton
               variant="primary"
               onClick={() => {
                 updateAnnotateStatusDataInstance(
@@ -52,7 +53,7 @@ const UpdateStatusButtonPanel = () => {
             />
           </Grid>{" "}
           <Grid item>
-            <SplitButton
+            <IconButton
               variant="info"
               onClick={() => {
                 updateAnnotateStatusDataInstance(
@@ -66,7 +67,7 @@ const UpdateStatusButtonPanel = () => {
             />
           </Grid>
           <Grid item>
-            <SplitButton
+            <IconButton
               variant="warning"
               onClick={() => {
                 updateAnnotateStatusDataInstance(
@@ -85,4 +86,4 @@ const UpdateStatusButtonPanel = () => {
   );
 };
 
-export default UpdateStatusButtonPanel;
+export default StatusButtonsList;

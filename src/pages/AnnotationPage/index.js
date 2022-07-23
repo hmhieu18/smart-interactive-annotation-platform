@@ -8,9 +8,9 @@ import { useParams } from "react-router";
 import useQuery from "../../utils/useQuery";
 import annotationEventCenter from "./EventCenter";
 import "../../assets/scss/sb-admin-2.scss";
-import RenderComponent from './components/Stage/index'
-import PlayControl from './components/PlayControl/index'
-import PropagationControl from './components/PropagationControl/index'
+import RenderComponent from "./components/Stage/index";
+import PlayControl from "./components/PlayControl/index";
+import PropagationControl from "./components/PropagationControl/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +41,9 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
   sidebarWrapper: {
-    width: "25%",makeStyles, makeStyles, 
+    width: "25%",
+    makeStyles,
+    makeStyles,
   },
 }));
 
@@ -56,14 +58,16 @@ const AnnotationPage = (props) => {
   const getDatasetInfo = useDatasetStore((state) => state.getDatasetInfo);
   const getDataInstances = useDatasetStore((state) => state.getDataInstances);
   const setInstanceId = useDatasetStore((state) => state.setInstanceId);
-  const loadAnnotationLabels = useAnnotationStore(state => state.loadAnnotationLabels)
+  const loadAnnotationLabels = useAnnotationStore(
+    (state) => state.loadAnnotationLabels
+  );
   // const loadAnnotationObjects = useAnnotationStore(state => state.loadAnnotationObjects)
-  const loadAnnotations = useAnnotationStore(state => state.loadAnnotations)
+  const loadAnnotations = useAnnotationStore((state) => state.loadAnnotations);
 
   useEffect(() => {
     if (datasetId) {
       getDatasetInfo(datasetId);
-      loadAnnotationLabels(datasetId)
+      loadAnnotationLabels(datasetId);
     }
   }, [datasetId]);
 
@@ -91,9 +95,9 @@ const AnnotationPage = (props) => {
         </div>
 
         <div className={classes.annotatorContainer}>
-           <RenderComponent/>
-          <PropagationControl/>
-          <PlayControl/>
+          <RenderComponent />
+          <PropagationControl />
+          <PlayControl />
           {/*<ModeController/>
           <KeyboardHandler /> 
           <Prediction /> */}

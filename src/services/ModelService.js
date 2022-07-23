@@ -45,6 +45,7 @@ class ModelService {
       id: newModel.id,
       name: newModel.name,
       description: newModel.description,
+      url: newModel.URL,
     }).then(response => {
       return ModelClass.constructorFromServerData(response.data)
     })

@@ -57,20 +57,31 @@ const ModelInfo = (props) => {
   const confirm = useConfirm();
   const history = useHistory();
   React.useEffect(() => {
-    const { name, description } = model;
+    const { name, description, URL } = model;
     setFieldValue("name", name);
     setFieldValue("description", description);
+    setFieldValue("url", URL);
   }, [model, setFieldValue]);
 
   const handleSubmit = async () => {
     let data = cloneDeep(values);
+    console.log("data", data);
     Object.keys(data).forEach((key) => {
       if (errors[key]) {
         data[key] = model[key];
       }
     });
 
-    const newDataset = new ModelClass(model.id, data.name, data.description);
+    const newDataset = new ModelClass(
+      model.id,
+      data.name,
+      data.description,
+      model.input,
+      model.output,
+      model.feature,
+      data.url
+    );
+    console.log("newDataset", newDataset);
 
     try {
       await updateModelInfo(newDataset);
@@ -128,6 +139,20 @@ const ModelInfo = (props) => {
       </div>
       <div className="card-body">
         <Field
+          name={"url"}
+          component={NakedField}
+          className={classes.description}
+          fullWidth
+          onBlur={handleSubmit}
+          placeholder={model.URL || "Config model's API endpoint"}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              handleSubmit();
+            }
+          }}
+        />
+
+        <Field
           name={"description"}
           component={NakedField}
           className={classes.description}
@@ -140,6 +165,7 @@ const ModelInfo = (props) => {
             }
           }}
         />
+
         <div className={classes.date}>
           <i class="bi bi-calendar" style={{ margin: "4px" }}></i>
           {"  Last Modified: "}
@@ -154,11 +180,13 @@ const ModelInfoForm = withFormik({
   mapPropsToValues: () => ({
     name: "",
     description: "",
+    url: "",
   }),
 
   validationSchema: Yup.object().shape({
     name: Yup.string().required(),
     description: Yup.string(),
+    url: Yup.string(),
   }),
 })(ModelInfo);
 

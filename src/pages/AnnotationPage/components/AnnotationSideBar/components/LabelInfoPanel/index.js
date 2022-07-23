@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 12,
     background: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
+    textAlign: "center",
   },
   listContainer: {
     width: "100%",
@@ -64,36 +65,29 @@ const LabelInfoPanel = (props) => {
   };
 
   return (
-    <Grid container className={classes.root}>
-      <Grid
-        container
-        item
-        xs={12}
-        direction="row"
-        alignItems="center"
-        className={classes.header}
-        onClick={() => setIsOpen((isOpen) => !isOpen)}
-      >
-        <Grid container item direction="row" alignItems="center" xs={2}>
-          {isOpen ? (
-            <ArrowDownIcon color="secondary" />
-          ) : (
-            <ArrowRightIcon color="secondary" />
-          )}
+    <div className="card shadow mb-4">
+    <a
+      // href="#collapseCardExample"
+      className="d-block card-header py-3"
+      data-toggle="collapse"
+      role="button"
+      aria-expanded="true"
+      aria-controls="collapseCardExample"
+      onClick={() => setIsOpen((isOpen) => !isOpen)}
+    >
+      {/* <h6 className="m-0 font-weight-bold text-primary">Data List</h6>
+    <Grid item className={classes.titleCount}>{dataset.instances}</Grid> */}
+      <Grid container item xs={8} direction="row" alignItems="center">
+        <Grid item className="m-0 font-weight-bold text-primary">
+          Labels
         </Grid>
-        <Grid container item xs={8} direction="row" alignItems="center">
-          <Grid item className={classes.title}>
-            Labels
-          </Grid>
-          <Grid item className={classes.titleCount}>
-            {labels.length}
-          </Grid>
+        <Grid item className={classes.titleCount}>
+          {labels.length}
         </Grid>
-        <Grid item xs={2}></Grid>
       </Grid>
-      <Grid container item xs={12}>
-        <Collapse in={isOpen} className={classes.listContainer}>
-          <List className={classes.listContainer}>
+    </a>
+    <Collapse in={isOpen} className="collapse show">
+      <List className={classes.listContainer}>
             {labels.map((obj) => {
               return (
                 <LabelInfo
@@ -104,9 +98,8 @@ const LabelInfoPanel = (props) => {
               );
             })}
           </List>
-        </Collapse>
-      </Grid>
-    </Grid>
+    </Collapse>
+  </div>
   );
 };
 

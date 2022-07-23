@@ -50,7 +50,11 @@ const useAnnotationStore = create((set, get) => ({
   },
 
   appendAnnotation: (newAnnotation) => {
-    set((state) => ({ annotations: [...state.annotations, newAnnotation],
+    const annotations = [...get().annotations, newAnnotation];
+    // sort annotations by frameid
+    annotations.sort((a, b) => a.frameID - b.frameID);
+    console.log("sorted annotations", annotations);
+    set((state) => ({ annotations,
     saveStatus: false }));
   },
 

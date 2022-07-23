@@ -22,6 +22,7 @@ import SplitButton from "../../../../../../components/SplitButton";
 import LabelMappingDialog from "./components/LabelMappingDialog/LabelMappingDialog";
 import { MODEL_ID } from "../../../../../../constants/constants";
 import { predictionResultMockup } from "../../../../../../mockup";
+import {FootballIcon} from '../../../../../../components/icons/FootballIcon'
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 20,
@@ -107,7 +108,7 @@ const AIAssistancePanel = (props) => {
     
     setOpenDialog(false);
     setOpenLoadingDialog(true);
-    handlePredictionResult(predictionResultMockup);
+    // handlePredictionResult(predictionResultMockup);
     setSse(sendRequest());
   };
 
@@ -148,11 +149,11 @@ const AIAssistancePanel = (props) => {
       setProgress(obj.progress);
       setProgressDes(obj.stage);
       if (obj.progress >= 100) {
-        setResult(predictionResultMockup);
+        setResult(obj.result);
         console.log("RESULT", result);
         sse.close();
         if (!isHandled) {
-          handlePredictionResult(predictionResultMockup);
+          handlePredictionResult(result);
         }
       }
     }
@@ -180,11 +181,10 @@ const AIAssistancePanel = (props) => {
           <div className="card-body">
             <SplitButton
               text="Predict Soccer Events"
-              icon={"ss"}
+              icon={<FootballIcon/>}
               onClick={instanceId ? handleTriggerLabelMapping : null}
             />
             <div className="my-2"></div>
-            <SplitButton text="Predict Faces" icon={"ss"} />
           </div>
         </Collapse>
       </div>

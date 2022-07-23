@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 12,
     background: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
+    textAlign: "center",
   },
   divider: {
     background: theme.palette.secondary.main,
@@ -76,46 +77,28 @@ const ObjectInfoPanel = (props) => {
   }));
 
   return (
-    <Grid container>
-      <Grid
-        container
-        item
-        xs={12}
-        direction="row"
-        alignItems="center"
-        className={classes.header}
-        onClick={() =>
-          setIsOpen((isOpen) => {
-            if (isOpen) setSelectedAnnotationId(null);
-            return !isOpen;
-          })
-        }
-      >
-        <Grid container item direction="row" alignItems="center" xs={2}>
-          {isOpen ? (
-            <ArrowDownIcon color="secondary" />
-          ) : (
-            <ArrowRightIcon color="secondary" />
-          )}
+    <div className="card shadow mb-4">
+    <a
+      // href="#collapseCardExample"
+      className="d-block card-header py-3"
+      data-toggle="collapse"
+      role="button"
+      aria-expanded="true"
+      aria-controls="collapseCardExample"
+      onClick={() => setIsOpen((isOpen) => !isOpen)}
+    >
+
+      <Grid container item xs={8} direction="row" alignItems="center">
+        <Grid item className="m-0 font-weight-bold text-primary">
+          Annotations
         </Grid>
-        <Grid container item xs={8} direction="row" alignItems="center">
-          <Grid item className={classes.title}>
-            Objects
-          </Grid>
-          <Grid item className={classes.titleCount}>
-            {annotationsList.length}
-          </Grid>
-        </Grid>
-        <Grid container item xs={2} justifyContent="flex-start">
-          {/* <Divider orientation="vertical" flexItem className={classes.divider} /> */}
+        <Grid item className={classes.titleCount}>
+          {annotationsList.length}
         </Grid>
       </Grid>
-      <Grid container item xs={12}>
-        <Collapse
-          in={isOpen || selectedAnnotationId}
-          className={classes.listContainer}
-        >
-          <List className={classes.listContainer}>
+    </a>
+    <Collapse in={isOpen} className="collapse show">
+      <List className={classes.listContainer}>
             {objectList.map((obj) => {
               return (
                 <ObjectInfo
@@ -130,9 +113,51 @@ const ObjectInfoPanel = (props) => {
               );
             })}
           </List>
-        </Collapse>
-      </Grid>
-    </Grid>
+    </Collapse>
+  </div>
+    // <Grid container>
+    //   <Grid
+    //     container
+    //     item
+    //     xs={12}
+    //     direction="row"
+    //     alignItems="center"
+    //     className={classes.header}
+    //     onClick={() =>
+    //       setIsOpen((isOpen) => {
+    //         if (isOpen) setSelectedAnnotationId(null);
+    //         return !isOpen;
+    //       })
+    //     }
+    //   >
+    //     <Grid container item direction="row" alignItems="center" xs={2}>
+    //       {isOpen ? (
+    //         <ArrowDownIcon color="secondary" />
+    //       ) : (
+    //         <ArrowRightIcon color="secondary" />
+    //       )}
+    //     </Grid>
+    //     <Grid container item xs={8} direction="row" alignItems="center">
+    //       <Grid item className={classes.title}>
+    //         Objects
+    //       </Grid>
+    //       <Grid item className={classes.titleCount}>
+    //         {annotationsList.length}
+    //       </Grid>
+    //     </Grid>
+    //     <Grid container item xs={2} justifyContent="flex-start">
+    //       {/* <Divider orientation="vertical" flexItem className={classes.divider} /> */}
+    //     </Grid>
+    //   </Grid>
+    //   <Grid container item xs={12}>
+    //     <Collapse
+    //       in={isOpen || selectedAnnotationId}
+    //       className={classes.listContainer}
+    //     >
+
+    //     </Collapse>
+    //   </Grid>
+    // </Grid>
   );
 };
 
