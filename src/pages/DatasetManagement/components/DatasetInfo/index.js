@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   date: {
     marginTop: 10,
+    marginBottom: 10,
     fontSize: 14,
     color: "#595959",
   },
@@ -167,7 +168,7 @@ const DatasetInfo = (props) => {
           xs={12}
           spacing={1}
           alignItems="center"
-          justifyContent="flex-end"
+          justifyContent="flex-start"
         >
           <Grid item>
             <SplitButton

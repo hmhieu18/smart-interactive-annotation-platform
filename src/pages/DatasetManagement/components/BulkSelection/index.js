@@ -47,17 +47,12 @@ const BulkSelection = (props) => {
   return (
     <Collapse in={Boolean(selectedIds.length)} timeout={500}>
       <Grid container className={classes.root}>
-        <Grid container item xs={8} alignItems="center">
-          <div className={classes.infoText}>
-            Selected <b>{selectedIds.length}</b> instances
-          </div>
-        </Grid>
-        <Grid container item xs={4} justifyContent="flex-end" spacing={1}>
+        <Grid container item xs={4} justifyContent="flex-start" spacing={1}>
           <Grid item>
             <BasicButton
               variant="primary"
               href={`/annotations/dataset=${datasetId}?instance_id=${selectedIds[0]}`}
-              text="Annotate"
+              text={`Annotate ${selectedIds.length} items`}
             >
             </BasicButton>
           </Grid>
@@ -65,7 +60,7 @@ const BulkSelection = (props) => {
             <BasicButton
               variant="secondary"
               onClick={deselectAll}
-              text="Cancel"
+              text="Deselect all"
             >
             </BasicButton>
           </Grid>
