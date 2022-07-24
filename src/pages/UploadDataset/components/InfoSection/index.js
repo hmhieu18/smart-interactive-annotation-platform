@@ -37,7 +37,7 @@ const Info = (props) => {
       </Grid>
       <Grid container item xs={10} justifyContent="center">
         <div className={classes.title}>
-          Append to dataset
+          Files import
         </div>
       </Grid>
     </Grid>

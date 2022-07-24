@@ -24,7 +24,8 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
     padding: 5,
     marginRight: 5,
-    background: theme.palette.primary.light
+    background: theme.palette.primary.light,
+    borderRadius: 50,
   }
 }))
 

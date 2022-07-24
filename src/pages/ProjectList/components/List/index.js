@@ -32,7 +32,10 @@ const List = (props) => {
       >
         {projects.map((project) => (
           <Grid xs={12} md={6} item>
-            <ProjectItem key={`project-${project.id}`} project={project} />
+            <ProjectItem
+              key={`project-${project.id}`}
+              project={project}
+            />
           </Grid>
         ))}
       </Grid>

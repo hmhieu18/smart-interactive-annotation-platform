@@ -31,8 +31,8 @@ export default class VideoDataInstanceClass extends DataInstanceClass {
   }
   async loadFrames(data) {
     console.log("Loading Frame", data);
-    const { fps, URL, ...others } = data;
-    const numFrames = 10;
+    const { fps, URL, numFrames, ...others } = data;
+    // const numFrames = 10;
     const frames = [];
     // const  = 10;
     for (let i = 1; i <= numFrames; i++) {

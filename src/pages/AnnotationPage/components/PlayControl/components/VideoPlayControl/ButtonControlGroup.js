@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
+import { emphasize } from "@material-ui/core/styles/colorManipulator";
 
 import PlayIcon from '@material-ui/icons/PlayArrowRounded';
 import PauseIcon from '@material-ui/icons/PauseRounded';
@@ -17,7 +18,13 @@ const useStyles = makeStyles((theme) => ({
   button: {
     minWidth: 30,
     minHeight: 30,
-    marginRight: 5,
+    margin: 5,
+    borderRadius: 100,
+    backgroundColor: theme.palette.primary.light,
+    "&:hover, &:focus": {
+      //gray color
+      backgroundColor: emphasize(theme.palette.primary.light, 0.2),
+    }
   }
 }))
 

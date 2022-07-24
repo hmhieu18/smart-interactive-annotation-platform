@@ -27,13 +27,13 @@ const ProjectList = (props) => {
   const queryProjects = useProjectListStore((state) => state.queryProjects);
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
   // const { useStore } = props;
-  const appendProject = useProjectListStore(state => state.appendProject);
+  const appendProject = useProjectListStore((state) => state.appendProject);
 
   React.useEffect(() => {
     queryProjects();
   });
   const handleCreateProject = (newProject) => {
-    appendProject(newProject)
+    appendProject(newProject);
   };
   return (
     // <div className={classes.root}>
@@ -42,6 +42,8 @@ const ProjectList = (props) => {
     <div id="content-wrapper" className="d-flex flex-column">
       <div id="content">
         <div className="container-fluid">
+          <h1 class="h3 mb-4 text-gray-800">Projects list</h1>
+
           <div className="d-sm-flex align-items-center justify-content-between mb-4"></div>
           <div
             style={{
@@ -51,7 +53,11 @@ const ProjectList = (props) => {
               marginBottom: 15,
             }}
           >
-            <SplitButton onClick={() => setOpenCreateDialog(true)} text="New Project" icon={<i class="bi bi-plus-square-fill"></i>}/>
+            <SplitButton
+              onClick={() => setOpenCreateDialog(true)}
+              text="New Project"
+              icon={<i class="bi bi-plus-square-fill"></i>}
+            />
           </div>
           <CreateProjectDialog
             open={openCreateDialog}

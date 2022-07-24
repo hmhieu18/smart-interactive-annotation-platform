@@ -53,11 +53,12 @@ const ProjectItem = (props) => {
   const { useStore, project } = props;
 
   const { id, name, description, modifiedDate } = project;
-  
+
   return (
     <Grid
       container
       className={classes.projectContainer}
+      // className="border-left-primary"
       component={Link}
       to={`/projects/project=${id}`}
     >
@@ -75,6 +76,7 @@ const ProjectItem = (props) => {
         </div>
       </div>
     </Grid>
+
   );
 };
 

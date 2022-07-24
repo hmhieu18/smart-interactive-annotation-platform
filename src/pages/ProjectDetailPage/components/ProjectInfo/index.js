@@ -9,12 +9,12 @@ import * as Yup from "yup";
 import { get, cloneDeep } from "lodash";
 import "../../../../assets/scss/sb-admin-2.scss";
 import CloseIcon from "@material-ui/icons/Close";
-import SettingsIcon from "@material-ui/icons/Settings";
-import StorageIcon from "@material-ui/icons/Storage";
+
+import DeleteIcon from '@material-ui/icons/Delete';
+import SplitButton from '../../../../components/SplitButton'
 
 import moment from "moment";
 import NakedField from "../../../../components/NakedField";
-import SettingsMenu from "./components/SettingsMenu";
 
 import ProjectClass from "../../../../classes/ProjectClass";
 
@@ -87,18 +87,10 @@ const ProjectInfo = (props) => {
 
   const [settingAnchorEl, setSettingAnchorEl] = React.useState(null);
 
-  const handleClickSettingMenu = (event) => {
-    setSettingAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseSettingMenu = () => {
-    setSettingAnchorEl(null);
-  };
-
   const handleDeleteProject = () => {
     confirm({ 
       title: `Delete project "${project.name}"`,
-      description: `This action is permanent! You'll lost all dataset and annotations in this project.`
+      description: `Project "${project.name}" and all related datasets will be deleted.`,
     })
     .then(async () => { 
       await deleteProject()
@@ -117,14 +109,6 @@ const ProjectInfo = (props) => {
           {project.name}
         </h6>
         <div className="dropdown no-arrow">
-          <IconButton onClick={handleClickSettingMenu}>
-            <SettingsIcon />
-          </IconButton>
-          <SettingsMenu
-            anchorEl={settingAnchorEl}
-            handleClickDelete={handleDeleteProject}
-            handleClose={handleCloseSettingMenu}
-          />
           <IconButton href={`/`}>
             <CloseIcon />
           </IconButton>
@@ -149,7 +133,25 @@ const ProjectInfo = (props) => {
           {"  Last Modified: "}
           {moment(project.modifiedDate).format("MMMM Do YYYY, h:mm")}
         </div>
+        <Grid
+          container
+          item
+          xs={12}
+          spacing={1}
+          alignItems="center"
+          justifyContent="flex-end"
+        >
+          <Grid item>
+            <SplitButton
+              variant="danger"
+              onClick={handleDeleteProject}
+              text="Delete project"
+              icon={<DeleteIcon/>}
+            />
+          </Grid>
+        </Grid>
       </div>
+      
     </div>
   );
 };

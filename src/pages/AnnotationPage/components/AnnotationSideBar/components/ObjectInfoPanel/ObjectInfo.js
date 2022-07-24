@@ -138,11 +138,11 @@ const ObjectInfo = (props) => {
           primary={<div className={classes.objectId}>Frame: {frameID} | {label.label}</div>}
           className={classes.objectId}
         />
-        <ListItemText
+        {/* <ListItemText
           disableTypography
           primary={<div className={classes.objectId}>ID: {id}</div>}
           className={classes.objectId}
-        />
+        /> */}
         {/* <ListItemText
           disableTypography
           primary={<div className={classes.objectId}>Label: {label.label}</div>}

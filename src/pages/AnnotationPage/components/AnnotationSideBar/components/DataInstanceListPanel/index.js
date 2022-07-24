@@ -128,7 +128,7 @@ const ObjectInfoPanel = (props) => {
       <Grid item className={classes.titleCount}>{dataset.instances}</Grid> */}
         <Grid container item xs={8} direction="row" alignItems="center">
           <Grid item className="m-0 font-weight-bold text-primary">
-            Data instances
+            Data samples
           </Grid>
           <Grid item className={classes.titleCount}>
             {dataset.instances}

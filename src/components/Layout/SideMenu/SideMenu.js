@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo from "../../../assets/logo/webscript.png";
+import logo from "../../../assets/logo/football.png";
 
 import MenuItem from "./MenuItem";
 
