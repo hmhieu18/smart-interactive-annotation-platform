@@ -143,7 +143,7 @@ const AIAssistancePanel = (props) => {
 
   const sendRequest = () => {
     const sse = new EventSource(
-      `${backendURL}/predict?model-url=soccernet-9b7f7694-64d8-4cb3-bf37-080dce41ebb4.loca.lt&data-id=${instanceId}`
+      `${backendURL}/predict?model-id=${modelId}&data-id=${instanceId}`
     );
     function getRealtimeData(obj) {
       setProgress(obj.progress);

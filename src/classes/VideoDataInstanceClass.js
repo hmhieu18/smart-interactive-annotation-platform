@@ -37,7 +37,9 @@ export default class VideoDataInstanceClass extends DataInstanceClass {
     // const  = 10;
     for (let i = 1; i <= numFrames; i++) {
       const name = `${i}.jpeg`;
-      const url = `files/${URL.split("files/")[1]}/${name}`;
+      // const url = `files/${URL.split("files/")[1]}/${name}`;
+      const url = `${URL}/${name}`;
+      console.log(i, url)
       const id = `${i}`;
       frames.push({
         id: id,
