@@ -1,10 +1,11 @@
 import create from "zustand";
 import { remove } from "lodash";
-import { filter } from 'lodash'
+import { filter } from "lodash";
 
 import DatasetService from "../../services/DatasetService";
 import DataInstanceService from "../../services/DataInstanceService";
-import LabelService from '../../services/LabelService'
+import LabelService from "../../services/LabelService";
+import AnnotationService from "../../services/AnnotationService";
 
 const useDatasetManagementStore = create((set, get) => ({
   isLoading: {},
@@ -136,6 +137,49 @@ const useDatasetManagementStore = create((set, get) => ({
     } catch (error) {
       alert(get(error, "data.errors.json.label", ""));
     }
+  },
+  loadAnnotationsByDataID: async (dataID) => {
+    let annotationsList = await AnnotationService.getAnnotationsByDataInstance(
+      dataID
+    );
+    let annotations = [];
+    annotationsList.forEach((ann) => {
+      annotations.push(ann);
+    });
+    return annotations;
+  },
+
+  loadAnnotationsOfDataset: async () => {
+    const dataList = get().dataList;
+    //promise all to get all annotations of all data instances
+    const annotations = await Promise.all(
+      dataList.map(async (data) => {
+        return {
+          fileName: data.name,
+          dataID: data.id,
+          annotations: await get().loadAnnotationsByDataID(data.id),
+        };
+      })
+    );
+    return annotations;
+    // set({
+    //   annotations: [],
+    //   saveStatus: true,
+    // });
+    // const setIsLoading = get().setIsLoading;
+    // setIsLoading("loading_annotations", true);
+    // let annotationsList = await AnnotationService.getAnnotationsByDataInstance(
+    //   dataID
+    // );
+    // console.log("annotationsListstore", annotationsList);
+    // let annotations = [];
+    // annotationsList.forEach((ann) => {
+    //   annotations.push(ann);
+    // });
+    // set({
+    //   annotations,
+    // });
+    // setIsLoading("loading_annotations", false);
   },
 }));
 

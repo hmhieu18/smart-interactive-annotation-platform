@@ -15,27 +15,34 @@ class AnnotationService {
   }
 
   async getAnnotationsByDataInstance(dataInstanceId) {
-    const annotationResponse = await RestConnector.get(
-      `/predict/annotation?data-id=${dataInstanceId}`
-    );
-    if (annotationResponse?.data?.annotation === "") {
+    try {
+      const annotationResponse = await RestConnector.get(
+        `/predict/annotation?data-id=${dataInstanceId}`
+      );
+      //check status code
+      if (annotationResponse.status === 200) {
+        if (annotationResponse?.data?.annotation === "") {
+          return [];
+        }
+        console.log("getAnnotationsByDataInstance", annotationResponse.data);
+        const reponseList = JSON.parse(annotationResponse.data.annotation);
+        console.log("getAnnotationsByDataInstance.responseList", reponseList);
+
+        const annotationsObj = await Promise.all(
+          reponseList.map(async (ann) => await this.parseAnnotationObj(ann))
+        );
+        console.log("getAnnotationsByDataInstance", annotationsObj);
+        return annotationsObj;
+
+        // // MOCKUP
+        // const annotationsObj = await Promise.all(mockupAnnotationList.map(
+        //       async (ann) => await this.parseAnnotationObj(ann)
+        //     ));
+      }
+      return [];
+    } catch (error) {
       return [];
     }
-    console.log("getAnnotationsByDataInstance", annotationResponse.data);
-    const reponseList = JSON.parse(annotationResponse.data.annotation);
-    console.log("getAnnotationsByDataInstance.responseList", reponseList);
-
-    const annotationsObj = await Promise.all(
-      reponseList.map(async (ann) => await this.parseAnnotationObj(ann))
-    );
-    console.log("getAnnotationsByDataInstance", annotationsObj);
-
-    // // MOCKUP
-    // const annotationsObj = await Promise.all(mockupAnnotationList.map(
-    //       async (ann) => await this.parseAnnotationObj(ann)
-    //     ));
-
-    return annotationsObj;
   }
 
   async setAnnotationsByDataInstance(dataID, listAnnotation) {

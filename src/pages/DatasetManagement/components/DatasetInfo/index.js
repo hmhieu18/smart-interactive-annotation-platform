@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import { useParams, useHistory } from "react-router";
 import { useConfirm } from "material-ui-confirm";
@@ -66,7 +66,7 @@ const DatasetInfo = (props) => {
   const dataset = useStore((state) => state.dataset);
   const deleteDataset = useStore((state) => state.deleteDataset);
   const updateDatasetInfo = useStore((state) => state.updateDatasetInfo);
-
+  const getAnnotations = useStore((state) => state.loadAnnotationsOfDataset);
   const { id, projectId, datatype, description } = dataset;
 
   React.useEffect(() => {
@@ -75,6 +75,21 @@ const DatasetInfo = (props) => {
     setFieldValue("description", description);
     setFieldValue("createdDate", createdDate);
   }, [dataset, setFieldValue]);
+
+  const handleExportData = async () => {
+    const annotations = await getAnnotations();
+    const element = document.createElement("a");
+
+    const json = JSON.stringify(annotations, null, 2);
+
+    const file = new Blob([json], {
+      type: "text/plain",
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = `${id}.json`;
+    document.body.appendChild(element);
+    element.click();
+  };
 
   const handleSubmit = async () => {
     let data = cloneDeep(values);
@@ -139,7 +154,14 @@ const DatasetInfo = (props) => {
           {moment(dataset.modifiedDate).format("MMMM Do YYYY, h:mm")}
         </div>
         <div className={classes.date}>
-          <i class={dataset.datatype=="video"?"bi bi-file-play-fill":"bi bi-file-image-fill"} style={{ margin: "4px" }}></i>
+          <i
+            class={
+              dataset.datatype == "video"
+                ? "bi bi-file-play-fill"
+                : "bi bi-file-image-fill"
+            }
+            style={{ margin: "4px" }}
+          ></i>
           {`  Number of ${dataset.datatype}(s): `}
           {dataset.instances}
         </div>
@@ -154,9 +176,10 @@ const DatasetInfo = (props) => {
           <Grid item>
             <SplitButton
               variant="success"
-              href={`${backendURL}/export/export_dataset?dataset_id=${id}`}
+              // href={`${backendURL}/export/export_dataset?dataset_id=${id}`}
               text="Export annotated data"
               icon={<i class="bi bi-arrow-down-square-fill"></i>}
+              onClick={handleExportData}
             />
           </Grid>
           <Grid item>
@@ -168,11 +191,13 @@ const DatasetInfo = (props) => {
             />
           </Grid>
           <Grid item>
-            <SplitButton
-              href={`/annotations/dataset=${datasetId}?page=${1}`}
-              text="Annotate"
-              icon={<i class="bi bi-pencil-fill"></i>}
-            />
+            {dataset.datatype == "video" && (
+              <SplitButton
+                href={`/annotations/dataset=${datasetId}?page=${1}`}
+                text="Annotate"
+                icon={<i class="bi bi-pencil-fill"></i>}
+              />
+            )}
           </Grid>
         </Grid>
         <Grid
@@ -188,7 +213,7 @@ const DatasetInfo = (props) => {
               variant="danger"
               onClick={handleClickDeleteDataset}
               text="Delete dataset"
-              icon={<DeleteIcon/>}
+              icon={<DeleteIcon />}
             />
           </Grid>
         </Grid>
