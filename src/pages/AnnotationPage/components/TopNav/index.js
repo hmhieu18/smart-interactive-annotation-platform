@@ -8,7 +8,7 @@ import { useParams } from "react-router";
 import DataInfo from "./components/DataInfo/index";
 import SaveStatus from "./components/SaveStatus/index";
 import useQuery from "../../../../utils/useQuery";
-import { useGeneralStore } from "../../stores/index";
+import { useGeneralStore, useDatasetStore } from "../../stores/index";
 
 const useStyles = makeStyles((theme) => ({
   topNavWrapper: {
@@ -71,6 +71,7 @@ const TopNav = (props) => {
   const page = JSON.parse(query.get("page") || 1);
   const isPlayMode = useGeneralStore((state) => state.isPlayMode);
   const setIsPlayMode = useGeneralStore((state) => state.setIsPlayMode);
+  const videoId = useDatasetStore((state) => state.instanceId);
 
   return (
     <div className={classes.topNavWrapper}>
@@ -79,14 +80,16 @@ const TopNav = (props) => {
         <SaveStatus></SaveStatus>
       </div>
       <div className={classes.rightSection}>
-        <IconButton
-          onClick={() => {
-            setIsPlayMode(true);
-          }}
-          className={classes.fullScreenButton}
-        >
-          <Fullscreen color={classes.closeIcon} />
-        </IconButton>
+        {videoId && (
+          <IconButton
+            onClick={() => {
+              setIsPlayMode(true);
+            }}
+            className={classes.fullScreenButton}
+          >
+            <Fullscreen color={classes.closeIcon} />
+          </IconButton>
+        )}
         <IconButton
           href={`/datasets/dataset=${datasetId}?page=${1}`}
           className={classes.roundButton2}

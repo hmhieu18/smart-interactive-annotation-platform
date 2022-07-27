@@ -1,191 +1,322 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import KonvaPlayer from "./components/KonvaPlayer";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { mockupVideo } from "../../../../mockup";
-import React, { useCallback, useMemo, useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Stage, Layer } from "react-konva";
-import { get, find, debounce } from "lodash";
+import { mockupVideo } from "../../../../mockup.js";
+import { find } from "lodash";
+import { ReactComponent as BBoxIcon } from "../../../../static/images/icons/ToolboxIcon/rectangle.svg";
+import { ANNOTATION_TYPE } from "../../../../constants/constants";
+import { DEFAULT_ANNOTATION_ATTRS } from "../../constants";
 
-import EventCenter from "../../EventCenter";
-import { useGeneralStore, useDatasetStore } from "../../stores/index";
+import Container from "@material-ui/core/Container";
+import ReactPlayer from "react-player";
+import Typography from "@material-ui/core/Typography";
+import EventIcon from "@material-ui/icons/Bookmark";
 
-import { EVENT_TYPES, MODES, STAGE_PADDING } from "../../constants";
-import getRenderingSize from "../../utils/getRenderingSize";
-import VideoPlayControl from "./components/PlaybackController/VideoPlayControl";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import screenful from "screenfull";
+import Controls from "./components/Controls";
+import { useDatasetStore, useAnnotationStore } from "../../stores/index";
+import { get } from "lodash";
+import ObjectInfoPanel from "./components/ObjectInfoPanel/index";
 const useStyles = makeStyles((theme) => ({
-  stageContainer: {
-    width: "100%",
-
-    flex: 1,
-    overflowY: "hidden",
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    boxSizing: "border-box",
-  },
-  stage: {
-    background: "#f8f8f8",
-    cursor: ({ activeMode }) =>
-      get(find(MODES, { name: activeMode }), "cursor", "default"),
+  sidebarWrapper: {
+    width: "30%",
+    margin: "30px",
   },
   annotatorContainer: {
     display: "flex",
-    flex: 1,
     overflowX: "hidden",
-    // paddingBottom: 10,
-    background: theme.palette.primary.light,
+  },
+  playerWrapper: {
+    flex: 1,
+    width: "100%",
+    position: "relative",
   },
 }));
+const format = (seconds) => {
+  if (isNaN(seconds)) {
+    return `00:00`;
+  }
+  const date = new Date(seconds * 1000);
+  const hh = date.getUTCHours();
+  const mm = date.getUTCMinutes();
+  const ss = date.getUTCSeconds().toString().padStart(2, "0");
+  if (hh) {
+    return `${hh}:${mm.toString().padStart(2, "0")}:${ss}`;
+  }
+  return `${mm}:${ss}`;
+};
 
+let count = 0;
+const mapAnnotationTypeToIcon = {
+  [ANNOTATION_TYPE.BBOX]: BBoxIcon,
+  [ANNOTATION_TYPE.EVENT]: EventIcon,
+};
 const RenderComponent = (props) => {
+  const dataInstances = useDatasetStore((state) => state.dataInstances);
+  const videoId = useDatasetStore((state) => state.instanceId);
+  const video = useDatasetStore(
+    useCallback(
+      (state) => find(state.dataInstances, { id: videoId }),
+      [videoId]
+    )
+  );
+  const annotationsList = useAnnotationStore((state) => state.annotations);
+  const labels = useAnnotationStore((state) => state.labels);
+
+  const objectList = annotationsList.map((obj) => ({
+    ...obj,
+    label: find(labels, { id: obj.labelID }),
+  }));
+
+  const marks = objectList.map((annotation) => {
+    const value = (annotation.frameID * 100) / video?.numFrames;
+    const fillColor = get(
+      annotation.label,
+      "annotationProperties.fill",
+      DEFAULT_ANNOTATION_ATTRS.fill
+    );
+    const AnnotationTypeIcon = mapAnnotationTypeToIcon[annotation.type];
+    const label = <AnnotationTypeIcon style={{ color: fillColor }} />;
+    return {
+      value,
+      label,
+      textLabel: annotation.label.label,
+    };
+  });
+
   const { open, setOpen } = props;
 
   const handleClose = () => {
     setOpen(false);
   };
-  const videoRef = useRef(null);
-  const [loading, setLoading] = useState(true);
-  const [videoSize, setVideoSize] = useState({
-    width: 0,
-    height: 0,
+
+  const classes = useStyles();
+  const [showControls, setShowControls] = useState(false);
+  // const [count, setCount] = useState(0);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [bookmarks, setBookmarks] = useState([]);
+  const [state, setState] = useState({
+    pip: false,
+    playing: true,
+    controls: false,
+    light: false,
+
+    muted: false,
+    played: 0,
+    duration: 0,
+    playbackRate: 1.0,
+    volume: 1,
+    loop: false,
+    seeking: false,
   });
-
-  const activeMode = useGeneralStore((state) => state.activeMode);
-  const classes = useStyles({ activeMode });
-
-  const stageContainerRef = React.useRef(null);
-  const getStageContainerRef = useCallback(
-    () => stageContainerRef.current,
-    [stageContainerRef]
-  );
-  const stageRef = React.useRef(null);
-  const setStage = useGeneralStore((state) => state.setStage);
   React.useEffect(() => {
-    setStage(stageRef.current);
-  }, [stageRef]);
+    // if (!video) {
+    //   video = dataInstances?dataInstances[0]:null;
+    // }
+  }, [video, dataInstances]);
+  const playerRef = useRef(null);
+  const playerContainerRef = useRef(null);
+  const controlsRef = useRef(null);
+  const canvasRef = useRef(null);
+  const {
+    playing,
+    controls,
+    light,
 
-  const stage = useGeneralStore((state) => state.stage);
-  const stageSize = useGeneralStore((state) => state.stageSize);
-  const setStageSize = useGeneralStore((state) => state.setStageSize);
+    muted,
+    loop,
+    playbackRate,
+    pip,
+    played,
+    seeking,
+    volume,
+  } = state;
 
-  const handleNewStageSize = debounce(
-    () => {
-      const container = getStageContainerRef();
+  const handlePlayPause = () => {
+    setState({ ...state, playing: !state.playing });
+  };
 
-      if (
-        container &&
-        container.clientWidth > 0 &&
-        container.clientHeight > 0
-      ) {
-        setStageSize({
-          width: container.clientWidth,
-          height: container.clientHeight,
-        });
-      }
-    },
-    500,
-    { leading: true, trailing: true }
-  );
+  const handleRewind = () => {
+    playerRef.current.seekTo(playerRef.current.getCurrentTime() - 10);
+  };
 
-  const instanceId = useDatasetStore((state) => state.instanceId);
-  const dataInstance = useDatasetStore(
-    useCallback(
-      (state) => find(state.dataInstances, { id: instanceId }),
-      [instanceId]
-    )
-  );
+  const handleFastForward = () => {
+    playerRef.current.seekTo(playerRef.current.getCurrentTime() + 10);
+  };
 
-  const setRenderingSize = useGeneralStore((state) => state.setRenderingSize);
-  const renderingSize = useMemo(() => {
-    const newRenderingSize = getRenderingSize(
-      stageSize,
-      dataInstance,
-      STAGE_PADDING
-    );
-    setRenderingSize(newRenderingSize);
-    window.canvasRenderingSize = newRenderingSize;
-
-    return newRenderingSize;
-  }, [stageSize, dataInstance]);
-
-  const recenterStage = () => {
-    const stage = stageRef.current;
-    if (stage) {
-      stage.position({
-        x: (stageSize.width - renderingSize.width) / 2,
-        y: (stageSize.height - renderingSize.height) / 2,
-      });
-      stage.scale({ x: 1, y: 1 });
-      stage.batchDraw();
+  const handleProgress = (changeState) => {
+    if (count > 3) {
+      controlsRef.current.style.visibility = "hidden";
+      count = 0;
+    }
+    if (controlsRef.current.style.visibility == "visible") {
+      count += 1;
+    }
+    if (!state.seeking) {
+      setState({ ...state, ...changeState });
     }
   };
 
-  useEffect(() => {
-    if (stage) {
-      recenterStage();
-    }
-  }, [stageSize, renderingSize]);
+  const handleSeekChange = (e, newValue) => {
+    // console.log({ newValue });
+    setState({ ...state, played: parseFloat(newValue / 100) });
+  };
 
-  React.useEffect(() => {
-    handleNewStageSize();
-    window.addEventListener("resize", handleNewStageSize);
-    const { getSubject } = EventCenter;
-    let subscriptions = {
-      [EVENT_TYPES.RESIZE_STAGE]: getSubject(
-        EVENT_TYPES.RESIZE_STAGE
-      ).subscribe({ next: (e) => handleNewStageSize(e) }),
-      [EVENT_TYPES.VIEW.CENTER_VIEWPOINT]: getSubject(
-        EVENT_TYPES.VIEW.CENTER_VIEWPOINT
-      ).subscribe({ next: (e) => recenterStage(e) }),
-    };
+  const handleSeekMouseDown = (e) => {
+    setState({ ...state, seeking: true });
+  };
 
-    return () => {
-      window.removeEventListener("resize", handleNewStageSize);
-      Object.keys(subscriptions).forEach((subscription) =>
-        subscriptions[subscription].unsubscribe()
-      );
-    };
-  }, []);
+  const handleSeekMouseUp = (e, newValue) => {
+    console.log({ value: e.target });
+    setState({ ...state, seeking: false });
+    // console.log(sliderRef.current.value)
+    playerRef.current.seekTo(newValue / 100, "fraction");
+  };
+
+  const handleDuration = (duration) => {
+    setState({ ...state, duration });
+  };
+
+  const handleVolumeSeekDown = (e, newValue) => {
+    setState({ ...state, seeking: false, volume: parseFloat(newValue / 100) });
+  };
+  const handleVolumeChange = (e, newValue) => {
+    // console.log(newValue);
+    setState({
+      ...state,
+      volume: parseFloat(newValue / 100),
+      muted: newValue === 0 ? true : false,
+    });
+  };
+
+  const toggleFullScreen = () => {
+    screenful.toggle(playerContainerRef.current);
+  };
+
+  const handleMouseMove = () => {
+    // console.log("mousemove");
+    controlsRef.current.style.visibility = "visible";
+    count = 0;
+  };
+
+  const hanldeMouseLeave = () => {
+    controlsRef.current.style.visibility = "hidden";
+    count = 0;
+  };
+
+  const handlePlaybackRate = (rate) => {
+    setState({ ...state, playbackRate: rate });
+  };
+
+  const hanldeMute = () => {
+    setState({ ...state, muted: !state.muted });
+  };
+
+  const currentTime =
+    playerRef && playerRef.current
+      ? playerRef.current.getCurrentTime()
+      : "00:00";
+
+  const duration =
+    playerRef && playerRef.current ? playerRef.current.getDuration() : "00:00";
+  const getElapsedTimeSlider = () => {
+    var text = Math.round(played * duration);
+    const timeInPercent = played * 100;
+    const oneSecInPercent = 100 / duration;
+    marks.forEach((mark) => {
+      if (
+        timeInPercent >= mark.value - oneSecInPercent &&
+        timeInPercent <= mark.value + oneSecInPercent
+      )
+        text += ` ${mark.textLabel}`;
+    });
+    return text;
+  };
+  const totalDuration = format(duration);
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xl">
-      <DialogTitle>Video</DialogTitle>
+      <div className="modal-header">
+        <button
+          className="close"
+          type="button"
+          onClick={handleClose}
+          aria-label="Close"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
       <DialogContent>
-        <video
-          style={{ display: "none" }}
-          ref={stageRef}
-          onLoadedData={(el) => {
-            setVideoSize({
-              width: el.target.videoWidth,
-              height: el.target.videoHeight,
-            });
-            setLoading(false);
-          }}
-          src={mockupVideo.url}
-        />
-        <div className={classes.stageContainer} ref={stageContainerRef}>
-          <Stage
-            // ref={stageRef}
-            width={stageSize.width}
-            height={stageSize.height}
-            className={classes.stage}
+        <Container maxWidth="md" className={classes.annotatorContainer}>
+          <div
+            onMouseMove={handleMouseMove}
+            onMouseLeave={hanldeMouseLeave}
+            ref={playerContainerRef}
+            className={classes.playerWrapper}
           >
-            <Layer listening={false}>
-              <KonvaPlayer
-                width={stageSize.width}
-                height={stageSize.height}
-                video={stageRef.current}
-              />
-            </Layer>
-          </Stage>
-          {/* <div className={classes.annotatorContainer}> */}
-            <VideoPlayControl />
-          {/* </div> */}
-        </div>
+            <ReactPlayer
+              ref={playerRef}
+              width="100%"
+              height="100%"
+              url={video?.video}
+              pip={pip}
+              playing={playing}
+              controls={false}
+              light={light}
+              loop={loop}
+              playbackRate={playbackRate}
+              volume={volume}
+              muted={muted}
+              onProgress={handleProgress}
+              config={{
+                file: {
+                  attributes: {
+                    crossorigin: "anonymous",
+                  },
+                },
+              }}
+            />
+
+            <Controls
+              ref={controlsRef}
+              onSeek={handleSeekChange}
+              onSeekMouseDown={handleSeekMouseDown}
+              onSeekMouseUp={handleSeekMouseUp}
+              onDuration={handleDuration}
+              onRewind={handleRewind}
+              onPlayPause={handlePlayPause}
+              onFastForward={handleFastForward}
+              playing={playing}
+              played={played}
+              elapsedTime={format(currentTime)}
+              elapsedTimeSlider={getElapsedTimeSlider()}
+              totalDuration={totalDuration}
+              onMute={hanldeMute}
+              muted={muted}
+              onVolumeChange={handleVolumeChange}
+              onVolumeSeekDown={handleVolumeSeekDown}
+              playbackRate={playbackRate}
+              onPlaybackRateChange={handlePlaybackRate}
+              onToggleFullScreen={toggleFullScreen}
+              volume={volume}
+              marks={marks}
+              fileName={video?.name}
+            />
+          </div>
+          <div className={classes.sidebarWrapper}>
+            <ObjectInfoPanel
+              playerRef={playerRef}
+              controlsRef={controlsRef}
+              fps={video?.fps}
+            />
+          </div>
+        </Container>
       </DialogContent>
     </Dialog>
   );

@@ -4,7 +4,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import BookmarkIcon from "@material-ui/icons/Bookmark";
 import FastRewindIcon from "@material-ui/icons/FastRewind";
 import FastForwardIcon from "@material-ui/icons/FastForward";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
@@ -98,6 +97,9 @@ function ValueLabelComponent(props) {
   );
 }
 
+function valuetext(value) {
+  return `${value}°C`;
+}
 const Controls = forwardRef(
   (
     {
@@ -110,18 +112,17 @@ const Controls = forwardRef(
       onFastForward,
       playing,
       played,
+      elapsedTimeSlider,
       elapsedTime,
       totalDuration,
       onMute,
       muted,
       onVolumeSeekDown,
-      onChangeDispayFormat,
-      playbackRate,
-      onPlaybackRateChange,
       onToggleFullScreen,
       volume,
       onVolumeChange,
-      onBookmark,
+      marks,
+      fileName
     },
     ref
   ) => {
@@ -155,18 +156,8 @@ const Controls = forwardRef(
           >
             <Grid item>
               <Typography variant="h5" style={{ color: "#fff" }}>
-                Video Title
+                {fileName}
               </Typography>
-            </Grid>
-            <Grid item>
-              <Button
-                onClick={onBookmark}
-                variant="contained"
-                color="primary"
-                startIcon={<BookmarkIcon />}
-              >
-                Bookmark
-              </Button>
             </Grid>
           </Grid>
           <Grid container direction="row" alignItems="center" justify="center">
@@ -212,14 +203,17 @@ const Controls = forwardRef(
                 min={0}
                 max={100}
                 ValueLabelComponent={(props) => (
-                  <ValueLabelComponent {...props} value={elapsedTime} />
+                  <ValueLabelComponent {...props} value={elapsedTimeSlider} />
                 )}
-                aria-label="custom thumb label"
+                aria-label="Always visible"
+                // valueLabelDisplay="on"
+                // aria-label="custom thumb label"
                 value={played * 100}
                 onChange={onSeek}
                 onMouseDown={onSeekMouseDown}
                 onChangeCommitted={onSeekMouseUp}
                 onDuration={onDuration}
+                marks={marks}
               />
             </Grid>
 
@@ -260,16 +254,7 @@ const Controls = forwardRef(
                   onMouseDown={onSeekMouseDown}
                   onChangeCommitted={onVolumeSeekDown}
                 />
-                <Button
-                  variant="text"
-                  onClick={
-                    onChangeDispayFormat
-                    //     () =>
-                    //   setTimeDisplayFormat(
-                    //     timeDisplayFormat == "normal" ? "remaining" : "normal"
-                    //   )
-                  }
-                >
+                <Button variant="text">
                   <Typography
                     variant="body1"
                     style={{ color: "#fff", marginLeft: 16 }}
@@ -281,47 +266,6 @@ const Controls = forwardRef(
             </Grid>
 
             <Grid item>
-              <Button
-                onClick={handleClick}
-                aria-describedby={id}
-                className={classes.bottomIcons}
-                variant="text"
-              >
-                <Typography>{playbackRate}X</Typography>
-              </Button>
-
-              <Popover
-                container={ref.current}
-                open={open}
-                id={id}
-                onClose={handleClose}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-              >
-                <Grid container direction="column-reverse">
-                  {[0.5, 1, 1.5, 2].map((rate) => (
-                    <Button
-                      key={rate}
-                      //   onClick={() => setState({ ...state, playbackRate: rate })}
-                      onClick={() => onPlaybackRateChange(rate)}
-                      variant="text"
-                    >
-                      <Typography
-                        color={rate === playbackRate ? "secondary" : "inherit"}
-                      >
-                        {rate}X
-                      </Typography>
-                    </Button>
-                  ))}
-                </Grid>
-              </Popover>
               <IconButton
                 onClick={onToggleFullScreen}
                 className={classes.bottomIcons}
