@@ -3,7 +3,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import TopNav from "./components/TopNav/index";
 import Toolbox from "./components/Toolbox/index";
 import AnnotationSideBar from "./components/AnnotationSideBar/index";
-import { useDatasetStore, useAnnotationStore } from "./stores/index";
+import {
+  useDatasetStore,
+  useAnnotationStore,
+  useGeneralStore,
+} from "./stores/index";
 import { useParams } from "react-router";
 import useQuery from "../../utils/useQuery";
 import annotationEventCenter from "./EventCenter";
@@ -11,7 +15,7 @@ import "../../assets/scss/sb-admin-2.scss";
 import RenderComponent from "./components/Stage/index";
 import PlayControl from "./components/PlayControl/index";
 import PropagationControl from "./components/PropagationControl/index";
-
+import VideoPlayerPopUp from "./components/VideoPlayerPopUp/index";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -55,6 +59,7 @@ const AnnotationPage = (props) => {
   const instanceIdQuery = query.get("instance_id") || "";
 
   const instanceId = useDatasetStore((state) => state.instanceId);
+
   const getDatasetInfo = useDatasetStore((state) => state.getDatasetInfo);
   const getDataInstances = useDatasetStore((state) => state.getDataInstances);
   const setInstanceId = useDatasetStore((state) => state.setInstanceId);
@@ -63,7 +68,8 @@ const AnnotationPage = (props) => {
   );
   // const loadAnnotationObjects = useAnnotationStore(state => state.loadAnnotationObjects)
   const loadAnnotations = useAnnotationStore((state) => state.loadAnnotations);
-
+  const isPlayMode = useGeneralStore((state) => state.isPlayMode);
+  const setIsPlayMode = useGeneralStore((state) => state.setIsPlayMode);
   useEffect(() => {
     if (datasetId) {
       getDatasetInfo(datasetId);
@@ -105,6 +111,10 @@ const AnnotationPage = (props) => {
         <div className={classes.toolboxContainer}>
           <Toolbox eventCenter={annotationEventCenter} />
         </div>
+        <VideoPlayerPopUp
+          open={isPlayMode}
+          setOpen={setIsPlayMode}
+        />
       </div>
     </div>
   );

@@ -2,12 +2,13 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import SettingsIcon from "@material-ui/icons/Settings";
+import Fullscreen from "@material-ui/icons/Fullscreen";
 import { useParams } from "react-router";
 
 import DataInfo from "./components/DataInfo/index";
 import SaveStatus from "./components/SaveStatus/index";
 import useQuery from "../../../../utils/useQuery";
+import { useGeneralStore } from "../../stores/index";
 
 const useStyles = makeStyles((theme) => ({
   topNavWrapper: {
@@ -48,8 +49,19 @@ const useStyles = makeStyles((theme) => ({
     padding: 10,
     borderRadius: 100,
     backgroundColor: theme.palette.error.main,
+    marginRight: 20,
   },
-  closeIcon: { backgroundColor: theme.palette.primary.light },
+  fullScreenButton: {
+    width: 25,
+    height: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    borderRadius: 100,
+    backgroundColor: theme.palette.primary.light,
+    marginRight: 20,
+  },
+  closeIcon: { backgroundColor: theme.palette.primary.light, marginRight: 20 },
 }));
 
 const TopNav = (props) => {
@@ -57,6 +69,8 @@ const TopNav = (props) => {
   const { datasetId } = useParams();
   const query = useQuery();
   const page = JSON.parse(query.get("page") || 1);
+  const isPlayMode = useGeneralStore((state) => state.isPlayMode);
+  const setIsPlayMode = useGeneralStore((state) => state.setIsPlayMode);
 
   return (
     <div className={classes.topNavWrapper}>
@@ -65,6 +79,14 @@ const TopNav = (props) => {
         <SaveStatus></SaveStatus>
       </div>
       <div className={classes.rightSection}>
+        <IconButton
+          onClick={() => {
+            setIsPlayMode(true);
+          }}
+          className={classes.fullScreenButton}
+        >
+          <Fullscreen color={classes.closeIcon} />
+        </IconButton>
         <IconButton
           href={`/datasets/dataset=${datasetId}?page=${1}`}
           className={classes.roundButton2}

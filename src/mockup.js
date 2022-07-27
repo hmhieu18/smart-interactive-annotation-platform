@@ -8,6 +8,17 @@
 // import Image_8 from './static/images/mockup/Image_8.jpg'
 // import Image_9 from './static/images/mockup/Image_9.jpg'
 // import Image_10 from './static/images/mockup/Image_10.jpg'
+export const mockupVideo = {
+  id: "62ecae9d-0778-47af-8d23-f8f0ddb5aa99",
+  name: "MU-Spurs01.mp4",
+  url: "files//dataset/62ecae9d-0778-47af-8d23-f8f0ddb5aa99/MU-Spurs01.mp4",
+  thumbnail:
+    "files//dataset/62ecae9d-0778-47af-8d23-f8f0ddb5aa99/MU-Spurs01_thumbnail.png",
+  _cls: "VideoDataInstance",
+  annotateStatus: 2,
+  fps: 25,
+  numFrames: 725
+};
 export const predictionResultMockup = {
   UrlLocal: "WandaVision.mp4",
   predictions: [

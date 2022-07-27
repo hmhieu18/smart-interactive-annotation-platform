@@ -26,6 +26,12 @@ const useGeneralStore = create((set, get) => ({
   currentMousePosition: { x: 0, y: 0 },
   updateCurrentMousePosition: () => set(state => ({ currentMousePosition: getPointerPosition(state.stage) })),
   getCurrentMousePosition: () => get().currentMousePosition,
+
+  isPlayMode: false,
+  setIsPlayMode: (newIsPlayMode) => {
+    console.log("setIsPlayMode", newIsPlayMode);
+    set({ isPlayMode: newIsPlayMode })},
+  getIsPlayMode: () => get().isPlayMode,
 }))
 
 export default useGeneralStore

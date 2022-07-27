@@ -4,7 +4,9 @@ import { backendURL } from "../constants/constants";
 const RestConnector = () => {
   const instance = axios.create({
     baseURL: backendURL,
-    headers: {"ngrok-skip-browser-warning": true},
+    headers: {
+      // "ngrok-skip-browser-warning": true,
+    },
   });
 
   instance.interceptors.response.use(
