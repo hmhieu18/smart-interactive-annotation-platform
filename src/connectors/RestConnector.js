@@ -5,7 +5,7 @@ const RestConnector = () => {
   const instance = axios.create({
     baseURL: backendURL,
     headers: {
-      // "ngrok-skip-browser-warning": true,
+      "ngrok-skip-browser-warning": true,
     },
   });
 
