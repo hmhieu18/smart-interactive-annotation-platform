@@ -138,7 +138,7 @@ const UploadZoneFolder = (props) => {
                 icon={<FolderIcon />}
               ></SplitButton>
             </div>
-            <p>Max 256Mb/file</p>
+            <p>Max 200MB/file</p>
           </div>
         )}
       </div>

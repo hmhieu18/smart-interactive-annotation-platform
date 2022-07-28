@@ -67,7 +67,7 @@ const acceptedFormats = {
     message: "Drop PNG, JPEG files to upload.",
   },
   [DATASET_DATATYPE.VIDEO]: {
-    accept: "video/*",
+    accept: "video/*, .mkv",
     message: "Drop MP4 files to upload.",
   },
 };
@@ -132,7 +132,7 @@ const UploadZoneFolder = (props) => {
                 icon={<InsertDriveFileIcon />}
               ></SplitButton>
             </div>
-            <p>Max 256Mb/file</p>
+            <p>Max 200MB/file</p>
           </div>
         )}
       </div>
