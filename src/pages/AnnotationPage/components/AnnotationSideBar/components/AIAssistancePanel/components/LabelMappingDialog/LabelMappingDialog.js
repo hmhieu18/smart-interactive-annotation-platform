@@ -53,9 +53,16 @@ const LabelMappingDialog = (props) => {
     yourLabels.forEach((mlabel) => {
       yourOptions.push({ value: mlabel.id, label: mlabel.label });
     });
+
+
     const modelOptions = [];
     modelLabels.forEach((mlabel) => {
       modelOptions.push({ value: mlabel.id, label: mlabel.label });
+    });
+    yourLabels.forEach((label, index) => {
+      set(values, label.label, labelPairList
+          ? labelPairList[index]?.classId
+          : null)
     });
     yourOptions.forEach((option, index) => {
       setFields((fields) => [
@@ -63,12 +70,15 @@ const LabelMappingDialog = (props) => {
         {
           name: option.label,
           valueYourOption: option.label,
-          valueModelOption: labelPairList?labelPairList[index]?.classId:null,
+          // valueModelOption: labelPairList
+          //   ? labelPairList[index]?.classId
+          //   : null,
           options2: modelOptions,
           ...labelMapItem,
         },
       ]);
     });
+
   }, [yourLabels, modelLabels, labelPairList]);
 
   const handleClose = () => {
@@ -87,7 +97,7 @@ const LabelMappingDialog = (props) => {
     const newListOfLabelPairs = [];
     yourLabels.forEach((label, index) => {
       newListOfLabelPairs.push({
-        classId: get(values, label.label, ""),
+        classId: get(data, label.label, ""),
         labelId: label.id,
       });
     });
@@ -131,6 +141,7 @@ const LabelMappingDialog = (props) => {
 };
 
 const LabelForm = withFormik({
+  initialValues: { selectedOption: "Free" },
 })(LabelMappingDialog);
 
 export default LabelForm;

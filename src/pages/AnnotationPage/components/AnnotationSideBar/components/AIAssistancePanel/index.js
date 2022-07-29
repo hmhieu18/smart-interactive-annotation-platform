@@ -22,7 +22,7 @@ import SplitButton from "../../../../../../components/SplitButton";
 import LabelMappingDialog from "./components/LabelMappingDialog/LabelMappingDialog";
 import { MODEL_ID } from "../../../../../../constants/constants";
 import { predictionResultMockup } from "../../../../../../mockup";
-import {FootballIcon} from '../../../../../../components/icons/FootballIcon'
+import { FootballIcon } from "../../../../../../components/icons/FootballIcon";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 20,
@@ -80,7 +80,7 @@ const AIAssistancePanel = (props) => {
   const [progressDes, setProgressDes] = useState("");
   const [sse, setSse] = useState(null);
   const [result, setResult] = useState(null);
-  const [isHandled, setIsHandled] = useState(false);
+  // const [isHandled, setIsHandled] = useState(false);
   const video = useDatasetStore(
     useCallback(
       (state) => find(state.dataInstances, { id: instanceId }),
@@ -95,7 +95,6 @@ const AIAssistancePanel = (props) => {
   }, [datasetId, modelId]);
 
   const handleTriggerLabelMapping = async () => {
-
     await loadModelLabels(modelId);
     await loadLabelMaps(datasetId);
 
@@ -105,7 +104,7 @@ const AIAssistancePanel = (props) => {
 
   const handleSaveEditDialog = async (finishedLabel) => {
     await createLabelMaps(finishedLabel, datasetId);
-    
+
     setOpenDialog(false);
     setOpenLoadingDialog(true);
     // handlePredictionResult(predictionResultMockup);
@@ -127,18 +126,29 @@ const AIAssistancePanel = (props) => {
   };
 
   const handlePredictionResult = (result) => {
-    setIsHandled(true);
-    const { fps, numFrames } = video;
-    console.log("handlePredictionResult", modelLabels, labelMaps);
-    for (const prediction of result.predictions) {
-      const frameID = Math.floor((prediction.position / 1000) * fps);
-      const modelLabel = find(modelLabels, { label: prediction.label });
-      const datasetLabelId = find(labelMaps, {classId: modelLabel.id}).labelId;
-      if(datasetLabelId) {
-        handleAddEventAnnotation(frameID, datasetLabelId);
-      }
-    }
-    setIsHandled(false);
+    // setIsHandled(true);
+    //download from url
+    fetch(result)
+      .then((response) => response.json())
+      .then((jsonData) => {
+        const { fps, numFrames } = video;
+        console.log("handlePredictionResult", jsonData, modelLabels, labelMaps);
+        for (const prediction of jsonData.predictions) {
+          const frameID = Math.floor((prediction.position / 1000) * fps);
+          const modelLabel = find(modelLabels, { label: prediction.label });
+          const datasetLabelId = find(labelMaps, {
+            classId: modelLabel.id,
+          })?.labelId;
+          if (datasetLabelId) {
+            handleAddEventAnnotation(frameID, datasetLabelId);
+          }
+        }
+      })
+      .catch((error) => {
+        // handle your errors here
+        console.error(error);
+      });
+    // setIsHandled(false);
   };
 
   const sendRequest = () => {
@@ -148,13 +158,14 @@ const AIAssistancePanel = (props) => {
     function getRealtimeData(obj) {
       setProgress(obj.progress);
       setProgressDes(obj.stage);
+      console.log("getRealtimeData", obj);
       if (obj.progress >= 100) {
         setResult(obj.result);
-        console.log("RESULT", result);
+        console.log("RESULT", obj.result);
         sse.close();
-        if (!isHandled) {
-          handlePredictionResult(result);
-        }
+        // if (!isHandled) {
+        handlePredictionResult(obj.result);
+        // }
       }
     }
     sse.onmessage = (e) => getRealtimeData(JSON.parse(e.data));
@@ -181,7 +192,7 @@ const AIAssistancePanel = (props) => {
           <div className="card-body">
             <SplitButton
               text="Predict Soccer Events"
-              icon={<FootballIcon/>}
+              icon={<FootballIcon />}
               onClick={instanceId ? handleTriggerLabelMapping : null}
             />
             <div className="my-2"></div>
