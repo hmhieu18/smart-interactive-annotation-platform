@@ -86,6 +86,36 @@ const useAnnotationStore = create((set, get) => ({
   saveStatus: true,
   setSaveStatus: (saveStatus) => set({ saveStatus }),
   getSaveStatus: () => get().saveStatus,
+
+  loadAnnotationsByDataID: async (dataID) => {
+    let annotationsList = await AnnotationService.getAnnotationsByDataInstance(
+      dataID
+    );
+    let annotations = [];
+    annotationsList.forEach((ann) => {
+      annotations.push({
+        Label: find(get().labels, { id: ann.labelID })?.label,
+        FrameNumber: ann.frameID,
+        Confidence: ann?.confidence,
+      });
+    });
+    return annotations;
+  },
+
+  loadAnnotationsOfDataset: async (dataList) => {
+    // const  = get().dataList;
+    //promise all to get all annotations of all data instances
+    const annotations = await Promise.all(
+      dataList.map(async (data) => {
+        return {
+          fileName: data.name,
+          dataID: data.id,
+          annotations: await get().loadAnnotationsByDataID(data.id),
+        };
+      })
+    );
+    return annotations;
+  },
 }));
 
 export default useAnnotationStore;
