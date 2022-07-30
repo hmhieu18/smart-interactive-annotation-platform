@@ -173,7 +173,7 @@ const DatasetInfo = (props) => {
           alignItems="center"
           justifyContent="flex-start"
         >
-          <Grid item>
+          {/* <Grid item>
             <SplitButton
               variant="success"
               // href={`${backendURL}/export/export_dataset?dataset_id=${id}`}
@@ -181,7 +181,7 @@ const DatasetInfo = (props) => {
               icon={<i class="bi bi-arrow-down-square-fill"></i>}
               onClick={handleExportData}
             />
-          </Grid>
+          </Grid> */}
           <Grid item>
             <SplitButton
               variant="info"

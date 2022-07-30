@@ -163,11 +163,12 @@ const AIAssistancePanel = (props) => {
     (state) => state.appendAnnotation
   );
 
-  const handleAddEventAnnotation = (frameID, labelID) => {
+  const handleAddEventAnnotation = (frameID, labelID, confidence) => {
     const newEvent = EventAnnotationClass.constructorFromServerData({
       id: null,
       frameID,
       labelID,
+      confidence,
     });
     console.log("handleAddEventAnnotation", newEvent);
     appendAnnotation(newEvent);
@@ -184,12 +185,13 @@ const AIAssistancePanel = (props) => {
         console.log("handlePredictionResult", jsonData, modelLabels, labelMaps);
         for (const prediction of jsonData.predictions) {
           const frameID = Math.floor((prediction.position / 1000) * fps);
+          const confidence = prediction.confidence;
           const modelLabel = find(modelLabels, { label: prediction.label });
           const datasetLabelId = find(labelMaps, {
             classId: modelLabel.id,
           })?.labelId;
           if (datasetLabelId) {
-            handleAddEventAnnotation(frameID, datasetLabelId);
+            handleAddEventAnnotation(frameID, datasetLabelId, confidence);
           }
         }
       })

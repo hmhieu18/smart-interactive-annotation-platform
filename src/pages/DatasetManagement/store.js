@@ -162,24 +162,6 @@ const useDatasetManagementStore = create((set, get) => ({
       })
     );
     return annotations;
-    // set({
-    //   annotations: [],
-    //   saveStatus: true,
-    // });
-    // const setIsLoading = get().setIsLoading;
-    // setIsLoading("loading_annotations", true);
-    // let annotationsList = await AnnotationService.getAnnotationsByDataInstance(
-    //   dataID
-    // );
-    // console.log("annotationsListstore", annotationsList);
-    // let annotations = [];
-    // annotationsList.forEach((ann) => {
-    //   annotations.push(ann);
-    // });
-    // set({
-    //   annotations,
-    // });
-    // setIsLoading("loading_annotations", false);
   },
 }));
 

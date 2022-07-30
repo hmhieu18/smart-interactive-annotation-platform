@@ -8,7 +8,11 @@ import { useParams } from "react-router";
 import DataInfo from "./components/DataInfo/index";
 import SaveStatus from "./components/SaveStatus/index";
 import useQuery from "../../../../utils/useQuery";
-import { useGeneralStore, useDatasetStore } from "../../stores/index";
+import { useGeneralStore, useDatasetStore, useAnnotationStore } from "../../stores/index";
+
+import SplitButton from "../../../../components/SplitButton";
+
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
   topNavWrapper: {
@@ -72,31 +76,70 @@ const TopNav = (props) => {
   const isPlayMode = useGeneralStore((state) => state.isPlayMode);
   const setIsPlayMode = useGeneralStore((state) => state.setIsPlayMode);
   const videoId = useDatasetStore((state) => state.instanceId);
+  const getExportAnnotations = useAnnotationStore((state) => state.loadAnnotationsOfDataset);
+  const dataInstances = useDatasetStore((state) => state.dataInstances);
 
+  const handleExportData = async () => {
+    const annotations = await getExportAnnotations(dataInstances);
+    const element = document.createElement("a");
+
+    const json = JSON.stringify(annotations, null, 2);
+
+    const file = new Blob([json], {
+      type: "text/plain",
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = `${datasetId}.json`;
+    document.body.appendChild(element);
+    element.click();
+
+  }
   return (
     <div className={classes.topNavWrapper}>
       <div className={classes.leftSection}>
         <DataInfo />
         <SaveStatus></SaveStatus>
       </div>
-      <div className={classes.rightSection}>
-        {videoId && (
+      {/* <div className={classes.rightSection}> */}
+      <Grid
+        container
+        item
+        xs={12}
+        spacing={1}
+        alignItems="center"
+        justifyContent="flex-end"
+      >
+        <Grid item style={{ margineLeft: 10 }}>
+          <SplitButton
+            variant="success"
+            text="Export annotated data"
+            icon={<i class="bi bi-arrow-down-square-fill"></i>}
+            onClick={handleExportData}
+          />
+        </Grid>
+        <Grid item>
+          {videoId && (
+            <IconButton
+              onClick={() => {
+                setIsPlayMode(true);
+              }}
+              className={classes.fullScreenButton}
+            >
+              <Fullscreen color={classes.closeIcon} />
+            </IconButton>
+          )}
+        </Grid>
+
+        <Grid item>
           <IconButton
-            onClick={() => {
-              setIsPlayMode(true);
-            }}
-            className={classes.fullScreenButton}
+            href={`/datasets/dataset=${datasetId}?page=${1}`}
+            className={classes.roundButton2}
           >
-            <Fullscreen color={classes.closeIcon} />
+            <CloseIcon color={classes.closeIcon} />
           </IconButton>
-        )}
-        <IconButton
-          href={`/datasets/dataset=${datasetId}?page=${1}`}
-          className={classes.roundButton2}
-        >
-          <CloseIcon color={classes.closeIcon} />
-        </IconButton>
-      </div>
+        </Grid>
+      </Grid>{" "}
+      {/* </div> */}
     </div>
   );
 };

@@ -78,7 +78,7 @@ const ObjectInfo = (props) => {
 
   const AnnotationTypeIcon = mapAnnotationTypeToIcon[annotationObject.type];
 
-  const { id, properties, label, frameID } = annotationObject;
+  const { id, properties, label, frameID, confidence } = annotationObject;
 
   const fillColor = get(
     label,
@@ -116,9 +116,24 @@ const ObjectInfo = (props) => {
 
         <ListItemText
           disableTypography
-          primary={<div className={classes.objectId}>{
-            format(frameID / fps)
-            }</div>}
+          primary={
+            <div className={classes.objectId}>{format(frameID / fps)}</div>
+          }
+          className={classes.objectId}
+        />
+        <ListItemText
+          disableTypography
+          primary={
+            <div className={classes.objectId}>
+              {
+                confidence == undefined || confidence == 1
+                  ? ""
+                  : `Conf: ${confidence.toFixed(2)}`
+                //get 2 decimal places of confidence
+                //.toFixed(2)
+              }
+            </div>
+          }
           className={classes.objectId}
         />
       </ListItem>
