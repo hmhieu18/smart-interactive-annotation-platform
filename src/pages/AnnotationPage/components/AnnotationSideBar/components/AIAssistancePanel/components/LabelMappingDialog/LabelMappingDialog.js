@@ -54,15 +54,16 @@ const LabelMappingDialog = (props) => {
       yourOptions.push({ value: mlabel.id, label: mlabel.label });
     });
 
-
     const modelOptions = [];
     modelLabels.forEach((mlabel) => {
       modelOptions.push({ value: mlabel.id, label: mlabel.label });
     });
     yourLabels.forEach((label, index) => {
-      set(values, label.label, labelPairList
-          ? labelPairList[index]?.classId
-          : null)
+      set(
+        values,
+        label.label,
+        labelPairList ? labelPairList[index]?.classId : null
+      );
     });
     yourOptions.forEach((option, index) => {
       setFields((fields) => [
@@ -78,7 +79,6 @@ const LabelMappingDialog = (props) => {
         },
       ]);
     });
-
   }, [yourLabels, modelLabels, labelPairList]);
 
   const handleClose = () => {
@@ -133,7 +133,7 @@ const LabelMappingDialog = (props) => {
           Cancel
         </Button>
         <Button onClick={handleSubmit} color="primary" disabled={isSubmitting}>
-          Save
+          Start predict
         </Button>
       </DialogActions>
     </Dialog>

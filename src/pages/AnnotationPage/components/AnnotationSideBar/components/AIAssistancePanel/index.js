@@ -23,6 +23,8 @@ import LabelMappingDialog from "./components/LabelMappingDialog/LabelMappingDial
 import { MODEL_ID } from "../../../../../../constants/constants";
 import { predictionResultMockup } from "../../../../../../mockup";
 import { FootballIcon } from "../../../../../../components/icons/FootballIcon";
+import PredictionService from "../../../../../../services/PredictionService";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 20,
@@ -55,6 +57,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+let interval = undefined;
+
 const AIAssistancePanel = (props) => {
   const classes = useStyles();
   const instanceId = useDatasetStore((state) => state.instanceId);
@@ -72,6 +76,7 @@ const AIAssistancePanel = (props) => {
   const createLabelMaps = useLabelStore((state) => state.createLabelMappings);
   const updateLabelMaps = useLabelStore((state) => state.updateLabelMaps);
   const { datasetId } = useParams();
+  const [running, setRunning] = useState(false);
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openLoadingDialog, setOpenLoadingDialog] = React.useState(false);
@@ -80,6 +85,7 @@ const AIAssistancePanel = (props) => {
   const [progressDes, setProgressDes] = useState("");
   const [sse, setSse] = useState(null);
   const [result, setResult] = useState(null);
+  const [predictionResult, setPredictionResult] = useState(null);
   // const [isHandled, setIsHandled] = useState(false);
   const video = useDatasetStore(
     useCallback(
@@ -111,6 +117,48 @@ const AIAssistancePanel = (props) => {
     setSse(sendRequest());
   };
 
+  const handleSaveEditDialogF = async (finishedLabel) => {
+    setPredictionResult(null);
+    setProgress(0);
+    setProgressDes("");
+    await createLabelMaps(finishedLabel, datasetId);
+    setOpenDialog(false);
+    setOpenLoadingDialog(true);
+    // handleFProgressBar();
+    const tmpResult = await PredictionService.getPredictionByModelIdAndDataId(
+      modelId,
+      instanceId
+    );
+    console.log("tmpResult", tmpResult);
+    setPredictionResult(tmpResult);
+    handlePredictionResult(tmpResult);
+    // setSse(sendRequest());
+  };
+
+  React.useEffect(() => {
+    if (predictionResult == null) {
+      interval = setInterval(() => {
+        setProgress((prev) => prev + 1);
+      }, 500);
+    } else {
+      setOpenLoadingDialog(false);
+      clearInterval(interval);
+    }
+  }, [predictionResult]);
+
+  React.useEffect(() => {
+    if (progress < 10) {
+      setProgressDes("Getting data...");
+    } else if (progress < 30) {
+      setProgressDes("Extracting features...");
+    } else if (progress < 70) {
+      setProgressDes("Predicting...");
+    }
+    if (progress == 70) {
+      clearInterval(interval);
+    }
+  }, [progress]);
+
   const appendAnnotation = useAnnotationStore(
     (state) => state.appendAnnotation
   );
@@ -128,6 +176,7 @@ const AIAssistancePanel = (props) => {
   const handlePredictionResult = (result) => {
     // setIsHandled(true);
     //download from url
+    console.log("handlePredictionResult", result);
     fetch(result)
       .then((response) => response.json())
       .then((jsonData) => {
@@ -199,7 +248,8 @@ const AIAssistancePanel = (props) => {
           </div>
         </Collapse>
       </div>
-      <LabelMappingDialog
+
+      {/* <LabelMappingDialog
         open={openDialog}
         setOpen={setOpenDialog}
         yourLabels={labels}
@@ -215,6 +265,24 @@ const AIAssistancePanel = (props) => {
         handleOnCancel={() => {
           sse.close();
         }}
+      /> */}
+
+      <LabelMappingDialog
+        open={openDialog}
+        setOpen={setOpenDialog}
+        yourLabels={labels}
+        modelLabels={modelLabels}
+        handleSave={handleSaveEditDialogF}
+        labelPairList={labelMaps}
+      />
+      <LoadingDialog
+        open={openLoadingDialog}
+        setOpen={setOpenLoadingDialog}
+        progress={progress}
+        description={progressDes}
+        // handleOnCancel={() => {
+        //   sse.close();
+        // }}
       />
     </div>
   );
